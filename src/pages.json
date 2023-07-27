@@ -1,0 +1,81 @@
+{
+  "pages": [
+    {
+      "path": "pages_work/index/index",
+      "style": {
+        "navigationBarTitleText": "我的工单"
+      }
+    },
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages_clock",
+      "name": "pages_clock",
+      "pages": [
+        {
+          "path": "index/index",
+          "style": {
+            "navigationBarTitleText": "打卡"
+          }
+        },
+        {
+          "path": "save/index",
+          "style": {
+            "navigationBarTitleText": "打卡"
+          }
+        },
+        {
+          "path": "count/index",
+          "style": {
+            "navigationBarTitleText": "打卡统计"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages_mine",
+      "name": "pages_mine",
+      "pages": [
+        {
+          "path": "mine/index",
+
+          "style": {
+            "navigationBarTitleText": "我的"
+          }
+        },
+        {
+          "path": "photo/index",
+          "style": {
+            "navigationBarTitleText": "我的相册"
+          }
+        },
+        {
+          "path": "personal/index",
+
+          "style": {
+            "navigationBarTitleText": "个人信息"
+          }
+        }
+      ]
+    }
+  ],
+
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#fff",
+    "backgroundColor": "#f7f8fa"
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  }
+}
