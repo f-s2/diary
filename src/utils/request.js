@@ -59,6 +59,13 @@ instance.interceptors.response.use(
         return res;
     },
     (error) => {
+        if (JSON.stringify(error).includes('Network Error')) {
+            uni.showToast({
+                title: 'Network Error',
+                icon: 'error'
+            })
+        }
+
         return Promise.reject(error);
     }
 );
