@@ -2,15 +2,17 @@
   <div class="page-body wrap-box">
     <u-loading v-if="false"> </u-loading>
     <div class="head">
-      2023年07月23日
+      {{ dayjs().format("YYYY年MM月DD日") }}
 
       <uni-icons @click="jump" type="calendar" size="30" />
     </div>
     <div class="main">
       <div class="swiper-date">
-        <div class="date-item" v-for="item in 10" :key="item">
-          <div class="count">{{ item }}次打卡</div>
-          <div class="label">07月23日 09:27:23</div>
+        <div class="date-item" v-for="(item, index) in dataList" :key="index">
+          <div class="count">{{ index + 1 }}次打卡</div>
+          <div class="label">
+            {{ dayjs(item.createTime).format("YYYY年MM月DD日 HH:mm:ss") }}
+          </div>
         </div>
       </div>
       <div class="time">
@@ -34,7 +36,9 @@
 </template>
 
 <script setup>
-import { onUnload } from "@dcloudio/uni-app";
+import { ClockInApi } from "@/api/ClockInApi";
+import { onShow, onUnload } from "@dcloudio/uni-app";
+import dayjs from "dayjs";
 import { ref } from "vue";
 import { getLocation } from "../../api/UserApi";
 import TabBar from "../../components/TabBar.vue";
@@ -44,9 +48,21 @@ let location;
 let timer = setInterval(() => {
   currentTime.value = new Date().getTime();
 }, 1000);
+
+onShow(() => {
+  getDateList();
+});
 onUnload(() => {
   clearInterval(timer);
 });
+const dataList = ref([{}]);
+reloadLocation();
+
+function getDateList() {
+  ClockInApi.list({ date: dayjs().format("YYYY-MM-DD") }).then((res) => {
+    dataList.value = res.data;
+  });
+}
 
 const handleClock = (res) => {
   uni.getLocation({
@@ -79,20 +95,24 @@ const handleClock = (res) => {
   });
 };
 
-const reloadLocation = () => {
+function reloadLocation() {
+  uni.showLoading();
   uni.getLocation({
     type: "wgs84",
     success: (res) => {
       const { latitude, longitude } = res;
       location = { latitude, longitude };
-      getLocation({ location: `${latitude},${longitude}` }).then((res) => {
-        const { address: adr } = res?.data?.result || {};
-        address.value = adr;
-      });
+      getLocation({ location: `${latitude},${longitude}` })
+        .then((res) => {
+          const { address: adr } = res?.data?.result || {};
+          address.value = adr;
+        })
+        .finally(() => {
+          uni.hideLoading();
+        });
     },
   });
-};
-reloadLocation();
+}
 
 function getDistance(lat1, lng1, lat2, lng2) {
   lat1 = lat1 || 0;

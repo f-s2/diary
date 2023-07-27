@@ -24,8 +24,12 @@ const popup = ref();
 let openid;
 const loading = ref(false);
 onLoad(() => {
-  if (userStore.userInfo.username) {
-    emit("load");
+  const token = uni.getStorageSync("token");
+  if (token) {
+    UserApi.getUserInfo({ id: uni.getStorageSync("id") }).then((res) => {
+      userStore.setUserInfo(res.data);
+      emit("load");
+    });
   } else {
     loading.value = true;
     uni.login({
@@ -33,10 +37,6 @@ onLoad(() => {
         UserApi.login({ code })
           .then((res) => {
             if (res.code === 0) {
-              userStore.setUserInfo(res.data);
-              uni.setStorageSync("token", res.data.token);
-              emit("load");
-            } else if (res.code === 1013) {
               openid = res.data.openid;
               getApp().globalData.openid = res.data.openid;
               popup.value.open();
@@ -53,11 +53,17 @@ onLoad(() => {
 });
 
 const getPhoneNumber = ({ detail }) => {
-  UserApi.getPhone({ code: detail.code, openid }).then((res) => {
-    userStore.setUserInfo(res.data);
-    uni.setStorageSync("token", res.data.token);
-    emit("load");
-  });
+  UserApi.getPhone({ code: detail.code, openid })
+    .then((res) => {
+      userStore.setUserInfo(res.data);
+      userStore.isLoginOut = false;
+      uni.setStorageSync("token", res.data.token);
+      uni.setStorageSync("id", res.data.id);
+      emit("load");
+    })
+    .finally(() => {
+      popup.value.close();
+    });
 };
 </script>
 

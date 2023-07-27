@@ -4,7 +4,7 @@
     <uni-forms :modelValue="formData" :rules="rules" label-position="top">
       <div class="address card">
         <uni-forms-item label="当前位置 :">
-          <text>上海市普陀区金沙江路天地软件园1号楼</text>
+          <text>{{ formData.address }}</text>
         </uni-forms-item>
       </div>
       <div class="address card">
@@ -19,12 +19,13 @@
       </div>
     </uni-forms>
     <div class="btn">
-      <button type="primary">保存打卡</button>
+      <button type="primary" @click="save">保存打卡</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ClockInApi } from "@/api/ClockInApi";
 import { onLoad } from "@dcloudio/uni-app";
 import { ref } from "vue";
 const formData = ref({});
@@ -37,6 +38,24 @@ onLoad((data) => {
     formData.value.longitude = info.longitude;
   }
 });
+const save = () => {
+  uni.showLoading();
+  ClockInApi.add({
+    ...formData.value,
+  })
+    .then((res) => {
+      if (res.code === 0) {
+        uni.showToast({
+          title: res.message,
+          icon: "success",
+        });
+        uni.navigateBack();
+      }
+    })
+    .finally(() => {
+      uni.hideLoading();
+    });
+};
 </script>
 
 <style lang="scss" scoped>

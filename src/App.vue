@@ -59,4 +59,24 @@ page {
 button[type="primary"] {
   background-color: $uni-color-primary;
 }
+button[type="primary"][plain] {
+  border-color: $uni-color-primary;
+  color: $uni-color-primary;
+}
+.uni-popup__wrapper {
+  border-radius: 10px 10px 0 0;
+  background-color: #fff !important;
+  padding: 24px 16px 30px;
+}
+.popup {
+  .uni-date {
+    .uni-date-editor--x {
+      border: none;
+    }
+    .uni-date-range {
+      background: #f7f8fa;
+      color: #000;
+    }
+  }
+}
 </style>

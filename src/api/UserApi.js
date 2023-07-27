@@ -18,9 +18,24 @@ export class UserApi {
             data
         })
     }
+    static getUserInfo(params) {
+        return request({
+            url: prefix + '/queryMenusByUserId',
+            method: 'get',
+            params,
+        })
+    }
+    static loginOut(data) {
+        return request({
+            url: prefix + '/loginOut',
+            method: 'get',
+            params: {},
+            data
+        })
+    }
     static getPhone(data) {
         return request({
-            url: prefix + '/login-for-wechat',
+            url: prefix + '/get-phone',
             method: 'post',
             params: {},
             data

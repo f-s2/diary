@@ -8,7 +8,7 @@
             {{ baseInfo?.[item.code] || "--" }}
           </span>
           <span v-else-if="item.code === 'roles'">
-            {{ baseInfo.roles.map((item) => item.name).join(",") }}
+            {{ baseInfo.roles?.map((item) => item.name).join(",") }}
           </span>
         </div>
       </div>

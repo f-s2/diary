@@ -2,7 +2,7 @@ import { netConfig } from '@/config/net.config';
 import axios from 'axios';
 import mpAdapter from "axios-miniprogram-adapter";
 axios.defaults.adapter = mpAdapter;
-const { baseURL, contentType, requestTimeout, successCode } = netConfig;
+const { baseURL, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
 let tokenLose = true;
 
@@ -34,25 +34,28 @@ instance.interceptors.response.use(
      */
     (response) => {
         const res = response.data;
-        // console.log(getApp().globalData, 'response');
-        // uni.navigateTo({
-        //     url: "/pages/login/index"
-        // })
 
         // 请求出错处理
         // -1 超时、token过期或者没有获得授权
-        if (res.status === -1 && tokenLose) {
-            tokenLose = false;
+        if (successCode.includes(res.code)) {
+            return res
+        } else if (invalidCode.includes(res.code)) {
+            uni.setStorageSync('token', '')
+            uni.setStorageSync("id", '');
             uni.showToast({
-                title: '服务器异常',
-                duration: 2000
-            });
+                title: '请重新登录'
+            })
+            uni.reLaunch({
+                url: '/pages_work/index/index'
+            })
+        } else {
+            uni.showToast({
+                icon: 'error',
+                title: res.message
+            })
+            return Promise.reject(res);
+        }
 
-            return Promise.reject(res);
-        }
-        if (successCode.indexOf(res.status) !== -1) {
-            return Promise.reject(res);
-        }
         return res;
     },
     (error) => {

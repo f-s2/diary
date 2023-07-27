@@ -2,43 +2,64 @@
   <div class="page-body wrap-box">
     <div class="calender">
       <uni-calendar
-        :date="queryParam.date"
         :insert="true"
         :lunar="true"
         :showMonth="false"
+        @change="handleChangeDate"
       />
     </div>
-    <uni-card
-      class="card-item"
-      v-for="item in 5"
-      :isFull="true"
-      :border="false"
-      :is-shadow="false"
-    >
-      <div class="count">
-        <span class="label">第{{ item }}次打卡</span>
-        <span class="date">09:27:23</span>
-      </div>
-      <div class="address">
-        <uni-icons type="location" />
-        上海市普陀区金沙江路天地软件园1号楼
-      </div>
+    <div v-if="dataList.length">
+      <uni-card
+        class="card-item"
+        :key="item.id"
+        v-for="(item, index) in dataList"
+        :isFull="true"
+        :border="false"
+        :is-shadow="false"
+      >
+        <div class="count">
+          <span class="label">第{{ index + 1 }}次打卡</span>
+          <span class="date">{{
+            dayjs(item.createTime).format("HH:mm:ss")
+          }}</span>
+        </div>
+        <div class="address">
+          <uni-icons type="location" />
+          {{ item.address }}
+        </div>
 
-      <div class="remark">
-        <uni-icons type="compose" />
-        事项XXXXXX
-      </div>
-    </uni-card>
+        <div class="remark">
+          <uni-icons type="compose" />
+          事项 {{ item.remark }}
+        </div>
+      </uni-card>
+    </div>
+    <u-empty title="当然暂无打卡记录" v-else />
   </div>
   <TabBar :activeIndex="1" />
 </template>
 
 <script setup>
+import { ClockInApi } from "@/api/ClockInApi";
 import dayjs from "dayjs";
 import { ref } from "vue";
 import TabBar from "../../components/TabBar.vue";
 
-const queryParam = ref({ date: dayjs().add(1, "day") });
+const dataList = ref([]);
+getDateList();
+function getDateList(date = dayjs().format("YYYY-MM-DD")) {
+  uni.showLoading();
+  ClockInApi.list({ date })
+    .then((res) => {
+      dataList.value = res.data;
+    })
+    .finally(() => {
+      uni.hideLoading();
+    });
+}
+const handleChangeDate = ({ fulldate }) => {
+  getDateList(fulldate);
+};
 </script>
 <style lang="scss" scoped>
 .wrap-box {

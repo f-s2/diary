@@ -19,7 +19,7 @@
           <div class="value">32</div>
           <div class="label">我的相册</div>
         </div>
-        <div class="count-item">
+        <div class="count-item" @click="jump('/pages_work/index/index')">
           <div class="value">108</div>
           <div class="label">完成工单</div>
         </div>
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="describe-box" style="margin-top: 32rpx">
-      <div class="describe-item">
+      <div class="describe-item" @click="handleLoginOut">
         <div class="describe-label" style="color: red">退出登录</div>
         <div class="describe-value">
           <uni-icons color="rgba(0, 0, 0, 0.9)" type="forward" size="24" />
@@ -42,15 +42,28 @@
 </template>
 
 <script setup>
+import { UserApi } from "@/api/UserApi";
 import { useUserStore } from "@/store/user";
 import { computed } from "vue";
 import TabBar from "../../components/TabBar.vue";
-
-const baseInfo = computed(() => useUserStore().userInfo);
+const userStore = useUserStore();
+const baseInfo = computed(() => userStore.userInfo);
 
 const jump = (url) => {
   uni.navigateTo({
     url,
+  });
+};
+
+const handleLoginOut = () => {
+  uni.showModal({
+    title: "确认注销登陆嘛?",
+    success: ({ confirm }) => {
+      confirm &&
+        UserApi.loginOut().then((res) => {
+          userStore.setUserInfo({});
+        });
+    },
   });
 };
 </script>
