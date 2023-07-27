@@ -72,7 +72,7 @@
 const levelOptions = ["A级", "B级", "C级", "D级"];
 import filter from "@/static/filter.png";
 
-import { onMounted, ref, toRefs } from "vue";
+import { ref, toRefs } from "vue";
 const props = defineProps({ queryParam: Object });
 const { queryParam } = toRefs(props);
 const tagInfo = [
@@ -105,9 +105,6 @@ const selectLevel = (code) => {
     temQueryParam.value.orderTypes.splice(index, 1);
   }
 };
-onMounted(() => {
-  show.value = true;
-});
 const show = ref(false);
 const temQueryParam = ref({});
 const handleOpen = () => {

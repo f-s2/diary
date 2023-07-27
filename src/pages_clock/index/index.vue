@@ -55,9 +55,8 @@ onShow(() => {
 onUnload(() => {
   clearInterval(timer);
 });
-const dataList = ref([{}]);
+const dataList = ref([]);
 reloadLocation();
-
 function getDateList() {
   ClockInApi.list({ date: dayjs().format("YYYY-MM-DD") }).then((res) => {
     dataList.value = res.data;
