@@ -37,6 +37,14 @@
         </div>
       </div>
     </div>
+    <div class="bg" style="text-align: center">
+      <img
+        style="width: 260px; height: 130px; margin-top: 80px"
+        class="img"
+        :src="src"
+        alt=""
+      />
+    </div>
   </div>
   <TabBar :activeIndex="2" />
 </template>
@@ -44,6 +52,7 @@
 <script setup>
 import { UserApi } from "@/api/UserApi";
 import { WorkApi } from "@/api/WorkApi";
+import src from "@/static/person.png";
 import { useUserStore } from "@/store/user";
 import { computed, ref } from "vue";
 import TabBar from "../../components/TabBar.vue";
