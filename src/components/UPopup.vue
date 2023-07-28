@@ -9,7 +9,7 @@
           size="16"
         ></uni-icons>
       </div>
-      <span class="title">{{ title }}</span>
+      <span class="title ele">{{ title }}</span>
       <div class="right">
         <slot name="right" v-if="cancel"> 取消 </slot>
       </div>
