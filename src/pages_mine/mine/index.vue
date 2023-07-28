@@ -16,15 +16,15 @@
     <div class="card-box">
       <div class="mid-card">
         <div class="count-item" @click="jump('/pages_mine/photo/index')">
-          <div class="value">32</div>
+          <div class="value">{{ statistics.pictureCount || 0 }}</div>
           <div class="label">我的相册</div>
         </div>
         <div class="count-item" @click="jump('/pages_work/index/index')">
-          <div class="value">108</div>
+          <div class="value">{{ statistics.finishOrderCount || 0 }}</div>
           <div class="label">完成工单</div>
         </div>
         <div class="count-item">
-          <div class="value">23</div>
+          <div class="value">{{ statistics.customerCount || 0 }}</div>
           <div class="label">服务客户</div>
         </div>
       </div>
@@ -43,12 +43,21 @@
 
 <script setup>
 import { UserApi } from "@/api/UserApi";
+import { WorkApi } from "@/api/WorkApi";
 import { useUserStore } from "@/store/user";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import TabBar from "../../components/TabBar.vue";
 const userStore = useUserStore();
 const baseInfo = computed(() => userStore.userInfo);
 
+const statistics = ref({});
+const init = () => {
+  WorkApi.statistics({}).then((res) => {
+    console.log("res", res);
+    statistics.value = res.data;
+  });
+};
+init();
 const jump = (url) => {
   uni.navigateTo({
     url,

@@ -23,7 +23,7 @@ page {
 }
 
 .page-body {
-  padding: 36rpx 32rpx 15rpx;
+  padding: 36rpx 32rpx 60rpx;
 }
 
 .describe-box {
@@ -39,7 +39,7 @@ page {
     align-items: center;
     padding: 32rpx 0;
     &:not(:first-child) {
-      border-top: 1rpx solid #f7f8fa;
+      border-top: 1px solid #f7f8fa;
     }
   }
   .describe-label {
@@ -64,9 +64,11 @@ button[type="primary"][plain] {
   color: $uni-color-primary;
 }
 .uni-popup__wrapper {
-  border-radius: 10px 10px 0 0;
   background-color: #fff !important;
   padding: 24px 16px 30px;
+}
+.uni-popup__wrapper.bottom {
+  border-radius: 10px 10px 0 0;
 }
 .popup {
   .uni-date {
@@ -78,5 +80,10 @@ button[type="primary"][plain] {
       color: #000;
     }
   }
+}
+.ellipsis {
+  overflow: hidden; // 溢出隐藏
+  white-space: nowrap; // 强制一行
+  text-overflow: ellipsis;
 }
 </style>

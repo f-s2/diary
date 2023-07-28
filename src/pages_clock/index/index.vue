@@ -65,8 +65,8 @@ function getDateList() {
 
 const handleClock = (res) => {
   uni.getLocation({
-    type: "wgs84",
-
+    type: "gcj02",
+    isHighAccuracy: true,
     success: (res) => {
       const { latitude, longitude } = res;
       location = { latitude, longitude };
@@ -86,6 +86,10 @@ const handleClock = (res) => {
           url: `/pages_clock/save/index?address=${JSON.stringify(res)}`,
         });
       } else {
+        uni.showToast({
+          title: `当前打卡地点超出范围限制,距离你所在位置${distance}km`,
+          icon: "error",
+        });
       }
     },
     fail: (err) => {
@@ -97,8 +101,10 @@ const handleClock = (res) => {
 function reloadLocation() {
   uni.showLoading();
   uni.getLocation({
-    type: "wgs84",
+    type: "gcj02",
+    isHighAccuracy: true,
     success: (res) => {
+      console.log("res", res);
       const { latitude, longitude } = res;
       location = { latitude, longitude };
       getLocation({ location: `${latitude},${longitude}` })

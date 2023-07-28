@@ -1,3 +1,4 @@
+import StatusTag from '@/components/StatusTag.vue';
 import UEmpty from '@/components/UEmpty.vue';
 import UPopup from '@/components/UPopup.vue';
 import ULoading from '@/components/zero-loading/index.vue';
@@ -13,6 +14,7 @@ export function createApp() {
 	app.component('ULoading', ULoading)
 	app.component('UEmpty', UEmpty)
 	app.component('UPopup', UPopup)
+	app.component('StatusTag', StatusTag)
 	return {
 		app,
 	};

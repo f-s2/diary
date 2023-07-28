@@ -7,6 +7,18 @@
       }
     },
     {
+      "path": "pages_work/detail/index",
+      "style": {
+        "navigationBarTitleText": "工单详情"
+      }
+    },
+    {
+      "path": "pages_work/process/index",
+      "style": {
+        "navigationBarTitleText": "处理工单"
+      }
+    },
+    {
       "path": "pages/login/index",
       "style": {
         "navigationBarTitleText": "登录"

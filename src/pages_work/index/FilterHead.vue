@@ -1,18 +1,20 @@
 <template>
   <div>
-    <uni-easyinput
-      prefixIcon="search"
-      type="search"
-      v-model="queryParam.keyword"
-      placeholder="工单编号，客户名称"
-      @change="reload"
-      @confirm="reload"
-    />
+    <div class="search">
+      <uni-easyinput
+        prefixIcon="search"
+        type="search"
+        v-model="queryParam.searchContent"
+        placeholder="工单编号，客户名称"
+        @change="$emit('load')"
+      />
+    </div>
+
     <div class="filter-bottom">
       <div class="tag-box">
         <span
           @click="selectTag(item)"
-          :class="['tag', { active: queryParam.type === item.code }]"
+          :class="['tag', { active: queryParam.finishStatus === item.code }]"
           v-for="item in tagInfo"
           :key="item.code"
         >
@@ -24,14 +26,7 @@
         筛选
       </div>
     </div>
-    {{ show }}
-    <u-popup
-      ref="popupRef"
-      v-model:show="show"
-      :is-mask-click="false"
-      type="bottom"
-      title="工单筛选"
-    >
+    <u-popup ref="popupRef" v-model:show="show" type="bottom" title="工单筛选">
       <div class="popup">
         <div class="sub-label">工单类型 :</div>
         <div class="level-box">
@@ -74,23 +69,25 @@ import filter from "@/static/filter.png";
 
 import { ref, toRefs } from "vue";
 const props = defineProps({ queryParam: Object });
+const emit = defineEmits(["load"]);
 const { queryParam } = toRefs(props);
 const tagInfo = [
   {
     name: "待完成",
-    code: 1,
+    code: 4,
   },
   {
-    name: "待完成",
-    code: 2,
+    name: "已完成",
+    code: 5,
   },
   {
-    name: "待完成",
-    code: 3,
+    name: "全部",
+    code: null,
   },
 ];
 const selectTag = ({ code }) => {
-  queryParam.value.type = code;
+  queryParam.value.finishStatus = code;
+  emit("load");
 };
 const selectLevel = (code) => {
   if (!temQueryParam.value.orderTypes) {
@@ -114,11 +111,12 @@ const handleOpen = () => {
 const handleOk = () => {
   const { orderTypes, date } = temQueryParam.value;
   queryParam.value.orderTypes = orderTypes;
-  queryParam.value.date = date;
+  queryParam.value.startTime = date[0];
+  queryParam.value.endTime = date[1];
   show.value = false;
+  emit("load");
 };
 const popupRef = ref();
-const reload = () => {};
 </script>
 
 <style lang="scss" scoped>

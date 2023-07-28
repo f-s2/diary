@@ -78,6 +78,7 @@ const handleChangeDate = ({ fulldate }) => {
   background: #fff;
 }
 .card-item {
+  margin-bottom: 10px;
   .count {
     font-size: 14px;
 
