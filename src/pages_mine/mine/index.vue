@@ -87,6 +87,7 @@ const handleLoginOut = () => {
 </script>
 <style lang="scss" scoped>
 .wrap-box {
+  padding-bottom: 150rpx;
 }
 .head {
   margin-bottom: 48rpx;

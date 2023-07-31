@@ -16,13 +16,12 @@
             {{ baseInfo?.[item.code] || "--" }}
           </span>
           <span v-else-if="item.code === 'types'">
-            {{ baseInfo.roles?.map((item) => item.name).join(",") }}
-            <status-tag type="1" :types="['维修']" />
+            <status-tag
+              type="1"
+              :types="baseInfo.typeVOList?.map((item) => item.name)"
+            />
           </span>
-          <span v-else-if="item.code === 'types'">
-            {{ baseInfo.roles?.map((item) => item.name).join(",") }}
-            <status-tag type="1" :types="['维修']" />
-          </span>
+
           <span v-else-if="item.code === 'users'">
             {{ baseInfo.users?.map((item) => item.username).join(",") }}
           </span>
@@ -68,7 +67,13 @@
         </template>
       </div>
     </div>
-    <button @click="jump" v-if="!isDone" class="confirm" type="primary">
+    <button
+      hover-class="none"
+      @click="jump"
+      v-if="!isDone"
+      class="confirm"
+      type="primary"
+    >
       处理工单
     </button>
   </div>
@@ -92,7 +97,9 @@ const getInfo = (id) => {
     .then((res) => {
       baseInfo.value = res.data;
     })
-    .finally(() => [uni.hideLoading()]);
+    .finally(() => {
+      uni.hideLoading();
+    });
 };
 const describeConfig = computed(() => {
   return [

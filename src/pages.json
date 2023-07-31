@@ -23,60 +23,54 @@
       "style": {
         "navigationBarTitleText": "登录"
       }
-    }
-  ],
-  "subPackages": [
-    {
-      "root": "pages_clock",
-      "name": "pages_clock",
-      "pages": [
-        {
-          "path": "index/index",
-          "style": {
-            "navigationBarTitleText": "打卡"
-          }
-        },
-        {
-          "path": "save/index",
-          "style": {
-            "navigationBarTitleText": "打卡"
-          }
-        },
-        {
-          "path": "count/index",
-          "style": {
-            "navigationBarTitleText": "打卡统计"
-          }
-        }
-      ]
     },
     {
-      "root": "pages_mine",
-      "name": "pages_mine",
-      "pages": [
-        {
-          "path": "mine/index",
+      "path": "pages_clock/index/index",
+      "style": {
+        "navigationBarTitleText": "打卡"
+      }
+    },
+    {
+      "path": "pages_clock/save/index",
+      "style": {
+        "navigationBarTitleText": "打卡"
+      }
+    },
+    {
+      "path": "pages_clock/count/index",
+      "style": {
+        "navigationBarTitleText": "打卡统计"
+      }
+    },
+    {
+      "path": "pages_mine/mine/index",
 
-          "style": {
-            "navigationBarTitleText": "我的"
-          }
-        },
-        {
-          "path": "photo/index",
-          "style": {
-            "navigationBarTitleText": "我的相册"
-          }
-        },
-        {
-          "path": "personal/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages_mine/photo/index",
+      "style": {
+        "navigationBarTitleText": "我的相册"
+      }
+    },
+    {
+      "path": "pages_mine/personal/index",
 
-          "style": {
-            "navigationBarTitleText": "个人信息"
-          }
-        }
-      ]
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
     }
   ],
+  "tabBar": {
+    "custom": true,
+    "list": [
+      { "pagePath": "pages_work/index/index", "text": "工单" },
+      { "pagePath": "pages_clock/index/index", "text": "打卡" },
+      { "pagePath": "pages_mine/mine/index", "text": "我的" }
+    ]
+  },
 
   "globalStyle": {
     "navigationBarTextStyle": "black",

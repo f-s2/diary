@@ -36,7 +36,7 @@ const tabInfo = [
 ];
 
 const jump = ({ path }) => {
-  uni.reLaunch({ url: path });
+  uni.switchTab({ url: path });
 };
 </script>
 

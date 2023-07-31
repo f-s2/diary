@@ -1,5 +1,10 @@
 <template>
-  <uni-popup ref="popup" :safe-area="false" v-bind="$attrs">
+  <uni-popup
+    ref="popup"
+    :safe-area="false"
+    @maskClick="$emit('maskClick')"
+    v-bind="$attrs"
+  >
     <div class="pup-head">
       <div class="left">
         <uni-icons
@@ -10,7 +15,7 @@
         ></uni-icons>
       </div>
       <span class="title ele">{{ title }}</span>
-      <div class="right">
+      <div class="right" @click="$emit('update:show', false)">
         <slot name="right" v-if="cancel"> 取消 </slot>
       </div>
     </div>

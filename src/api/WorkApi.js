@@ -68,4 +68,23 @@ export class WorkApi {
             data
         })
     }
+    static searchSpare(data) {
+        return request({
+            url: `/business/spare-parts-inventory/list`,
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+}
+const sparePrefix = `/business/inventory-type`
+export class SpareApi {
+    static tree(data) {
+        return request({
+            url: sparePrefix + '/list-all',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
 }

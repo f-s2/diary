@@ -82,7 +82,6 @@ const jump = (item) => {
 <style lang="scss" scoped>
 ::v-deep .uni-easyinput__content {
   background-color: #fff !important;
-  border-radius: 16px;
 }
 .page-body {
   padding-bottom: 150rpx;

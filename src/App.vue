@@ -18,6 +18,9 @@ export default {
 
 <style lang="scss">
 /*每个页面公共css */
+.uni-primary {
+  color: $uni-color-primary;
+}
 page {
   background-color: #f7f8fa;
 }
@@ -37,7 +40,7 @@ page {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 32rpx 0;
+    padding: 14px 0;
     &:not(:first-child) {
       border-top: 1px solid #f7f8fa;
     }
@@ -81,9 +84,46 @@ button[type="primary"][plain] {
     }
   }
 }
+.search {
+  .uni-easyinput__content {
+    border-radius: 16px !important;
+  }
+}
+
 .ellipsis {
   overflow: hidden; // 溢出隐藏
   white-space: nowrap; // 强制一行
   text-overflow: ellipsis;
+}
+
+.spare {
+  .uni-forms-item__label {
+    font-size: 12px;
+  }
+  .checklist-text {
+    font-size: 12px !important;
+  }
+  .checklist-box {
+    margin-right: 2px !important;
+  }
+  .uni-forms-item__content {
+    font-size: 12px;
+  }
+  .uni-easyinput {
+    display: inline-block;
+    width: 140rpx;
+  }
+  .uni-forms-item {
+    margin-bottom: 0;
+  }
+  .uni-forms-item__error {
+    position: initial;
+  }
+}
+.bottom-btn {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 32px;
 }
 </style>

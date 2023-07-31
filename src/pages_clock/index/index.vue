@@ -150,6 +150,7 @@ const jump = () => {
   flex-direction: column;
   gap: 20rpx;
   position: relative;
+  padding-bottom: 150rpx;
 }
 .head {
   font-size: 32rpx;
