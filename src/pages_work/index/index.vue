@@ -44,7 +44,7 @@
   </div>
 
   <TabBar :activeIndex="0" />
-  <auth-button @load="reload" />
+  <auth-button @load="reload" v-model:isInit="isInit" />
 </template>
 
 <script setup>
@@ -52,16 +52,24 @@ import { WorkApi } from "@/api/WorkApi";
 import icon1 from "@/static/code.png";
 import icon2 from "@/static/time.png";
 import { useUserStore } from "@/store/user";
-import { onShow } from "@dcloudio/uni-app";
+import { onPullDownRefresh, onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
 import AuthButton from "../../components/AuthButton";
 import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
 const userStore = useUserStore();
+const isInit = ref(false);
 onShow(() => {
+  isInit.value && getCount();
+});
+
+const getCount = () => {
   WorkApi.getCount().then((res) => {
     userStore.unFinishCount = res.data;
   });
+};
+onPullDownRefresh(() => {
+  reload();
 });
 const queryParam = ref({
   searchContent: "",
@@ -77,6 +85,7 @@ const reload = () => {
     })
     .finally(() => {
       uni.hideLoading();
+      uni.stopPullDownRefresh();
     });
 };
 const jump = (item) => {

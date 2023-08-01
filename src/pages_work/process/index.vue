@@ -172,19 +172,25 @@ const modalState = reactive({
   info: {},
 });
 const save = () => {
-  WorkApi.finish({ id: baseInfo.value.id }).then((res) => {
-    if (res.code === 0) {
-      uni.navigateBack({});
-      uni.showToast({
-        title: res.message,
-        icon: "success",
-      });
-    } else {
-      uni.showToast({
-        title: res.message,
-        icon: "error",
-      });
-    }
+  uni.showModal({
+    title: "确定提交工单?",
+    success: ({ confirm }) => {
+      confirm &&
+        WorkApi.finish({ id: baseInfo.value.id }).then((res) => {
+          if (res.code === 0) {
+            uni.navigateBack({});
+            uni.showToast({
+              title: res.message,
+              icon: "success",
+            });
+          } else {
+            uni.showToast({
+              title: res.message,
+              icon: "error",
+            });
+          }
+        });
+    },
   });
 };
 </script>

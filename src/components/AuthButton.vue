@@ -18,8 +18,7 @@ import { useUserStore } from "@/store/user";
 import { onLoad } from "@dcloudio/uni-app";
 import { ref } from "vue";
 import { UserApi } from "../api/UserApi";
-
-const emit = defineEmits(["load"]);
+const emit = defineEmits(["load", "update:isInit"]);
 const userStore = useUserStore();
 const popup = ref();
 let openid;
@@ -30,6 +29,7 @@ onLoad(() => {
     UserApi.getUserInfo({ id: uni.getStorageSync("id") }).then((res) => {
       userStore.setUserInfo(res.data);
       emit("load");
+      emit("update:isInit", true);
     });
   } else {
     loading.value = true;
@@ -54,17 +54,27 @@ onLoad(() => {
 });
 
 const getPhoneNumber = ({ detail }) => {
-  UserApi.getPhone({ code: detail.code, openid })
-    .then((res) => {
-      userStore.setUserInfo(res.data);
-      userStore.isLoginOut = false;
-      uni.setStorageSync("token", res.data.token);
-      uni.setStorageSync("id", res.data.id);
-      emit("load");
-    })
-    .finally(() => {
-      popup.value.close();
+  if (!detail?.code) {
+    uni.showModal({
+      title: "提示!",
+      content: "获取工单需授权登录！",
+      showCancel: false,
     });
+    popup.value.close();
+  } else {
+    UserApi.getPhone({ code: detail.code, openid })
+      .then((res) => {
+        userStore.setUserInfo(res.data);
+        userStore.isLoginOut = false;
+        uni.setStorageSync("token", res.data.token);
+        uni.setStorageSync("id", res.data.id);
+        emit("load");
+        emit("update:isInit", true);
+      })
+      .finally(() => {
+        popup.value.close();
+      });
+  }
 };
 </script>
 

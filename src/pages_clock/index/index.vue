@@ -85,9 +85,10 @@ const handleClock = (res) => {
           url: `/pages_clock/save/index?address=${JSON.stringify(res)}`,
         });
       } else {
-        uni.showToast({
-          title: `当前打卡地点超出范围限制,距离你所在位置${distance}km`,
-          icon: "error",
+        uni.showModal({
+          title: "提示!",
+          content: `当前打卡地点超出范围限制,距离你所在位置${distance}km`,
+          showCancel: false,
         });
       }
     },
