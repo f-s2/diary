@@ -16,11 +16,25 @@
         <div class="photo-box">
           <div
             class="img-box"
-            @click="preview(url)"
-            v-for="(url, i) in item.fileNames"
+            @click="preview(file.filePath)"
+            v-for="(file, i) in item.files"
             :key="i"
           >
-            <img class="pic" :src="userStore.userInfo.urlPrefix + url" alt="" />
+            <img
+              class="pic"
+              :src="userStore.userInfo.urlPrefix + file.filePath"
+              alt=""
+            />
+            <div class="img-info">
+              <div class="info">
+                <uni-icons type="images" size="16" /> {{ file.width }}*{{
+                  file.length
+                }}px
+              </div>
+              <div class="location">
+                <uni-icons type="location" size="16" />{{ file.address }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -118,21 +132,33 @@ reload();
   margin-bottom: 12px;
 }
 .photo-box {
-  padding: 16px;
-  border-radius: 4px;
-  background: #fff;
-  display: grid;
-  grid-template-columns: repeat(4, 120rpx);
-  justify-content: space-around;
-  grid-row-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   .img-box {
-    background: #fafafa;
-    text-align: center;
-    height: 120rpx;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.05);
+  }
+  .img-info {
+    flex: 1;
+    align-self: stretch;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: rgba($color: #000000, $alpha: 0.9);
+  }
+  .info,
+  .location {
+    line-height: 16px;
+    word-break: break-all;
   }
   .pic {
-    width: 100%;
-    height: 100%;
+    height: 48px;
+    width: 48px;
   }
 }
 </style>

@@ -60,6 +60,21 @@ export class WorkApi {
             data
         })
     }
+    static getDeviceInfo(data) {
+        return request({
+            url: prefix + '/get-inventory-by-order-device-id',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static getCount() {
+        return request({
+            url: prefix + '/count-unfinished',
+            method: 'get',
+            params: {},
+        })
+    }
     static updateSingle(data) {
         return request({
             url: `/business/inventory-outbound/update`,

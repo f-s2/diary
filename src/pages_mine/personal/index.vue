@@ -1,6 +1,6 @@
 <template>
   <div class="page-body">
-    <div class="describe-box" style="margin: 32rpx">
+    <div class="describe-box">
       <div class="describe-item" v-for="item in topConfig" :key="item.name">
         <div class="describe-label">{{ item.name }}</div>
         <div class="describe-value">
@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <div class="describe-box" style="margin: 32rpx">
+    <div class="describe-box" style="margin-top: 32px">
       <div class="describe-item" v-for="item in bottomConfig" :key="item.name">
         <div class="describe-label">{{ item.name }}</div>
         <div class="describe-value">

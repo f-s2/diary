@@ -153,13 +153,33 @@ const save = () => {
       return ref.validate();
     })
   ).then((res) => {
-    WorkApi.temSave({
-      id: relId.value,
-      needInventory: 1,
-      outboundList: [...forms.value.filter((item) => item.quantity)],
-    }).then((res) => {
-      emit("ok");
-    });
+    if (props.isAdd) {
+      WorkApi.temSave({
+        id: relId.value,
+        needInventory: 1,
+        outboundList: [...forms.value.filter((item) => item.quantity)],
+      }).then((res) => {
+        if (res.code === 0) {
+          emit("ok");
+        } else {
+          uni.showToast({
+            title: res.message,
+            icon: "error",
+          });
+        }
+      });
+    } else {
+      WorkApi.updateSingle([...forms.value]).then((res) => {
+        if (res.code === 0) {
+          emit("ok");
+        } else {
+          uni.showToast({
+            title: res.message,
+            icon: "error",
+          });
+        }
+      });
+    }
   });
 };
 defineExpose({ init, save });

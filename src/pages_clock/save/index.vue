@@ -19,7 +19,7 @@
       </div>
     </uni-forms>
     <div class="btn">
-      <button type="primary" @click="save">保存打卡</button>
+      <button hover-class="none" type="primary" @click="save">保存打卡</button>
     </div>
   </div>
 </template>

@@ -56,7 +56,9 @@
         <div class="action">
           <button @click="show = false" type="primary" plain>取消</button>
 
-          <button type="primary" @click="handleOk">确定</button>
+          <button hover-class="none" type="primary" @click="handleOk">
+            确定
+          </button>
         </div>
       </div>
     </u-popup>

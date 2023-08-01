@@ -8,7 +8,7 @@
         @change="handleChangeDate"
       />
     </div>
-    <div v-if="dataList.length">
+    <div v-if="dataList.length" class="wrap-card">
       <uni-card
         class="card-item"
         :key="item.id"
@@ -30,7 +30,8 @@
 
         <div class="remark">
           <uni-icons type="compose" />
-          事项 {{ item.remark }}
+          事项
+          {{ item.remark }}
         </div>
       </uni-card>
     </div>
@@ -73,12 +74,12 @@ const handleChangeDate = ({ fulldate }) => {
     font-weight: bold;
   }
 }
-.main {
-  padding: 40rpx 32rpx;
-  background: #fff;
+.wrap-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .card-item {
-  margin-bottom: 10px;
   .count {
     font-size: 14px;
 
@@ -95,6 +96,7 @@ const handleChangeDate = ({ fulldate }) => {
     color: rgba(0, 0, 0, 0.9);
     margin-top: 12px;
     font-size: 12px;
+    word-break: break-all;
   }
 }
 </style>

@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <template v-if="isDone">
+    <template v-if="isDone && baseInfo.fileNames?.length">
       <div class="sub-title">
         <span>现场单据照片</span>
       </div>
@@ -39,7 +39,7 @@
           :key="index"
           v-for="(item, index) in baseInfo.fileNames"
         >
-          <img :src="item" class="pic" />
+          <img :src="userStore.userInfo.urlPrefix + item" class="pic" />
         </div>
       </div>
     </template>
@@ -55,7 +55,7 @@
       >
         <div class="device-item_head">
           <img class="icon" :src="icon" alt="img" />
-          {{ item.name }} ({{ item.code }})
+          {{ item.name }} <span v-if="item.code"> ({{ item.code }})</span>
         </div>
         <template v-if="isDone">
           <div class="device-item_content" v-if="item.needInventory === 1">
@@ -82,18 +82,24 @@
 <script setup>
 import { WorkApi } from "@/api/WorkApi";
 import icon from "@/static/device.png";
-import { onLoad } from "@dcloudio/uni-app";
+import { useUserStore } from "@/store/user";
+import { onLoad, onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
 const baseInfo = ref({});
+const userStore = useUserStore();
 const isDone = computed(() => baseInfo.value.finishStatus === 5);
 
+const baseId = ref("");
 onLoad(({ id }) => {
-  getInfo(id);
+  baseId.value = id;
+});
+onShow(() => {
+  getInfo();
 });
 
-const getInfo = (id) => {
+const getInfo = () => {
   uni.showLoading();
-  WorkApi.detail(id)
+  WorkApi.detail(baseId.value)
     .then((res) => {
       baseInfo.value = res.data;
     })
@@ -114,7 +120,9 @@ const describeConfig = computed(() => {
 });
 const preview = () => {
   uni.previewImage({
-    urls: baseInfo.value.fileNames,
+    urls: baseInfo.value.fileNames.map(
+      (item) => userStore.userInfo.urlPrefix + item
+    ),
     fail: (err) => {
       console.log("err", err);
     },
@@ -128,6 +136,9 @@ const jump = () => {
 </script>
 
 <style lang="scss" scoped>
+.page-body {
+  padding-bottom: 200rpx;
+}
 .confirm {
   position: fixed;
   bottom: 80rpx;

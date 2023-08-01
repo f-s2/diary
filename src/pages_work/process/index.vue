@@ -32,9 +32,8 @@
       >
         <div class="describe-label">
           <span style="color: red">*</span
-          ><img class="icon" :src="icon" alt="" /> {{ item.name }}({{
-            item.code
-          }})
+          ><img class="icon" :src="icon" alt="" /> {{ item.name
+          }}<span v-if="item.code"> ({{ item.code }})</span>
         </div>
         <div class="describe-value">
           <uni-icons color="rgba(0, 0, 0, 0.3)" type="forward" size="24" />
@@ -57,7 +56,6 @@
       :types="baseInfo.typeVOList"
       v-model:show="modalState.show"
       @ok="handleOk"
-      @getInfo="getInfo"
     />
     <button @click="save" class="bottom-btn" type="primary" hover-class="none">
       提交工单
@@ -70,7 +68,8 @@ import { BaseApi } from "@/api/BaseApi";
 import { WorkApi } from "@/api/WorkApi";
 import icon from "@/static/device.png";
 import { useUserStore } from "@/store/user";
-import { onLoad } from "@dcloudio/uni-app";
+import { getAddress } from "@/utils/location";
+import { onLoad, onShow } from "@dcloudio/uni-app";
 import { provide, reactive, ref } from "vue";
 import SelectDevice from "./SelectDevice.vue";
 const userStore = useUserStore();
@@ -91,31 +90,40 @@ const config = [
 ];
 const baseId = ref("");
 onLoad(({ id }) => {
-  baseId.value = id || "1684073578090516480";
+  baseId.value = id;
   getInfo();
 });
+const addressInfo = ref({});
+onShow(() => {
+  getAddress().then((res) => {
+    const { address, location } = res;
+    addressInfo.value = {
+      latitude: location.lat,
+      longitude: location.lng,
+      address,
+    };
+  });
+});
+
 const getInfo = () => {
   uni.showLoading();
   WorkApi.detail(baseId.value)
     .then((res) => {
       baseInfo.value = res.data;
-      const { fileNames } = baseInfo.value;
+      const { finishFiles } = baseInfo.value;
       fileList.value =
-        fileNames?.map((item) => ({
-          name: item,
-          url: userStore.userInfo.urlPrefix + item,
+        finishFiles?.map((item) => ({
+          name: item.filePath,
+          url: userStore.userInfo.urlPrefix + item.filePath,
           extname: "png",
+          ...item,
         })) || [];
-      getNeedSpare();
     })
     .finally(() => [uni.hideLoading()]);
 };
-const getNeedSpare = () => {
-  const { id } = modalState.info;
-  if (!id) return false;
-  modalState.info = baseInfo.value.deviceVOList?.find((item) => item.id === id);
-};
-const handleSelect = ({ tempFilePaths }) => {
+
+const handleSelect = ({ tempFilePaths, tempFiles }) => {
+  const { height, width } = tempFiles[0].image;
   BaseApi.upload(tempFilePaths[0]).then((res) => {
     if (res.code === 0) {
       const { name } = res.data;
@@ -123,6 +131,10 @@ const handleSelect = ({ tempFilePaths }) => {
         url: userStore.userInfo.urlPrefix + name,
         name,
         extname: "png",
+        ...addressInfo.value,
+        width,
+        filePath: name,
+        length: height,
       });
       saveImgs();
     }
@@ -139,7 +151,7 @@ const saveImgs = () => {
   uni.showLoading();
   WorkApi.saveFiles({
     id: baseInfo.value.id,
-    finishFileNames: fileList.value.map((item) => item.name),
+    finishFiles: fileList.value,
   })
     .then((res) => {})
     .finally(() => {
@@ -160,9 +172,20 @@ const modalState = reactive({
   info: {},
 });
 const save = () => {
-  // WorkApi.finish({ ...baseInfo.value }).then((res) => {
-  //   console.log("res", res);
-  // });
+  WorkApi.finish({ id: baseInfo.value.id }).then((res) => {
+    if (res.code === 0) {
+      uni.navigateBack({});
+      uni.showToast({
+        title: res.message,
+        icon: "success",
+      });
+    } else {
+      uni.showToast({
+        title: res.message,
+        icon: "error",
+      });
+    }
+  });
 };
 </script>
 

@@ -66,7 +66,6 @@ function getDateList() {
 const handleClock = (res) => {
   uni.getLocation({
     type: "gcj02",
-    isHighAccuracy: true,
     success: (res) => {
       const { latitude, longitude } = res;
       location = { latitude, longitude };
@@ -102,7 +101,6 @@ function reloadLocation() {
   uni.showLoading();
   uni.getLocation({
     type: "gcj02",
-    isHighAccuracy: true,
     success: (res) => {
       console.log("res", res);
       const { latitude, longitude } = res;

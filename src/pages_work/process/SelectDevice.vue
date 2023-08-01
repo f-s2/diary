@@ -93,7 +93,7 @@
   <selected-spare
     v-model:show="selectedShow"
     :deviceInfo="deviceInfo"
-    @load="$emit('getInfo')"
+    @load="getDeviceInfo"
     :types="types"
   />
 </template>
@@ -104,10 +104,9 @@ import { eachTree } from "@/utils/tree";
 import { inject, ref, watch } from "vue";
 import EditSpare from "./EditSpare.vue";
 import SelectedSpare from "./SelectedSpare.vue";
-const props = defineProps({ show: Boolean, types: Array, deviceInfo: Object });
+const props = defineProps({ show: Boolean, types: Array });
 const emit = defineEmits(["getInfo"]);
 const queryParam = ref({});
-
 const relId = inject("relId");
 
 watch(
@@ -115,12 +114,19 @@ watch(
   (bol) => {
     if (bol) {
       getTree();
+      getDeviceInfo();
     }
   }
 );
 const isLast = ref(false);
 const parentInfo = ref({});
 const treeData = ref([]);
+const deviceInfo = ref({});
+const getDeviceInfo = () => {
+  WorkApi.getDeviceInfo({ id: relId.value }).then((res) => {
+    deviceInfo.value = res.data;
+  });
+};
 const getTree = () => {
   uni.showLoading();
   queryParam.value.searchContent = "";
@@ -170,7 +176,7 @@ const handleNot = () => {
         })
           .then(() => {})
           .finally(() => {
-            emit("getInfo");
+            getDeviceInfo();
             uni.hideLoading();
           });
       } else {

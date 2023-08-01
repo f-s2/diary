@@ -2,6 +2,7 @@
   <u-loading v-if="loading" />
   <uni-popup ref="popup" :mask-click="false">
     <button
+      hover-class="none"
       style="width: 80vw"
       open-type="getPhoneNumber"
       type="primary"

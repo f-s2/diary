@@ -6,22 +6,35 @@
       :key="item.name"
       @click="jump(item)"
     >
-      <img class="icon" :src="item.icon" alt="" />
+      <uni-badge
+        v-if="item.custom"
+        :text="userStore.unFinishCount"
+        type="error"
+        :max-num="99"
+        absolute="rightTop"
+      >
+        <img class="icon" :src="item.icon" alt="" />
+      </uni-badge>
+      <img v-else class="icon" :src="item.icon" alt="" />
+
       <div class="label">{{ item.name }}</div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useUserStore } from "@/store/user";
 import icon1 from "../static/tab/clock.png";
 import icon2 from "../static/tab/mine.png";
 import icon3 from "../static/tab/work.png";
+const userStore = useUserStore();
 defineProps({ activeIndex: Number });
 const tabInfo = [
   {
     name: "工单",
     icon: icon3,
     path: "/pages_work/index/index",
+    custom: true,
   },
   {
     name: "打卡",
@@ -41,6 +54,9 @@ const jump = ({ path }) => {
 </script>
 
 <style lang="scss" scoped>
+.dot {
+  color: red;
+}
 .tabs-box {
   display: flex;
   justify-content: space-between;

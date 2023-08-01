@@ -19,7 +19,10 @@
           <div class="value">{{ statistics.pictureCount || 0 }}</div>
           <div class="label">我的相册</div>
         </div>
-        <div class="count-item" @click="jump('/pages_work/index/index')">
+        <div
+          class="count-item"
+          @click="jump('/pages_work/index/index', params)"
+        >
           <div class="value">{{ statistics.finishOrderCount || 0 }}</div>
           <div class="label">完成工单</div>
         </div>
@@ -62,15 +65,20 @@ const baseInfo = computed(() => userStore.userInfo);
 const statistics = ref({});
 const init = () => {
   WorkApi.statistics({}).then((res) => {
-    console.log("res", res);
     statistics.value = res.data;
   });
 };
 init();
-const jump = (url) => {
-  uni.navigateTo({
-    url,
-  });
+const jump = (url, params) => {
+  if (!params) {
+    uni.navigateTo({
+      url,
+    });
+  } else {
+    uni.switchTab({
+      url: url,
+    });
+  }
 };
 
 const handleLoginOut = () => {

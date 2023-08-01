@@ -51,14 +51,22 @@
 import { WorkApi } from "@/api/WorkApi";
 import icon1 from "@/static/code.png";
 import icon2 from "@/static/time.png";
+import { useUserStore } from "@/store/user";
+import { onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
 import AuthButton from "../../components/AuthButton";
 import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
-
+const userStore = useUserStore();
+onShow(() => {
+  WorkApi.getCount().then((res) => {
+    userStore.unFinishCount = res.data;
+  });
+});
 const queryParam = ref({
-  // searchContent: "",
+  searchContent: "",
   finishStatus: null,
+  date: [],
 });
 const workList = ref([]);
 const reload = () => {
@@ -70,7 +78,6 @@ const reload = () => {
     .finally(() => {
       uni.hideLoading();
     });
-  console.log("reload");
 };
 const jump = (item) => {
   uni.navigateTo({

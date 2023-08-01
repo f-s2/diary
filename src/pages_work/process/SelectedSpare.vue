@@ -12,7 +12,7 @@
       <edit-spare
         ref="formRefs"
         :isAdd="false"
-        @ok="$emit('ok')"
+        @ok="handleOk"
         :types="types"
         v-model:formData="formData"
       />
@@ -21,8 +21,6 @@
 </template>
 
 <script setup>
-import { WorkApi } from "@/api/WorkApi";
-
 import { computed, ref, watch } from "vue";
 import EditSpare from "./EditSpare.vue";
 const props = defineProps({ show: Boolean, deviceInfo: Object, types: Array });
@@ -45,14 +43,11 @@ watch(
 );
 const save = () => {
   emit("update:show", true);
-  WorkApi.updateSingle([
-    ...formData.value.filter((item) => item.unitPrice),
-  ]).then((res) => {
-    if (res.code === 0) {
-      emit("update:show", false);
-      emit("load");
-    }
-  });
+  formRefs.value.save();
+};
+const handleOk = () => {
+  emit("update:show", false);
+  emit("load");
 };
 </script>
 
