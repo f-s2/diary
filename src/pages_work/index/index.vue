@@ -78,6 +78,7 @@ const queryParam = ref({
 });
 const workList = ref([]);
 const reload = () => {
+  getCount();
   uni.showLoading();
   WorkApi.list({ ...queryParam.value })
     .then((res) => {
