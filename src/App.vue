@@ -41,16 +41,20 @@ page {
     justify-content: space-between;
     align-items: center;
     padding: 14px 0;
+    gap: 10px;
     &:not(:first-child) {
       border-top: 1px solid #f7f8fa;
     }
   }
   .describe-label {
     font-weight: 400;
+    flex-shrink: 0;
   }
   .describe-value {
     color: rgb(0, 0, 0, 0.5);
     display: inline-flex;
+    flex-wrap: wrap;
+    word-break: break-all;
   }
 }
 .uni-easyinput {

@@ -103,7 +103,6 @@ function reloadLocation() {
   uni.getLocation({
     type: "gcj02",
     success: (res) => {
-      console.log("res", res);
       const { latitude, longitude } = res;
       location = { latitude, longitude };
       getLocation({ location: `${latitude},${longitude}` })

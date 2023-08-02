@@ -19,10 +19,7 @@
           <div class="value">{{ statistics.pictureCount || 0 }}</div>
           <div class="label">我的相册</div>
         </div>
-        <div
-          class="count-item"
-          @click="jump('/pages_work/index/index', params)"
-        >
+        <div class="count-item" @click="jump('/pages_work/index/index', 5)">
           <div class="value">{{ statistics.finishOrderCount || 0 }}</div>
           <div class="label">完成工单</div>
         </div>

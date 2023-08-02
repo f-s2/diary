@@ -33,6 +33,8 @@ onLoad(() => {
     });
   } else {
     loading.value = true;
+    emit("update:isInit", false);
+
     uni.login({
       success: ({ code }) => {
         UserApi.login({ code })
