@@ -5,7 +5,7 @@
     @maskClick="$emit('maskClick')"
     v-bind="$attrs"
   >
-    <div class="pup-head">
+    <div class="pup-head" v-if="head">
       <div class="left">
         <uni-icons
           v-if="back"
@@ -28,6 +28,10 @@ import { ref, watch } from "vue";
 const props = defineProps({
   show: Boolean,
   title: String,
+  head: {
+    type: Boolean,
+    default: true,
+  },
   back: {
     type: Boolean,
     default: true,

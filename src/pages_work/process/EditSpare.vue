@@ -58,15 +58,27 @@
       </uni-forms>
     </div>
   </div>
-  <button
-    v-if="isAdd"
-    class="bottom-btn"
-    @click="save"
-    type="primary"
-    hover-class="none"
-  >
-    保存
-  </button>
+  <div class="bottom-btn">
+    <button
+      @click="$emit('back')"
+      v-if="needBack"
+      class="btn"
+      type="primary"
+      hover-class="none"
+      plain
+    >
+      返回选择更多
+    </button>
+    <button
+      class="btn"
+      v-if="isAdd"
+      @click="save"
+      type="primary"
+      hover-class="none"
+    >
+      保存
+    </button>
+  </div>
 </template>
 
 <script setup>
@@ -75,7 +87,10 @@ import { computed, inject, ref, watch } from "vue";
 const props = defineProps({
   formData: Array,
   types: Array,
-
+  needBack: {
+    type: Boolean,
+    default: false,
+  },
   isAdd: {
     type: Boolean,
     default: true,
@@ -186,6 +201,13 @@ defineExpose({ init, save });
 </script>
 
 <style lang="scss" scoped>
+.bottom-btn {
+  display: flex;
+  gap: 10px;
+  .btn {
+    flex: 1;
+  }
+}
 .spare-item {
   border-bottom: 1px solid rgba($color: #000000, $alpha: 0.05);
   padding-bottom: 16px;

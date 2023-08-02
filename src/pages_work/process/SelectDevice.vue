@@ -15,19 +15,11 @@
         type="search"
         v-model="queryParam.searchContent"
         placeholder="备件名称,编码"
-        @change="load"
+        @focus="load"
       />
     </div>
-    <div class="search-content content" v-if="searchShow">
-      <edit-spare
-        v-if="searchSpareList.length"
-        @ok="$emit('ok')"
-        :types="types"
-        v-model:formData="searchSpareList"
-      />
-      <u-empty v-else></u-empty>
-    </div>
-    <div class="content" v-else>
+
+    <div class="content">
       <div class="describe-box" v-show="deviceInfo.outboundList?.length">
         <div class="describe-item" @click="handleView">
           <div class="describe-label" style="font-weight: bold">
@@ -40,7 +32,15 @@
       </div>
 
       <div class="sub-title">{{ parentInfo.name || "备件类型" }} :</div>
-      <div class="describe-box tree" v-if="!isLast">
+      <edit-spare
+        @ok="$emit('ok')"
+        :types="types"
+        v-model:formData="parentInfo.inventoryVOList"
+        v-if="isLast"
+        :needBack="true"
+        @back="handleBack"
+      />
+      <div class="describe-box tree" v-else-if="parentInfo.children?.length">
         <div
           @click="handleNext(item)"
           class="describe-item"
@@ -53,12 +53,7 @@
           </div>
         </div>
       </div>
-      <edit-spare
-        @ok="$emit('ok')"
-        :types="types"
-        v-model:formData="parentInfo.inventoryVOList"
-        v-else
-      />
+      <u-empty v-else></u-empty>
       <button
         @click="handleBack"
         v-show="parentInfo.name && !isLast"
@@ -96,6 +91,11 @@
     @load="getDeviceInfo"
     :types="types"
   />
+  <search-spare
+    v-model:show="searchShow"
+    :types="types"
+    @load="getDeviceInfo"
+  />
 </template>
 
 <script setup>
@@ -103,6 +103,7 @@ import { SpareApi, WorkApi } from "@/api/WorkApi";
 import { eachTree } from "@/utils/tree";
 import { inject, ref, watch } from "vue";
 import EditSpare from "./EditSpare.vue";
+import SearchSpare from "./SearchSpare.vue";
 import SelectedSpare from "./SelectedSpare.vue";
 const props = defineProps({ show: Boolean, types: Array });
 const emit = defineEmits(["getInfo"]);
@@ -188,32 +189,18 @@ const selectedShow = ref(false);
 const handleView = () => {
   selectedShow.value = true;
 };
-const searchSpareList = ref([]);
 const searchShow = ref(false);
 const load = () => {
-  searchSpareList.value = [];
   searchShow.value = true;
-  if (
-    queryParam.value.searchContent === "" ||
-    queryParam.value.searchContent === undefined
-  ) {
-    searchSpareList.value = [];
-    return false;
-  }
-  uni.showLoading();
-  WorkApi.searchSpare({ ...queryParam.value })
-    .then((res) => {
-      searchSpareList.value = res.data;
-    })
-    .finally(() => {
-      uni.hideLoading();
-    });
 };
 </script>
 
 <style lang="scss" scoped>
 .search {
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .tree {
   margin: 12px 0;

@@ -6,6 +6,7 @@
     title="已选择备件"
     :mask-click="false"
     @back="save"
+    :animation="false"
   >
     <div class="count">总计 : {{ counts }}</div>
     <div class="form-box">

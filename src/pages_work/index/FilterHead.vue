@@ -6,7 +6,8 @@
         type="search"
         v-model="queryParam.searchContent"
         placeholder="工单编号，客户名称"
-        @change="$emit('load')"
+        @confirm="$emit('load')"
+        @clear="$emit('load')"
       />
     </div>
 
@@ -107,7 +108,7 @@ const selectLevel = (code) => {
 const show = ref(false);
 const temQueryParam = ref({});
 const handleOpen = () => {
-  temQueryParam.value = { ...queryParam.value };
+  temQueryParam.value = JSON.parse(JSON.stringify(queryParam.value));
   show.value = true;
 };
 const handleOk = () => {
@@ -115,6 +116,7 @@ const handleOk = () => {
   queryParam.value.orderTypes = orderTypes;
   queryParam.value.startTime = date[0];
   queryParam.value.endTime = date[1];
+  queryParam.value.date = date;
   show.value = false;
   emit("load");
 };
