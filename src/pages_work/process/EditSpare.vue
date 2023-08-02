@@ -168,36 +168,45 @@ const save = () => {
       return ref.validate();
     })
   ).then((res) => {
+    uni.showLoading();
     if (props.isAdd) {
       WorkApi.temSave({
         id: relId.value,
         needInventory: 1,
         outboundList: [...forms.value.filter((item) => item.quantity)],
-      }).then((res) => {
-        if (res.code === 0) {
-          emit("ok");
-          uni.showToast({
-            title: "保存成功",
-            icon: "success",
-          });
-        } else {
-          uni.showToast({
-            title: res.message,
-            icon: "error",
-          });
-        }
-      });
+      })
+        .then((res) => {
+          if (res.code === 0) {
+            emit("ok");
+            uni.showToast({
+              title: "保存成功",
+              icon: "success",
+            });
+          } else {
+            uni.showToast({
+              title: res.message,
+              icon: "error",
+            });
+          }
+        })
+        .finally(() => {
+          uni.hideLoading();
+        });
     } else {
-      WorkApi.updateSingle([...forms.value]).then((res) => {
-        if (res.code === 0) {
-          emit("ok");
-        } else {
-          uni.showToast({
-            title: res.message,
-            icon: "error",
-          });
-        }
-      });
+      WorkApi.updateSingle([...forms.value])
+        .then((res) => {
+          if (res.code === 0) {
+            emit("ok");
+          } else {
+            uni.showToast({
+              title: res.message,
+              icon: "error",
+            });
+          }
+        })
+        .finally(() => {
+          uni.hideLoading();
+        });
     }
   });
 };
