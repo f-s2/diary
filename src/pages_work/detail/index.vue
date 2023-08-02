@@ -28,18 +28,21 @@
         </div>
       </div>
     </div>
-    <template v-if="isDone && baseInfo.fileNames?.length">
+    <template v-if="isDone && baseInfo.finishFiles?.length">
       <div class="sub-title">
         <span>现场单据照片</span>
       </div>
       <div class="img-list">
         <div
-          @click="preview"
+          @click="preview(index)"
           class="img-box"
           :key="index"
-          v-for="(item, index) in baseInfo.fileNames"
+          v-for="(item, index) in baseInfo.finishFiles"
         >
-          <img :src="userStore.userInfo.urlPrefix + item" class="pic" />
+          <img
+            :src="userStore.userInfo.urlPrefix + item.filePath"
+            class="pic"
+          />
         </div>
       </div>
     </template>
@@ -118,10 +121,11 @@ const describeConfig = computed(() => {
     { name: "维保人员", code: "users", custom: true },
   ];
 });
-const preview = () => {
+const preview = (current) => {
   uni.previewImage({
-    urls: baseInfo.value.fileNames.map(
-      (item) => userStore.userInfo.urlPrefix + item
+    current,
+    urls: baseInfo.value.finishFiles.map(
+      (item) => userStore.userInfo.urlPrefix + item.filePath
     ),
     fail: (err) => {
       console.log("err", err);

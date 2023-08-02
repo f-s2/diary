@@ -67,7 +67,7 @@
       hover-class="none"
       plain
     >
-      返回选择更多
+      返回
     </button>
     <button
       class="btn"
@@ -187,6 +187,10 @@ const save = () => {
       WorkApi.updateSingle([...forms.value]).then((res) => {
         if (res.code === 0) {
           emit("ok");
+          uni.showToast({
+            title: "保存成功",
+            icon: "success",
+          });
         } else {
           uni.showToast({
             title: res.message,

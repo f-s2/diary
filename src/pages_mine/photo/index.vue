@@ -40,14 +40,39 @@
       </div>
     </div>
     <u-empty class="empty" v-else></u-empty>
+    <div class="file-box" style="width: 0">
+      <uni-file-picker
+        :auto-upload="false"
+        @select="savePhotos"
+        :sourceType="['camera']"
+      >
+        <button class="bottom-btn" type="primary" hover-class="none">
+          拍照
+        </button>
+      </uni-file-picker>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { BaseApi } from "@/api/BaseApi";
+import { ClockInApi } from "@/api/ClockInApi";
 import { WorkApi } from "@/api/WorkApi";
 import { useUserStore } from "@/store/user";
-
+import { getAddress } from "@/utils/location";
+import { onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
+const addressInfo = ref({});
+onShow(() => {
+  getAddress().then((res) => {
+    const { address, location } = res;
+    addressInfo.value = {
+      latitude: location.lat,
+      longitude: location.lng,
+      address,
+    };
+  });
+});
 
 const userStore = useUserStore();
 const dateInfo = [
@@ -81,6 +106,39 @@ const reload = () => {
       uni.hideLoading();
     });
 };
+const savePhotos = ({ tempFilePaths, tempFiles }) => {
+  const { height, width } = tempFiles[0].image;
+  uni.showLoading();
+  BaseApi.upload(tempFilePaths[0])
+    .then((res) => {
+      if (res.code === 0) {
+        const { name } = res.data;
+
+        const params = {
+          ...addressInfo.value,
+          width,
+          filePath: name,
+          length: height,
+        };
+        uni.showLoading();
+        ClockInApi.saveImg(params)
+          .then((res) => {
+            if (res.code === 0) {
+              uni.showToast({
+                title: "保存成功",
+              });
+            }
+          })
+          .finally(() => {
+            uni.hideLoading();
+            reload();
+          });
+      }
+    })
+    .finally(() => {
+      uni.hideLoading();
+    });
+};
 const preview = (url) => {
   uni.previewImage({
     urls: [userStore.userInfo.urlPrefix + url],
@@ -96,8 +154,12 @@ reload();
   padding: 80rpx 0;
   display: block;
 }
+.bottom-btn {
+  bottom: 100rpx;
+}
 .page {
   padding: 32rpx;
+  // padding-top: 150rpx;
 }
 .filter-date {
   display: flex;

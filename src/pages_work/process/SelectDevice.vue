@@ -33,7 +33,7 @@
 
       <div class="sub-title">{{ parentInfo.name || "备件类型" }} :</div>
       <edit-spare
-        @ok="$emit('ok')"
+        @ok="saveOk"
         :types="types"
         v-model:formData="parentInfo.inventoryVOList"
         v-if="isLast"
@@ -62,7 +62,7 @@
         plain
         class="bottom-btn"
       >
-        返回选择更多
+        返回
       </button>
       <div
         v-show="!parentInfo.name"
@@ -151,6 +151,10 @@ const handleNext = (item) => {
   } else {
     isLast.value = false;
   }
+};
+const saveOk = () => {
+  handleBack();
+  getDeviceInfo();
 };
 const handleBack = () => {
   if (!parentInfo.value.parentId) {

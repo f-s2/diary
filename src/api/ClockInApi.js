@@ -26,4 +26,12 @@ export class ClockInApi {
             data
         })
     }
+    static saveImg(data) {
+        return request({
+            url: prefix + '/save-picture',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
 }
