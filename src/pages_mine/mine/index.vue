@@ -54,6 +54,7 @@ import { UserApi } from "@/api/UserApi";
 import { WorkApi } from "@/api/WorkApi";
 import src from "@/static/person.png";
 import { useUserStore } from "@/store/user";
+import { onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
 import TabBar from "../../components/TabBar.vue";
 const userStore = useUserStore();
@@ -65,7 +66,9 @@ const init = () => {
     statistics.value = res.data;
   });
 };
-init();
+onShow(() => {
+  init();
+});
 const jump = (url, params) => {
   if (!params) {
     uni.navigateTo({
