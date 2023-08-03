@@ -56,6 +56,7 @@
       <u-empty v-else></u-empty>
       <button
         @click="handleBack"
+        style="background-color: #fff"
         v-show="parentInfo.name && !isLast"
         type="primary"
         hover-class="none"
@@ -208,6 +209,7 @@ const load = () => {
 }
 .tree {
   margin: 12px 0;
+  margin-bottom: 150rpx;
   .describe-label {
     // color: rgba($color: #000000, $alpha: 0.9);
   }
