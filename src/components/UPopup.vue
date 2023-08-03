@@ -4,6 +4,7 @@
     :safe-area="false"
     @maskClick="$emit('maskClick')"
     v-bind="$attrs"
+    @change="handelChange"
   >
     <div class="pup-head" v-if="head">
       <div class="left">
@@ -46,6 +47,9 @@ const emit = defineEmits(["update:show", "back"]);
 const handleBack = () => {
   emit("update:show", false);
   emit("back");
+};
+const handelChange = ({ show }) => {
+  emit("update:show", show);
 };
 watch(
   () => props.show,

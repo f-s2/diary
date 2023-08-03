@@ -1,6 +1,8 @@
 <template>
   <div class="page">
-    <div class="head card">2023年07月23日 09:27:23</div>
+    <div class="head card">
+      {{ dayjs().format("YYYY年MM月DD日 hh:mm:ss") }}
+    </div>
     <uni-forms :modelValue="formData" :rules="rules" label-position="top">
       <div class="address card">
         <uni-forms-item label="当前位置 :">
@@ -27,6 +29,7 @@
 <script setup>
 import { ClockInApi } from "@/api/ClockInApi";
 import { onLoad } from "@dcloudio/uni-app";
+import dayjs from "dayjs";
 import { ref } from "vue";
 const formData = ref({});
 const rules = [];
@@ -70,7 +73,7 @@ const save = () => {
   padding: 22rpx 32rpx;
   background-color: #fff;
   border-radius: 4px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .head {
   font-size: 32rpx;
