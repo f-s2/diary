@@ -18,5 +18,5 @@ export const netConfig = {
     //无权限code
     noPermissionCode: -1,
 
-    mapKey: "HZ6BZ-ILOCJ-UZ2FQ-X6OJP-QVXIO-OMBY6"
+    mapKey: "KYABZ-NKLCZ-WR2X7-7D7JR-V67ST-3GBAN"
 };

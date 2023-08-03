@@ -1,7 +1,6 @@
 
 import { getLocation } from "@/api/UserApi";
 export const getAddress = () => {
-    uni.showLoading();
     return new Promise((resolve, reject) => {
         uni.getLocation({
             type: "gcj02",
@@ -15,7 +14,6 @@ export const getAddress = () => {
                     })
                     .catch(reject)
                     .finally(() => {
-                        uni.hideLoading();
                     });
             },
         });

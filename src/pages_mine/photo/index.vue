@@ -60,10 +60,14 @@ import { ClockInApi } from "@/api/ClockInApi";
 import { WorkApi } from "@/api/WorkApi";
 import { useUserStore } from "@/store/user";
 import { getAddress } from "@/utils/location";
-import { onShow } from "@dcloudio/uni-app";
+import { onLoad } from "@dcloudio/uni-app";
 import { ref } from "vue";
 const addressInfo = ref({});
-onShow(() => {
+onLoad(() => {
+  getAddressInfo();
+});
+
+const getAddressInfo = () => {
   getAddress().then((res) => {
     const { address, location } = res;
     addressInfo.value = {
@@ -72,8 +76,7 @@ onShow(() => {
       address,
     };
   });
-});
-
+};
 const userStore = useUserStore();
 const dateInfo = [
   {
@@ -107,8 +110,9 @@ const reload = () => {
     });
 };
 const savePhotos = ({ tempFilePaths, tempFiles }) => {
+  getAddressInfo();
   const { height, width } = tempFiles[0].image;
-  uni.showLoading();
+  uni.showLoading({ mask: true });
   BaseApi.upload(tempFilePaths[0])
     .then((res) => {
       if (res.code === 0) {
@@ -120,7 +124,6 @@ const savePhotos = ({ tempFilePaths, tempFiles }) => {
           filePath: name,
           length: height,
         };
-        uni.showLoading();
         ClockInApi.saveImg(params)
           .then((res) => {
             if (res.code === 0) {
@@ -130,7 +133,6 @@ const savePhotos = ({ tempFilePaths, tempFiles }) => {
             }
           })
           .finally(() => {
-            uni.hideLoading();
             reload();
           });
       }
@@ -155,11 +157,11 @@ reload();
   display: block;
 }
 .bottom-btn {
-  bottom: 100rpx;
+  // bottom: 100rpx;
 }
 .page {
   padding: 32rpx;
-  // padding-top: 150rpx;
+  padding-bottom: 150rpx;
 }
 .filter-date {
   display: flex;
