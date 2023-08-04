@@ -9,10 +9,12 @@ export const useUserStore = defineStore('user', () => {
     const setUserInfo = (data) => {
         userInfo.value = data
     }
+    const unFinishCount = ref(0)
     return {
         userInfo,
         setUserInfo,
-        isLogout
+        isLogout,
+        unFinishCount
     }
 
 

@@ -8,7 +8,7 @@
     >
       <uni-badge
         v-if="item.custom"
-        :text="userStore.unFinishCount"
+        :text="+userStore.unFinishCount || ''"
         type="error"
         :max-num="99"
         absolute="rightTop"

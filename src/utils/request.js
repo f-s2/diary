@@ -50,7 +50,7 @@ instance.interceptors.response.use(
             })
         } else {
             uni.showToast({
-                icon: 'error',
+                // icon: 'error',
                 title: res.message
             })
             return Promise.reject(res);
