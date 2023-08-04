@@ -182,11 +182,6 @@ const save = () => {
               title: "保存成功",
               icon: "success",
             });
-          } else {
-            uni.showToast({
-              title: res.message,
-              icon: "error",
-            });
           }
         })
         .finally(() => {
@@ -197,11 +192,6 @@ const save = () => {
         .then((res) => {
           if (res.code === 0) {
             emit("ok");
-          } else {
-            uni.showToast({
-              title: res.message,
-              icon: "error",
-            });
           }
         })
         .finally(() => {

@@ -177,16 +177,12 @@ const save = () => {
     success: ({ confirm }) => {
       confirm &&
         WorkApi.finish({ id: baseInfo.value.id }).then((res) => {
+          console.log(res, "res");
           if (res.code === 0) {
             uni.navigateBack({});
             uni.showToast({
               title: res.message,
               icon: "success",
-            });
-          } else {
-            uni.showToast({
-              title: res.message,
-              icon: "error",
             });
           }
         });

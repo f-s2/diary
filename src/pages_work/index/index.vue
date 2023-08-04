@@ -60,7 +60,7 @@ import FilterHead from "./FilterHead";
 const userStore = useUserStore();
 const isInit = ref(false);
 onShow(() => {
-  isInit.value && getCount();
+  isInit.value && reload();
 });
 
 const getCount = () => {

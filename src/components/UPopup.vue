@@ -7,13 +7,8 @@
     @change="handelChange"
   >
     <div class="pup-head" v-if="head">
-      <div class="left">
-        <uni-icons
-          v-if="back"
-          @click="handleBack"
-          type="back"
-          size="16"
-        ></uni-icons>
+      <div class="left" @click="handleBack">
+        <uni-icons v-if="back" type="back" size="16"></uni-icons>
       </div>
       <span class="title ele">{{ title }}</span>
       <div class="right" @click="$emit('update:show', false)">
@@ -81,6 +76,10 @@ watch(
   .left {
     position: absolute;
     left: 0;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
   }
   .right {
     position: absolute;

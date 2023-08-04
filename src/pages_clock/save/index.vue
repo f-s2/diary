@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="head card">
-      {{ dayjs().format("YYYY年MM月DD日 hh:mm:ss") }}
+      {{ dayjs().format("YYYY年MM月DD日 HH:mm:ss") }}
     </div>
     <uni-forms :modelValue="formData" :rules="rules" label-position="top">
       <div class="address card">

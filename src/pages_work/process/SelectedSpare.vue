@@ -44,6 +44,7 @@ watch(
 );
 const save = () => {
   emit("update:show", true);
+  uni.showLoading({ mask: true });
   formRefs.value.save();
 };
 const handleOk = () => {
