@@ -35,7 +35,7 @@
         </div>
       </uni-card>
     </div>
-    <u-empty title="当然暂无打卡记录" v-else />
+    <u-empty title="当前暂无打卡记录" v-else />
   </div>
   <TabBar :activeIndex="1" />
 </template>
