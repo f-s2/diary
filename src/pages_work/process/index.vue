@@ -21,6 +21,14 @@
         </div>
       </div>
     </div>
+    <div class="remark" style="margin-bottom: 10px">
+      <div class="sub-title">
+        <span>描述</span>
+      </div>
+      <uni-card :isFull="true" :border="false" :is-shadow="false">
+        {{ baseInfo.remark }}
+      </uni-card>
+    </div>
     <uni-forms
       ref="formRef"
       :label-width="0"

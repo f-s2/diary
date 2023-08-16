@@ -78,7 +78,7 @@
         </template>
       </div>
     </div>
-    <reply-popup v-model:show="replyShow" :info="baseInfo" />
+    <reply-popup v-model:show="replyShow" :info="baseInfo" @ok="getInfo" />
     <button
       hover-class="none"
       @click="handleReply"

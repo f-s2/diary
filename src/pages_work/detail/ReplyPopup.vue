@@ -38,7 +38,11 @@
             ]"
           ></uni-data-checkbox>
         </uni-forms-item>
-        <uni-forms-item label="推迟时间 :" name="delayDay">
+        <uni-forms-item
+          v-if="formData.delayed === 1"
+          label="推迟时间 :"
+          name="delayDay"
+        >
           <div class="form-item">
             <uni-easyinput v-model="formData.delayDay" type="number" />
             天
