@@ -51,6 +51,13 @@ export class WorkApi {
             params: {},
         })
     }
+    static reply(data) {
+        return request({
+            url: prefix + '/reply',
+            method: 'post',
+            data,
+        })
+    }
 
     static finish(data) {
         return request({

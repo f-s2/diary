@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <template v-if="isDone && baseInfo.finishFiles?.length">
+    <template v-if="!isDoing && baseInfo.finishFiles?.length">
       <div class="sub-title">
         <span>现场单据照片</span>
       </div>
@@ -46,6 +46,14 @@
         </div>
       </div>
     </template>
+    <div class="remark" style="margin-bottom: 10px">
+      <div class="sub-title">
+        <span>描述</span>
+      </div>
+      <uni-card :isFull="true" :border="false" :is-shadow="false">
+        {{ baseInfo.remark }}
+      </uni-card>
+    </div>
 
     <div class="sub-title">
       <span>设备信息</span>
@@ -60,7 +68,7 @@
           <img class="icon" :src="icon" alt="img" />
           {{ item.name }} <span v-if="item.code"> ({{ item.code }})</span>
         </div>
-        <template v-if="isDone">
+        <template v-if="!isDoing">
           <div class="device-item_content" v-if="item.needInventory === 1">
             <div class="spare-item" v-for="device in item.outboundList">
               {{ device.name }}({{ device.code }}) *{{ device.quantity }}
@@ -70,10 +78,20 @@
         </template>
       </div>
     </div>
+    <reply-popup v-model:show="replyShow" :info="baseInfo" />
+    <button
+      hover-class="none"
+      @click="handleReply"
+      v-if="!baseInfo.replyStatus"
+      class="confirm"
+      type="primary"
+    >
+      回复工单
+    </button>
     <button
       hover-class="none"
       @click="jump"
-      v-if="!isDone"
+      v-else-if="isDoing"
       class="confirm"
       type="primary"
     >
@@ -88,9 +106,10 @@ import icon from "@/static/device.png";
 import { useUserStore } from "@/store/user";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
+import ReplyPopup from "./ReplyPopup.vue";
 const baseInfo = ref({});
 const userStore = useUserStore();
-const isDone = computed(() => baseInfo.value.finishStatus === 5);
+const isDoing = computed(() => baseInfo.value.finishStatus === 4);
 
 const baseId = ref("");
 onLoad(({ id }) => {
@@ -139,6 +158,10 @@ const jump = () => {
   uni.navigateTo({
     url: "/pages_work/process/index?id=" + baseInfo.value.id,
   });
+};
+const replyShow = ref(false);
+const handleReply = () => {
+  replyShow.value = true;
 };
 </script>
 

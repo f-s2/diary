@@ -130,4 +130,15 @@ button[type="primary"][plain] {
   right: 16px;
   bottom: 32px;
 }
+.reply-form {
+  .form-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .uni-easyinput {
+      width: 100px !important;
+      flex: initial;
+    }
+  }
+}
 </style>

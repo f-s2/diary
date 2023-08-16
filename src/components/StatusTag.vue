@@ -1,6 +1,7 @@
 <template>
   <div v-if="type == 0" :class="['status', { bg: needBg }]">
     <span class="doing" v-if="status === 4">待完成</span>
+    <span class="waiting" v-else-if="status === 6">待审核</span>
     <span class="done" v-else-if="status === 5">已完成</span>
   </div>
   <div class="types" v-else-if="type == 1">
@@ -42,8 +43,12 @@ defineProps({
     .doing {
       background-color: rgba($color: $uni-color-warning, $alpha: 0.1);
     }
+    .waiting {
+      background-color: rgba($color: $uni-color-primary, $alpha: 0.1);
+    }
   }
   .done,
+  .waiting,
   .doing {
     padding: 2px 8px;
     border-radius: 4px;
@@ -67,6 +72,12 @@ defineProps({
     color: $uni-color-warning;
     &::before {
       background-color: $uni-color-warning;
+    }
+  }
+  .waiting {
+    color: $uni-color-primary;
+    &::before {
+      background-color: $uni-color-primary;
     }
   }
 }

@@ -15,42 +15,61 @@
               :types="baseInfo.typeVOList?.map((item) => item.name)"
             />
           </span>
-
           <span v-else-if="item.code === 'users'">
             {{ baseInfo.users?.map((item) => item.username).join(",") }}
           </span>
         </div>
       </div>
     </div>
-    <div class="sub-title">设备使用选择</div>
-    <div class="describe-box bottom">
-      <div
-        class="describe-item"
-        v-for="item in baseInfo.deviceVOList"
-        :key="item.id"
-        @click="handleSelectPart(item)"
-      >
-        <div class="describe-label">
-          <span style="color: red">*</span
-          ><img class="icon" :src="icon" alt="" /> {{ item.name
-          }}<span v-if="item.code"> ({{ item.code }})</span>
-        </div>
-        <div class="describe-value">
-          <uni-icons color="rgba(0, 0, 0, 0.3)" type="forward" size="24" />
+    <uni-forms
+      ref="formRef"
+      :label-width="0"
+      :modelValue="formData"
+      :rules="rules"
+    >
+      <div class="sub-title">实际完成时间</div>
+      <div class="timer">
+        <uni-forms-item name="actualFinishTime" required>
+          <uni-datetime-picker
+            v-model="formData.actualFinishTime"
+            type="datetime"
+            placeholder="完成时间"
+          />
+        </uni-forms-item>
+      </div>
+      <div class="sub-title">设备使用选择</div>
+      <div class="describe-box bottom">
+        <div
+          class="describe-item"
+          v-for="item in baseInfo.deviceVOList"
+          :key="item.id"
+          @click="handleSelectPart(item)"
+        >
+          <div class="describe-label">
+            <span style="color: red">*</span
+            ><img class="icon" :src="icon" alt="" /> {{ item.name
+            }}<span v-if="item.code"> ({{ item.code }})</span>
+          </div>
+          <div class="describe-value">
+            <uni-icons color="rgba(0, 0, 0, 0.3)" type="forward" size="24" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="sub-title">现场拍照</div>
-    <div class="img-box">
-      <uni-file-picker
-        :auto-upload="false"
-        @select="handleSelect"
-        @delete="handleDelete"
-        :modelValue="fileList"
-        :imageStyles="imageStyles"
-        :sourceType="['camera']"
-      ></uni-file-picker>
-    </div>
+      <div class="sub-title">现场拍照</div>
+      <div class="img-box">
+        <uni-forms-item required>
+          <uni-file-picker
+            :auto-upload="false"
+            @select="handleSelect"
+            @delete="handleDelete"
+            :modelValue="fileList"
+            :imageStyles="imageStyles"
+            :sourceType="['camera']"
+          ></uni-file-picker>
+        </uni-forms-item>
+      </div>
+    </uni-forms>
+
     <select-device
       :deviceInfo="modalState.info"
       :types="baseInfo.typeVOList"
@@ -174,21 +193,48 @@ const modalState = reactive({
   show: false,
   info: {},
 });
-const save = () => {
+const formData = ref({});
+const formRef = ref();
+const rules = {
+  actualFinishTime: {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择",
+      },
+    ],
+  },
+};
+const save = async () => {
+  await formRef.value.validate();
+  if (!fileList.value?.length) {
+    uni.showToast({
+      title: "需上传图片",
+      icon: "none",
+    });
+    return false;
+  }
   uni.showModal({
     title: "确定提交工单?",
     success: ({ confirm }) => {
       confirm &&
-        WorkApi.finish({ id: baseInfo.value.id }).then((res) => {
-          console.log(res, "res");
-          if (res.code === 0) {
-            uni.navigateBack({});
-            uni.showToast({
-              title: res.message,
-              icon: "success",
-            });
+        WorkApi.finish({ id: baseInfo.value.id, ...formData.value }).then(
+          (res) => {
+            console.log(res, "res");
+            if (res.code === 0) {
+              uni.navigateBack({});
+              uni.showToast({
+                title: res.message,
+                icon: "success",
+              });
+            } else {
+              uni.showToast({
+                title: res.message,
+                icon: "none",
+              });
+            }
           }
-        });
+        );
     },
   });
 };

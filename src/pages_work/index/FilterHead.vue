@@ -80,6 +80,10 @@ const tagInfo = [
     code: 4,
   },
   {
+    name: "待审核",
+    code: 6,
+  },
+  {
     name: "已完成",
     code: 5,
   },
@@ -184,11 +188,7 @@ const popupRef = ref();
     }
   }
 }
-.time-picker {
-}
-::v-deep .uni-date-range {
-  background: #f7f8fa !important;
-}
+
 .action {
   display: flex;
   margin: 28px 0 10px;
