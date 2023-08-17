@@ -30,7 +30,7 @@
     </div>
     <template v-if="!isDoing && baseInfo.finishFiles?.length">
       <div class="sub-title">
-        <span>现场单据照片</span>
+        <span>现场照片+服务单</span>
       </div>
       <div class="img-list">
         <div
@@ -140,6 +140,7 @@ const describeConfig = computed(() => {
     { name: "公司地址", code: "address" },
     { name: "工单创建时间", code: "createTime" },
     { name: "工单完成时间", code: "finishTime" },
+    { name: "维修联系人", code: "repairContactInfo" },
     { name: "维保人员", code: "users", custom: true },
   ];
 });

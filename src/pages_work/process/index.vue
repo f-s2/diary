@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="sub-title">现场拍照</div>
+      <div class="sub-title">材料上传(现场照片+服务单)</div>
       <div class="img-box">
         <uni-forms-item required>
           <uni-file-picker
@@ -116,6 +116,7 @@ const config = [
   { name: "联系人电话", code: "contactPhone" },
   { name: "公司地址", code: "address" },
   { name: "工单创建时间", code: "createTime" },
+  { name: "维修联系人", code: "repairContactInfo" },
   { name: "维保人员", code: "users", custom: true },
 ];
 const baseId = ref("");

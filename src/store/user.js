@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 export const useUserStore = defineStore('user', () => {
 
-    const isLogout = ref(false)
+    const isLoginOut = ref(false)
     const userInfo = ref({
     })
     const setUserInfo = (data) => {
@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
     return {
         userInfo,
         setUserInfo,
-        isLogout,
+        isLoginOut,
         unFinishCount
     }
 

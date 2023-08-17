@@ -43,8 +43,6 @@ onLoad(() => {
               openid = res.data.openid;
               getApp().globalData.openid = res.data.openid;
               popup.value.open();
-            } else {
-              uni.showToast({ title: "登录失败" });
             }
           })
           .finally(() => {
@@ -66,12 +64,14 @@ const getPhoneNumber = ({ detail }) => {
   } else {
     UserApi.getPhone({ code: detail.code, openid })
       .then((res) => {
-        userStore.setUserInfo(res.data);
-        userStore.isLoginOut = false;
-        uni.setStorageSync("token", res.data.token);
-        uni.setStorageSync("id", res.data.id);
-        emit("load");
-        emit("update:isInit", true);
+        if (res.code === 0) {
+          userStore.setUserInfo(res.data);
+          userStore.isLoginOut = false;
+          uni.setStorageSync("token", res.data.token);
+          uni.setStorageSync("id", res.data.id);
+          emit("load");
+          emit("update:isInit", true);
+        }
       })
       .finally(() => {
         popup.value.close();
