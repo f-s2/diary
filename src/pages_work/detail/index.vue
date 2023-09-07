@@ -46,7 +46,7 @@
         </div>
       </div>
     </template>
-    <div class="remark" style="margin-bottom: 10px">
+    <div class="remark" style="margin: 10px 0">
       <div class="sub-title">
         <span>描述</span>
       </div>

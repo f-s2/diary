@@ -73,10 +73,15 @@ button[type="primary"][plain] {
 .uni-popup__wrapper {
   background-color: #fff !important;
   padding: 24px 16px 30px;
+  &.center {
+    border-radius: 10px;
+    padding: 10px;
+  }
+  &.bottom {
+    border-radius: 10px 10px 0 0;
+  }
 }
-.uni-popup__wrapper.bottom {
-  border-radius: 10px 10px 0 0;
-}
+
 .popup {
   .uni-date {
     .uni-date-editor--x {
