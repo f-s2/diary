@@ -1,12 +1,8 @@
 <template>
   <div class="page">
     <div class="filter-date">
-      <div
-        @click="selectDate(item)"
-        :class="['date-item', { active: activeIndex === item.code }]"
-        v-for="item in dateInfo"
-        :key="item.code"
-      >
+      <div @click="selectDate(item)" :class="['date-item', { active: activeIndex === item.code }]"
+        v-for="item in dateInfo" :key="item.code">
         {{ item.name }}
       </div>
     </div>
@@ -14,17 +10,8 @@
       <div class="photo-type" v-for="(item, index) in picList" :key="index">
         <div class="photo-title">{{ item.time }}</div>
         <div class="photo-box">
-          <div
-            class="img-box"
-            @click="preview(file.filePath)"
-            v-for="(file, i) in item.files"
-            :key="i"
-          >
-            <img
-              class="pic"
-              :src="userStore.userInfo.urlPrefix + file.filePath"
-              alt=""
-            />
+          <div class="img-box" @click="preview(file.filePath)" v-for="(file, i) in item.files" :key="i">
+            <img class="pic" :src="userStore.userInfo.urlPrefix + file.filePath" alt="" />
             <div class="img-info">
               <div class="info">
                 <uni-icons type="images" size="16" /> {{ file.width }}*{{
@@ -41,11 +28,7 @@
     </div>
     <u-empty class="empty" v-else></u-empty>
     <div class="file-box" style="width: 0">
-      <uni-file-picker
-        :auto-upload="false"
-        @select="savePhotos"
-        :sourceType="['camera']"
-      >
+      <uni-file-picker :auto-upload="false" @select="savePhotos" :sourceType="['camera']">
         <button class="bottom-btn" type="primary" hover-class="none">
           拍照
         </button>
@@ -60,23 +43,11 @@ import { ClockInApi } from "@/api/ClockInApi";
 import { WorkApi } from "@/api/WorkApi";
 import { useUserStore } from "@/store/user";
 import { getAddress } from "@/utils/location";
-import { onLoad } from "@dcloudio/uni-app";
 import { ref } from "vue";
 const addressInfo = ref({});
-onLoad(() => {
-  getAddressInfo();
-});
 
-const getAddressInfo = () => {
-  getAddress().then((res) => {
-    const { address, location } = res;
-    addressInfo.value = {
-      latitude: location.lat,
-      longitude: location.lng,
-      address,
-    };
-  });
-};
+
+
 const userStore = useUserStore();
 const dateInfo = [
   {
@@ -109,8 +80,14 @@ const reload = () => {
       uni.hideLoading();
     });
 };
-const savePhotos = ({ tempFilePaths, tempFiles }) => {
-  getAddressInfo();
+const savePhotos = async ({ tempFilePaths, tempFiles }) => {
+  const res = await getAddress()
+  const { address, location } = res;
+  addressInfo.value = {
+    latitude: location.lat,
+    longitude: location.lng,
+    address,
+  };
   const { height, width } = tempFiles[0].image;
   uni.showLoading({ mask: true });
   BaseApi.upload(tempFilePaths[0])
@@ -156,13 +133,16 @@ reload();
   padding: 80rpx 0;
   display: block;
 }
+
 .bottom-btn {
   // bottom: 100rpx;
 }
+
 .page {
   padding: 32rpx;
   padding-bottom: 150rpx;
 }
+
 .filter-date {
   display: flex;
   border-radius: 4rpx;
@@ -178,27 +158,33 @@ reload();
     text-align: center;
     line-height: 80rpx;
     font-weight: bold;
+
     &.active {
       background-color: #fff;
     }
   }
 }
+
 .photo-list {
   margin-top: 32rpx;
 }
+
 .photo-type {
   padding: 12px 16px;
   border-radius: 4px;
   background: #fff;
 }
+
 .photo-title {
   font-weight: bold;
   margin-bottom: 12px;
 }
+
 .photo-box {
   display: flex;
   flex-direction: column;
   gap: 14px;
+
   .img-box {
     display: flex;
     gap: 12px;
@@ -206,6 +192,7 @@ reload();
     padding-bottom: 14px;
     border-bottom: 1px solid rgba($color: #000000, $alpha: 0.05);
   }
+
   .img-info {
     flex: 1;
     align-self: stretch;
@@ -215,11 +202,13 @@ reload();
     justify-content: space-around;
     color: rgba($color: #000000, $alpha: 0.9);
   }
+
   .info,
   .location {
     line-height: 16px;
     word-break: break-all;
   }
+
   .pic {
     height: 48px;
     width: 48px;

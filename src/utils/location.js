@@ -16,6 +16,14 @@ export const getAddress = () => {
                     .finally(() => {
                     });
             },
+            fail: (err) => {
+                uni.showModal({
+                    title: "提示!",
+                    content: '请确保您位置定位权限已打卡!',
+                    showCancel: false
+                })
+                reject(err)
+            }
         });
     })
 

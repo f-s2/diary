@@ -22,13 +22,7 @@
       <div class="address">
         <div class="label">当前位置:</div>
         <div class="value">{{ address || "--" }}</div>
-        <uni-icons
-          @click="reloadLocation"
-          class="icon"
-          type="reload"
-          color="#1890ff"
-          size="18"
-        />
+        <uni-icons @click="reloadLocation" class="icon" type="reload" color="#1890ff" size="18" />
       </div>
     </div>
   </div>
@@ -37,10 +31,10 @@
 
 <script setup>
 import { ClockInApi } from "@/api/ClockInApi";
+import { getAddress } from "@/utils/location";
 import { onShow, onUnload } from "@dcloudio/uni-app";
 import dayjs from "dayjs";
 import { ref } from "vue";
-import { getLocation } from "../../api/UserApi";
 import TabBar from "../../components/TabBar.vue";
 const currentTime = ref(new Date().getTime());
 const address = ref("");
@@ -100,21 +94,12 @@ const handleClock = (res) => {
 
 function reloadLocation() {
   uni.showLoading();
-  uni.getLocation({
-    type: "gcj02",
-    success: (res) => {
-      const { latitude, longitude } = res;
-      location = { latitude, longitude };
-      getLocation({ location: `${latitude},${longitude}` })
-        .then((res) => {
-          const { address: adr } = res?.data?.result || {};
-          address.value = adr;
-        })
-        .finally(() => {
-          uni.hideLoading();
-        });
-    },
-  });
+  getAddress().then(res => {
+    address.value = res.address
+  }).finally(() => {
+    uni.hideLoading();
+  })
+
 }
 
 function getDistance(lat1, lng1, lat2, lng2) {
@@ -133,7 +118,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
     Math.asin(
       Math.sqrt(
         Math.pow(Math.sin(a / 2), 2) +
-          Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)
+        Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)
       )
     );
   return (distance / 1000).toFixed(2);
@@ -150,6 +135,7 @@ const jump = () => {
   position: relative;
   padding-bottom: 150rpx;
 }
+
 .head {
   font-size: 32rpx;
   padding: 22rpx 32rpx;
@@ -160,16 +146,19 @@ const jump = () => {
   align-items: center;
   justify-content: space-between;
 }
+
 .main {
   padding: 40rpx 32rpx;
   background: #fff;
 }
+
 .swiper-date {
   overflow-x: auto;
   display: flex;
   flex-wrap: nowrap;
   gap: 16px;
 }
+
 .date-item {
   border-radius: 2px;
   background: #f7f8fa;
@@ -178,20 +167,24 @@ const jump = () => {
   font-size: 12px;
   padding: 24rpx;
   box-sizing: border-box;
+
   .count {
     color: rgba(0, 0, 0, 0.5);
     margin-bottom: 48rpx;
   }
+
   .label {
     color: rgba(0, 0, 0, 0.9);
   }
 }
+
 .time {
   text-align: center;
   font-size: 32px;
   font-weight: bold;
   margin: 32px 0 24px;
 }
+
 .clock {
   width: 300rpx;
   height: 300rpx;
@@ -206,6 +199,7 @@ const jump = () => {
   font-weight: bold;
   box-shadow: 0 0 8px $uni-color-primary;
 }
+
 .address {
   display: flex;
   font-size: 14px;
@@ -217,6 +211,7 @@ const jump = () => {
   .label {
     color: rgba(0, 0, 0, 0.5);
   }
+
   .icon {
     font-weight: bold;
   }

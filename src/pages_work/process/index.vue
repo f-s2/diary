@@ -10,10 +10,7 @@
             {{ baseInfo?.[item.code] || "--" }}
           </span>
           <span v-else-if="item.code === 'types'">
-            <status-tag
-              type="1"
-              :types="baseInfo.typeVOList?.map((item) => item.name)"
-            />
+            <status-tag type="1" :types="baseInfo.typeVOList?.map((item) => item.name)" />
           </span>
           <span v-else-if="item.code === 'users'">
             {{ baseInfo.users?.map((item) => item.username).join(",") }}
@@ -29,33 +26,18 @@
         {{ baseInfo.remark }}
       </uni-card>
     </div>
-    <uni-forms
-      ref="formRef"
-      :label-width="0"
-      :modelValue="formData"
-      :rules="rules"
-    >
+    <uni-forms ref="formRef" :label-width="0" :modelValue="formData" :rules="rules">
       <div class="sub-title">实际完成时间</div>
       <div class="timer">
         <uni-forms-item name="actualFinishTime" required>
-          <uni-datetime-picker
-            v-model="formData.actualFinishTime"
-            type="datetime"
-            placeholder="完成时间"
-          />
+          <uni-datetime-picker v-model="formData.actualFinishTime" type="datetime" placeholder="完成时间" />
         </uni-forms-item>
       </div>
       <div class="sub-title">设备使用选择</div>
       <div class="describe-box bottom">
-        <div
-          class="describe-item"
-          v-for="item in baseInfo.deviceVOList"
-          :key="item.id"
-          @click="handleSelectPart(item)"
-        >
+        <div class="describe-item" v-for="item in baseInfo.deviceVOList" :key="item.id" @click="handleSelectPart(item)">
           <div class="describe-label">
-            <span style="color: red">*</span
-            ><img class="icon" :src="icon" alt="" /> {{ item.name
+            <span style="color: red">*</span><img class="icon" :src="icon" alt="" /> {{ item.name
             }}<span v-if="item.code"> ({{ item.code }})</span>
           </div>
           <div class="describe-value">
@@ -66,24 +48,14 @@
       <div class="sub-title">材料上传(现场照片+服务单)</div>
       <div class="img-box">
         <uni-forms-item required>
-          <uni-file-picker
-            :auto-upload="false"
-            @select="handleSelect"
-            @delete="handleDelete"
-            :modelValue="fileList"
-            :imageStyles="imageStyles"
-            :sourceType="['camera']"
-          ></uni-file-picker>
+          <uni-file-picker :auto-upload="false" @select="handleSelect" @delete="handleDelete" :modelValue="fileList"
+            :imageStyles="imageStyles" :sourceType="['camera']"></uni-file-picker>
         </uni-forms-item>
       </div>
     </uni-forms>
 
-    <select-device
-      :deviceInfo="modalState.info"
-      :types="baseInfo.typeVOList"
-      v-model:show="modalState.show"
-      @ok="handleOk"
-    />
+    <select-device :deviceInfo="modalState.info" :types="baseInfo.typeVOList" v-model:show="modalState.show"
+      @ok="handleOk" />
     <button @click="save" class="bottom-btn" type="primary" hover-class="none">
       提交工单
     </button>
@@ -95,8 +67,7 @@ import { BaseApi } from "@/api/BaseApi";
 import { WorkApi } from "@/api/WorkApi";
 import icon from "@/static/device.png";
 import { useUserStore } from "@/store/user";
-import { getAddress } from "@/utils/location";
-import { onLoad, onShow } from "@dcloudio/uni-app";
+import { onLoad } from "@dcloudio/uni-app";
 import { provide, reactive, ref } from "vue";
 import SelectDevice from "./SelectDevice.vue";
 const userStore = useUserStore();
@@ -124,17 +95,7 @@ onLoad(({ id }) => {
   baseId.value = id;
   getInfo();
 });
-const addressInfo = ref({});
-onShow(() => {
-  getAddress().then((res) => {
-    const { address, location } = res;
-    addressInfo.value = {
-      latitude: location.lat,
-      longitude: location.lng,
-      address,
-    };
-  });
-});
+
 
 const getInfo = () => {
   uni.showLoading();
@@ -155,6 +116,7 @@ const getInfo = () => {
 
 const handleSelect = ({ tempFilePaths, tempFiles }) => {
   const { height, width } = tempFiles[0].image;
+  uni.showLoading();
   BaseApi.upload(tempFilePaths[0]).then((res) => {
     if (res.code === 0) {
       const { name } = res.data;
@@ -162,29 +124,30 @@ const handleSelect = ({ tempFilePaths, tempFiles }) => {
         url: userStore.userInfo.urlPrefix + name,
         name,
         extname: "png",
-        ...addressInfo.value,
         width,
         filePath: name,
         length: height,
       });
       saveImgs();
     }
-  });
+  }).catch(err => {
+    uni.hideLoading()
+  })
 };
 
 const handleDelete = ({ tempFile }) => {
   const index = fileList.value.findIndex((item) => item.name === tempFile.name);
   fileList.value.splice(index, 1);
+  uni.showLoading();
   saveImgs();
 };
 
 const saveImgs = () => {
-  uni.showLoading();
   WorkApi.saveFiles({
     id: baseInfo.value.id,
     finishFiles: fileList.value,
   })
-    .then((res) => {})
+    .then((res) => { })
     .finally(() => {
       uni.hideLoading();
     });
@@ -254,16 +217,20 @@ const save = async () => {
   .describe-label {
     color: rgba($color: #000000, $alpha: 0.5);
   }
+
   .describe-value {
     color: rgba($color: #000000, $alpha: 0.9);
   }
 }
+
 .bottom {
   margin-bottom: 12px;
+
   .describe-label {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
     .icon {
       width: 20px;
       height: 20px;
@@ -278,6 +245,7 @@ const save = async () => {
   font-weight: bold;
   margin-bottom: 24px;
 }
+
 .sub-title {
   font-size: 16px;
   font-weight: bold;
@@ -285,6 +253,7 @@ const save = async () => {
   align-items: center;
   gap: 8px;
   margin-bottom: 12px;
+
   &::before {
     content: "";
     display: inline-block;
@@ -295,6 +264,7 @@ const save = async () => {
     vertical-align: middle;
   }
 }
+
 .img-box {
   background: #fff;
   border-radius: 4px;
