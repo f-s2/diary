@@ -1,18 +1,8 @@
 <template>
   <div class="tabs-box">
-    <div
-      :class="['tab-item', { active: activeIndex === index }]"
-      v-for="(item, index) in tabInfo"
-      :key="item.name"
-      @click="jump(item)"
-    >
-      <uni-badge
-        v-if="item.custom"
-        :text="+userStore.unFinishCount || ''"
-        type="error"
-        :max-num="99"
-        absolute="rightTop"
-      >
+    <div :class="['tab-item', { active: activeIndex === index }]" v-for="(item, index) in tabInfo" :key="item.name"
+      @click="jump(item)">
+      <uni-badge v-if="item.custom" :text="+userStore.unFinishCount || ''" type="error" :max-num="99" absolute="rightTop">
         <img class="icon" :src="item.icon" alt="" />
       </uni-badge>
       <img v-else class="icon" :src="item.icon" alt="" />
@@ -24,6 +14,7 @@
 
 <script setup>
 import { useUserStore } from "@/store/user";
+import { onShow } from "@dcloudio/uni-app";
 import icon1 from "../static/tab/clock.png";
 import icon2 from "../static/tab/mine.png";
 import icon3 from "../static/tab/work.png";
@@ -51,12 +42,16 @@ const tabInfo = [
 const jump = ({ path }) => {
   uni.switchTab({ url: path });
 };
+onShow(() => {
+  uni.hideTabBar()
+})
 </script>
 
 <style lang="scss" scoped>
 .dot {
   color: red;
 }
+
 .tabs-box {
   display: flex;
   justify-content: space-between;
@@ -67,6 +62,7 @@ const jump = ({ path }) => {
   padding: 20rpx 0 40rpx;
   background-color: #fff;
 }
+
 .tab-item {
   display: flex;
   flex: 1;
@@ -74,9 +70,11 @@ const jump = ({ path }) => {
   justify-content: center;
   align-items: center;
   font-size: 22rpx;
+
   &.active {
     color: $uni-color-primary;
   }
+
   .icon {
     width: 40rpx;
     height: 40rpx;

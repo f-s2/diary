@@ -38,12 +38,7 @@
       </div>
     </div>
     <div class="bg" style="text-align: center">
-      <img
-        style="width: 260px; height: 130px; margin-top: 80px"
-        class="img"
-        :src="src"
-        alt=""
-      />
+      <img style="width: 260px; height: 130px; margin-top: 80px" class="img" :src="src" alt="" />
     </div>
   </div>
   <TabBar :activeIndex="2" />
@@ -65,6 +60,9 @@ const init = () => {
   WorkApi.statistics({}).then((res) => {
     statistics.value = res.data;
   });
+  UserApi.getUserInfo().then(res => {
+    userStore.userInfo = res.data
+  })
 };
 onShow(() => {
   init();
@@ -88,57 +86,73 @@ const handleLoginOut = () => {
       confirm &&
         UserApi.loginOut().then((res) => {
           userStore.setUserInfo({});
+          uni.setStorageSync('token', '')
+          uni.reLaunch({
+            url: '/pages/login/index'
+          })
         });
     },
   });
 };
 </script>
+
 <style lang="scss" scoped>
 .wrap-box {
   padding-bottom: 150rpx;
 }
+
 .head {
   margin-bottom: 48rpx;
   padding: 24rpx;
+
   .describe {
     font-size: 24rpx;
     color: rgba(0, 0, 0, 0.5);
   }
 }
+
 .head-top {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20rpx;
+
   .name {
     font-size: 48rpx;
     font-weight: bold;
   }
+
   .private {
     font-size: 30rpx;
     display: inline-flex;
     align-items: center;
   }
 }
+
 .card-box {
   margin: 0 -32rpx;
   padding: 0 32rpx;
   border-bottom: 1rpx solid rgba(0, 0, 0, 0.1);
 }
+
 .mid-card {
   display: flex;
   background: linear-gradient(180deg, #1890ff 0%, #8dc8ff 100%);
   margin: 0 24rpx;
   padding: 28rpx 0;
   border-radius: 16rpx 16rpx 0 0;
+
   .count-item {
     flex: 1;
     text-align: center;
   }
+
   color: #fff;
+
   .value {
     font-size: 44rpx;
     font-weight: bold;
   }
+
   .label {
     font-size: 24rpx;
   }

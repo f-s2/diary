@@ -2,12 +2,12 @@ import { netConfig } from '@/config/net.config';
 import axios from 'axios';
 import mpAdapter from "axios-miniprogram-adapter";
 axios.defaults.adapter = mpAdapter;
-const { baseURL, contentType, requestTimeout, successCode, invalidCode } = netConfig;
+const { baseName, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
 let tokenLose = true;
 
 const instance = axios.create({
-    baseURL,
+    baseURL: baseName,
     timeout: requestTimeout,
     headers: {
         'Content-Type': contentType,
@@ -46,7 +46,7 @@ instance.interceptors.response.use(
                 title: '请重新登录'
             })
             uni.reLaunch({
-                url: '/pages_work/index/index'
+                url: '/pages/login/index'
             })
         } else {
             uni.showToast({

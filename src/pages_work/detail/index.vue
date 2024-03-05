@@ -5,21 +5,14 @@
       <status-tag :needBg="true" :status="baseInfo.finishStatus" />
     </div>
     <div class="describe-box" style="margin-bottom: 12px">
-      <div
-        class="describe-item"
-        v-for="item in describeConfig"
-        :key="item.name"
-      >
+      <div class="describe-item" v-for="item in describeConfig" :key="item.name">
         <div class="describe-label">{{ item.name }}</div>
         <div class="describe-value">
           <span v-if="!item.custom">
             {{ baseInfo?.[item.code] || "--" }}
           </span>
           <span v-else-if="item.code === 'types'">
-            <status-tag
-              type="1"
-              :types="baseInfo.typeVOList?.map((item) => item.name)"
-            />
+            <status-tag type="1" :types="baseInfo.typeVOList?.map((item) => item.name)" />
           </span>
 
           <span v-else-if="item.code === 'users'">
@@ -33,16 +26,8 @@
         <span>现场照片+服务单</span>
       </div>
       <div class="img-list">
-        <div
-          @click="preview(index)"
-          class="img-box"
-          :key="index"
-          v-for="(item, index) in baseInfo.finishFiles"
-        >
-          <img
-            :src="userStore.userInfo.urlPrefix + item.filePath"
-            class="pic"
-          />
+        <div @click="preview(index)" class="img-box" :key="index" v-for="(item, index) in baseInfo.finishFiles">
+          <img :src="userStore.userInfo.urlPrefix + item.filePath" class="pic" />
         </div>
       </div>
     </template>
@@ -59,15 +44,12 @@
       <span>设备信息</span>
     </div>
     <div class="device-list">
-      <div
-        class="device-item"
-        v-for="item in baseInfo.deviceVOList"
-        :key="item.id"
-      >
+      <div class="device-item" v-for="item in baseInfo.deviceVOList" :key="item.id">
         <div class="device-item_head">
           <img class="icon" :src="icon" alt="img" />
           {{ item.name }} <span v-if="item.code"> ({{ item.code }})</span>
         </div>
+
         <template v-if="!isDoing">
           <div class="device-item_content" v-if="item.needInventory === 1">
             <div class="spare-item" v-for="device in item.outboundList">
@@ -79,22 +61,10 @@
       </div>
     </div>
     <reply-popup v-model:show="replyShow" :info="baseInfo" @ok="getInfo" />
-    <button
-      hover-class="none"
-      @click="handleReply"
-      v-if="!baseInfo.replyStatus"
-      class="confirm"
-      type="primary"
-    >
+    <button hover-class="none" @click="handleReply" v-if="!baseInfo.replyStatus" class="confirm" type="primary">
       回复工单
     </button>
-    <button
-      hover-class="none"
-      @click="jump"
-      v-else-if="isDoing"
-      class="confirm"
-      type="primary"
-    >
+    <button hover-class="none" @click="jump" v-else-if="isDoing" class="confirm" type="primary">
       处理工单
     </button>
   </div>
@@ -117,6 +87,7 @@ onLoad(({ id }) => {
 });
 onShow(() => {
   getInfo();
+
 });
 
 const getInfo = () => {
@@ -170,12 +141,14 @@ const handleReply = () => {
 .page-body {
   padding-bottom: 200rpx;
 }
+
 .confirm {
   position: fixed;
   bottom: 80rpx;
   left: 32rpx;
   right: 32rpx;
 }
+
 .sub-title {
   justify-content: space-between;
   display: flex;
@@ -183,16 +156,20 @@ const handleReply = () => {
   font-weight: bold;
   margin-bottom: 12px;
 }
+
 .describe-label {
   color: rgba($color: #000000, $alpha: 0.5);
 }
+
 .describe-value {
   color: rgba($color: #000000, $alpha: 0.9);
 }
+
 .device-item_head {
   font-size: 14px;
   line-height: 20px;
   margin-bottom: 10px;
+
   .icon {
     width: 20px;
     height: 20px;
@@ -200,10 +177,12 @@ const handleReply = () => {
     vertical-align: middle;
   }
 }
+
 .device-item_content {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+
   .spare-item {
     color: #165dff;
     font-size: 12px;
@@ -212,6 +191,7 @@ const handleReply = () => {
     padding: 2px 4px;
   }
 }
+
 .device-list {
   padding: 32rpx;
   background-color: #fff;
@@ -220,10 +200,12 @@ const handleReply = () => {
   flex-direction: column;
   gap: 16px;
 }
+
 .device-item:not(:last-child) {
   padding-bottom: 16px;
   border-bottom: 1px solid #f7f8fa;
 }
+
 .empty-device {
   display: inline-block;
   border-radius: 2px;
@@ -232,6 +214,7 @@ const handleReply = () => {
   font-size: 12px;
   padding: 2px 4px;
 }
+
 .img-list {
   padding: 16px;
   border-radius: 4px;
@@ -240,11 +223,13 @@ const handleReply = () => {
   grid-template-columns: repeat(4, 100rpx);
   justify-content: space-around;
   grid-row-gap: 10px;
+
   .img-box {
     background: #fafafa;
     text-align: center;
     height: 150rpx;
   }
+
   .pic {
     width: 100%;
     height: 100%;

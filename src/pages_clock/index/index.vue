@@ -31,11 +31,11 @@
 
 <script setup>
 import { ClockInApi } from "@/api/ClockInApi";
-import { getAddress } from "@/utils/location";
+import { getLocation } from "@/api/UserApi";
+import TabBar from "@/components/TabBar.vue";
 import { onShow, onUnload } from "@dcloudio/uni-app";
 import dayjs from "dayjs";
 import { ref } from "vue";
-import TabBar from "../../components/TabBar.vue";
 const currentTime = ref(new Date().getTime());
 const address = ref("");
 let location;
@@ -45,60 +45,81 @@ let timer = setInterval(() => {
 
 onShow(() => {
   getDateList();
+  reloadLocation();
+
 });
 onUnload(() => {
   clearInterval(timer);
 });
 const dataList = ref([]);
-reloadLocation();
 function getDateList() {
   ClockInApi.list({ date: dayjs().format("YYYY-MM-DD") }).then((res) => {
     dataList.value = res.data;
   });
 }
 
-const handleClock = (res) => {
+const handleClock = () => {
   uni.getLocation({
     type: "gcj02",
     success: (res) => {
       const { latitude, longitude } = res;
       location = { latitude, longitude };
+      uni.chooseLocation({
+        latitude,
+        longitude,
+        success: (res) => {
+          const distance = getDistance(
+            res.latitude,
+            res.longitude,
+            location.latitude,
+            location.longitude
+          );
+          if (distance < 0.5) {
+            uni.navigateTo({
+              url: `/pages_clock/save/index?address=${JSON.stringify(res)}`,
+            });
+          } else {
+            uni.showModal({
+              title: "提示!",
+              content: `当前打卡地点超出范围限制,距离你所在位置${distance}km`,
+              showCancel: false,
+            });
+          }
+        },
+        fail: (err) => {
+          console.log("err", err);
+        },
+      });
     },
   });
-  uni.chooseLocation({
-    success: (res) => {
-      const distance = getDistance(
-        res.latitude,
-        res.longitude,
-        location.latitude,
-        location.longitude
-      );
 
-      if (distance < 0.5) {
-        uni.navigateTo({
-          url: `/pages_clock/save/index?address=${JSON.stringify(res)}`,
-        });
-      } else {
-        uni.showModal({
-          title: "提示!",
-          content: `当前打卡地点超出范围限制,距离你所在位置${distance}km`,
-          showCancel: false,
-        });
-      }
-    },
-    fail: (err) => {
-      console.log("err", err);
-    },
-  });
 };
 
 function reloadLocation() {
-  uni.showLoading();
-  getAddress().then(res => {
-    address.value = res.address
-  }).finally(() => {
-    uni.hideLoading();
-  })
+  uni.showLoading()
+  uni.getLocation({
+    type: "gcj02",
+    success: (res) => {
+      const { latitude, longitude } = res;
+      location = { latitude, longitude };
+      getLocation({ location: `${latitude},${longitude}` })
+        .then((response) => {
+          address.value = response.data.result.address
+        })
+        .finally(() => {
+          uni.hideLoading()
+        });
+    },
+    fail: (err) => {
+      uni.showModal({
+        title: "提示!",
+        content: '请确保您位置定位权限已打卡!',
+        showCancel: false
+      })
+      uni.hideLoading()
+
+    }
+  });
 
 }
 
@@ -127,6 +148,7 @@ const jump = () => {
   uni.navigateTo({ url: `/pages_clock/count/index` });
 };
 </script>
+
 <style lang="scss" scoped>
 .wrap-box {
   display: flex;

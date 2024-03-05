@@ -4,15 +4,8 @@
       <filter-head @load="reload" :queryParam="queryParam" />
     </div>
     <div class="content" v-if="workList.length">
-      <uni-card
-        @click="jump(item)"
-        padding="10px 4px"
-        v-for="item in workList"
-        :key="item.id"
-        :isFull="true"
-        :border="false"
-        :is-shadow="false"
-      >
+      <uni-card @click="jump(item)" padding="10px 4px" v-for="item in workList" :key="item.id" :isFull="true"
+        :border="false" :is-shadow="false">
         <div class="work-item">
           <div class="item-head">
             <div class="item-title ellipsis">
@@ -23,11 +16,7 @@
             </div>
           </div>
           <div class="item-mid">
-            <status-tag
-              style="margin-right: 8rpx"
-              type="1"
-              :types="item.typeVOList.map((item) => item.name)"
-            />
+            <status-tag style="margin-right: 8rpx" type="1" :types="item.typeVOList.map((item) => item.name)" />
             <status-tag type="2" :levels="item.orderType" />
           </div>
           <div class="item-bottom">
@@ -44,7 +33,6 @@
   </div>
 
   <TabBar :activeIndex="0" />
-  <auth-button @load="reload" v-model:isInit="isInit" />
 </template>
 
 <script setup>
@@ -54,13 +42,12 @@ import icon2 from "@/static/time.png";
 import { useUserStore } from "@/store/user";
 import { onPullDownRefresh, onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
-import AuthButton from "../../components/AuthButton";
 import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
 const userStore = useUserStore();
-const isInit = ref(false);
 onShow(() => {
-  isInit.value && reload();
+  reload();
+
 });
 
 const getCount = () => {
@@ -100,13 +87,15 @@ const jump = (item) => {
 ::v-deep .uni-easyinput__content {
   background-color: #fff !important;
 }
+
 .page-body {
   padding-bottom: 150rpx;
 }
+
 .empty {
   padding: 100px 0;
-  display: block;
 }
+
 .content {
   display: flex;
   flex-direction: column;
@@ -114,12 +103,14 @@ const jump = (item) => {
   // height: calc(100vh - 360rpx);
   // overflow-y: auto;
 }
+
 .work-item {
   .item-head {
     display: flex;
 
     justify-content: space-between;
   }
+
   .item-title {
     font-size: 16px;
     font-weight: bold;
@@ -127,10 +118,12 @@ const jump = (item) => {
     flex: 1;
     margin-right: 20px;
   }
+
   .item-mid {
     margin: 8px 0;
   }
 }
+
 .item-bottom {
   color: rgba($color: #000000, $alpha: 0.3);
   display: flex;
@@ -138,6 +131,7 @@ const jump = (item) => {
   font-size: 12px;
   align-items: center;
   gap: 4rpx;
+
   .icon {
     height: 14px;
     width: 14px;

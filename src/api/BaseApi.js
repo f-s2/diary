@@ -5,7 +5,7 @@ export class BaseApi {
 
         return new Promise((resolve, reject) => {
             uni.uploadFile({
-                url: netConfig.baseURL + '/business/picture/upload',
+                url: netConfig.baseName + '/business/picture/upload',
                 method: 'post',
 
                 name: 'file',

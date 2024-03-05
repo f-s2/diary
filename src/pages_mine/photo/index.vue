@@ -15,8 +15,8 @@
             <div class="img-info">
               <div class="info">
                 <uni-icons type="images" size="16" /> {{ file.width }}*{{
-                  file.length
-                }}px
+          file.length
+        }}px
               </div>
               <div class="location">
                 <uni-icons type="location" size="16" />{{ file.address }}
@@ -40,12 +40,31 @@
 <script setup>
 import { BaseApi } from "@/api/BaseApi";
 import { ClockInApi } from "@/api/ClockInApi";
+import { getLocation } from "@/api/UserApi";
 import { WorkApi } from "@/api/WorkApi";
 import { useUserStore } from "@/store/user";
-import { getAddress } from "@/utils/location";
+import { onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
 const addressInfo = ref({});
 
+
+onShow(() => {
+  uni.showLoading()
+  uni.getLocation({
+    type: "gcj02",
+    success: (res) => {
+      const { latitude, longitude } = res;
+      getLocation({ location: `${latitude},${longitude}` })
+        .then((response) => {
+          addressInfo.value = response.data.result
+        })
+        .finally(() => {
+          uni.hideLoading()
+        });
+    }
+
+  })
+})
 
 
 const userStore = useUserStore();
@@ -80,21 +99,15 @@ const reload = () => {
       uni.hideLoading();
     });
 };
+
 const savePhotos = async ({ tempFilePaths, tempFiles }) => {
-  const res = await getAddress()
-  const { address, location } = res;
-  addressInfo.value = {
-    latitude: location.lat,
-    longitude: location.lng,
-    address,
-  };
+
   const { height, width } = tempFiles[0].image;
   uni.showLoading({ mask: true });
   BaseApi.upload(tempFilePaths[0])
     .then((res) => {
       if (res.code === 0) {
         const { name } = res.data;
-
         const params = {
           ...addressInfo.value,
           width,
@@ -117,6 +130,9 @@ const savePhotos = async ({ tempFilePaths, tempFiles }) => {
     .finally(() => {
       uni.hideLoading();
     });
+
+
+
 };
 const preview = (url) => {
   uni.previewImage({
@@ -127,16 +143,18 @@ const preview = (url) => {
   });
 };
 reload();
+
+
+
+
 </script>
+
 <style lang="scss" scoped>
 .empty {
   padding: 80rpx 0;
-  display: block;
 }
 
-.bottom-btn {
-  // bottom: 100rpx;
-}
+
 
 .page {
   padding: 32rpx;

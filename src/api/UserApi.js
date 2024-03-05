@@ -12,7 +12,7 @@ const prefix = `/userservice/system/user`
 export class UserApi {
     static login(data) {
         return request({
-            url: prefix + '/login-for-wechat',
+            url: prefix + '/login',
             method: 'post',
             params: {},
             data
@@ -20,7 +20,7 @@ export class UserApi {
     }
     static getUserInfo(params) {
         return request({
-            url: prefix + '/queryMenusByUserId',
+            url: prefix + '/get-info',
             method: 'get',
             params,
         })
@@ -50,9 +50,8 @@ export function getLocation(data) {
     return new Promise((resolve, reject) => {
         return uni.request(
             {
-                url: 'https://apis.map.qq.com/ws/geocoder/v1/',
+                url: '/v1/',
                 method: 'GET',
-
                 data: {
                     key: netConfig.mapKey,
                     ...data

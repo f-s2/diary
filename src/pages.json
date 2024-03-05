@@ -1,6 +1,12 @@
 {
   "pages": [
     {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
       "path": "pages_work/index/index",
       "style": {
         "navigationBarTitleText": "我的工单",
@@ -19,12 +25,7 @@
         "navigationBarTitleText": "处理工单"
       }
     },
-    {
-      "path": "pages/login/index",
-      "style": {
-        "navigationBarTitleText": "登录"
-      }
-    },
+  
     {
       "path": "pages_clock/index/index",
       "style": {
