@@ -230,6 +230,11 @@ const jump = () => {
   gap: 8px;
   line-height: 30px;
 
+  .value {
+    flex: 1;
+  }
+
+
   .label {
     color: rgba(0, 0, 0, 0.5);
   }
