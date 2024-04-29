@@ -19,11 +19,7 @@
         <uni-dateformat :date="currentTime" format="hh:mm:ss"> </uni-dateformat>
       </div>
       <div class="clock" @click="handleClock">打卡</div>
-      <div class="address">
-        <div class="label">当前位置:</div>
-        <div class="value">{{ address || "--" }}</div>
-        <uni-icons @click="reloadLocation" class="icon" type="reload" color="#1890ff" size="18" />
-      </div>
+
     </div>
   </div>
   <TabBar :activeIndex="1" />
@@ -31,21 +27,17 @@
 
 <script setup>
 import { ClockInApi } from "@/api/ClockInApi";
-import { getLocation } from "@/api/UserApi";
 import TabBar from "@/components/TabBar.vue";
 import { onShow, onUnload } from "@dcloudio/uni-app";
 import dayjs from "dayjs";
 import { ref } from "vue";
 const currentTime = ref(new Date().getTime());
-const address = ref("");
-let location;
 let timer = setInterval(() => {
   currentTime.value = new Date().getTime();
 }, 1000);
 
 onShow(() => {
   getDateList();
-  reloadLocation();
 
 });
 onUnload(() => {
@@ -59,91 +51,14 @@ function getDateList() {
 }
 
 const handleClock = () => {
-  uni.getLocation({
-    type: "gcj02",
-    success: (res) => {
-      const { latitude, longitude } = res;
-      location = { latitude, longitude };
-      uni.chooseLocation({
-        latitude,
-        longitude,
-        success: (res) => {
-          const distance = getDistance(
-            res.latitude,
-            res.longitude,
-            location.latitude,
-            location.longitude
-          );
-          if (distance < 0.5) {
-            uni.navigateTo({
-              url: `/pages_clock/save/index?address=${JSON.stringify(res)}`,
-            });
-          } else {
-            uni.showModal({
-              title: "提示!",
-              content: `当前打卡地点超出范围限制,距离你所在位置${distance}km`,
-              showCancel: false,
-            });
-          }
-        },
-        fail: (err) => {
-          console.log("err", err);
-        },
-      });
-    },
+  uni.navigateTo({
+    url: `/pages_clock/save/index`,
   });
-
 };
 
-function reloadLocation() {
-  uni.showLoading()
-  uni.getLocation({
-    type: "gcj02",
-    success: (res) => {
-      const { latitude, longitude } = res;
-      location = { latitude, longitude };
-      getLocation({ location: `${latitude},${longitude}` })
-        .then((response) => {
-          address.value = response.data.result.address
-        })
-        .finally(() => {
-          uni.hideLoading()
-        });
-    },
-    fail: (err) => {
-      uni.showModal({
-        title: "提示!",
-        content: '请确保您位置定位权限已打卡!',
-        showCancel: false
-      })
-      uni.hideLoading()
 
-    }
-  });
 
-}
 
-function getDistance(lat1, lng1, lat2, lng2) {
-  lat1 = lat1 || 0;
-  lng1 = lng1 || 0;
-  lat2 = lat2 || 0;
-  lng2 = lng2 || 0;
-  var rad1 = (lat1 * Math.PI) / 180.0;
-  var rad2 = (lat2 * Math.PI) / 180.0;
-  var a = rad1 - rad2;
-  var b = (lng1 * Math.PI) / 180.0 - (lng2 * Math.PI) / 180.0;
-  var r = 6378137;
-  var distance =
-    r *
-    2 *
-    Math.asin(
-      Math.sqrt(
-        Math.pow(Math.sin(a / 2), 2) +
-        Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)
-      )
-    );
-  return (distance / 1000).toFixed(2);
-}
 const jump = () => {
   uni.navigateTo({ url: `/pages_clock/count/index` });
 };

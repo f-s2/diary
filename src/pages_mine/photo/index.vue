@@ -18,9 +18,6 @@
           file.length
         }}px
               </div>
-              <div class="location">
-                <uni-icons type="location" size="16" />{{ file.address }}
-              </div>
             </div>
           </div>
         </div>
@@ -40,30 +37,14 @@
 <script setup>
 import { BaseApi } from "@/api/BaseApi";
 import { ClockInApi } from "@/api/ClockInApi";
-import { getLocation } from "@/api/UserApi";
 import { WorkApi } from "@/api/WorkApi";
 import { useUserStore } from "@/store/user";
 import { onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
-const addressInfo = ref({});
-
 
 onShow(() => {
   uni.showLoading()
-  uni.getLocation({
-    type: "gcj02",
-    success: (res) => {
-      const { latitude, longitude } = res;
-      getLocation({ location: `${latitude},${longitude}` })
-        .then((response) => {
-          addressInfo.value = response.data.result
-        })
-        .finally(() => {
-          uni.hideLoading()
-        });
-    }
 
-  })
 })
 
 
@@ -109,7 +90,6 @@ const savePhotos = async ({ tempFilePaths, tempFiles }) => {
       if (res.code === 0) {
         const { name } = res.data;
         const params = {
-          ...addressInfo.value,
           width,
           filePath: name,
           length: height,
@@ -215,9 +195,6 @@ reload();
     flex: 1;
     align-self: stretch;
     font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
     color: rgba($color: #000000, $alpha: 0.9);
   }
 

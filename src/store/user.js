@@ -18,4 +18,8 @@ export const useUserStore = defineStore('user', () => {
     }
 
 
+}, {
+    persist: {
+        enabled: true
+    }
 })
