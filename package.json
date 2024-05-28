@@ -2,8 +2,8 @@
   "name": "uni-preset-vue",
   "version": "0.0.0",
   "scripts": {
-    "dev": "uni -p mp-weixin",
-    "build": "uni build -p mp-weixin",
+    "dev": "uni",
+    "build": "uni build ",
     "dev:app": "uni -p app",
     "dev:app-android": "uni -p app-android",
     "dev:app-ios": "uni -p app-ios",
@@ -38,6 +38,7 @@
     "build:quickapp-webview-union": "uni build -p quickapp-webview-union"
   },
   "dependencies": {
+    "@climblee/uv-ui": "^1.1.20",
     "@dcloudio/uni-app": "3.0.0-3080720230703001",
     "@dcloudio/uni-app-plus": "3.0.0-3080720230703001",
     "@dcloudio/uni-components": "3.0.0-3080720230703001",
@@ -55,6 +56,7 @@
     "axios": "0.26.0",
     "axios-miniprogram-adapter": "^0.3.5",
     "dayjs": "^1.11.9",
+    "html5-qrcode": "^2.3.8",
     "pinia": "2.0.36",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.3.4",

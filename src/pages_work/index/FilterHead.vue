@@ -1,24 +1,13 @@
 <template>
   <div>
     <div class="search">
-      <uni-easyinput
-        prefixIcon="search"
-        type="search"
-        v-model="queryParam.searchContent"
-        placeholder="工单编号，客户名称"
-        @confirm="$emit('load')"
-        @clear="$emit('load')"
-      />
+      <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、设备组" @search="$emit('load')"
+        @clear="$emit('load')" :showAction="false" />
     </div>
-
     <div class="filter-bottom">
       <div class="tag-box">
-        <span
-          @click="selectTag(item)"
-          :class="['tag', { active: queryParam.finishStatus === item.code }]"
-          v-for="item in tagInfo"
-          :key="item.code"
-        >
+        <span @click="selectTag(item)" :class="['tag', { active: queryParam.finishStatus === item.code }]"
+          v-for="item in tagInfo" :key="item.code">
           {{ item.name }}
         </span>
       </div>
@@ -27,31 +16,21 @@
         筛选
       </div>
     </div>
-    <u-popup ref="popupRef" v-model:show="show" type="bottom" title="工单筛选">
+    <u-popup ref="popupRef" v-model:show="show" mode="bottom" title="工单筛选" :round="10">
       <div class="popup">
         <div class="sub-label">工单类型 :</div>
         <div class="level-box">
-          <span
-            :class="[
-              'level-tag',
-              { active: temQueryParam.orderTypes?.includes(item) },
-            ]"
-            @click="selectLevel(item)"
-            v-for="item in levelOptions"
-            :key="item"
-          >
+          <span :class="[
+        'level-tag',
+        { active: temQueryParam.orderTypes?.includes(item) },
+      ]" @click="selectLevel(item)" v-for="item in levelOptions" :key="item">
             {{ item }}
           </span>
         </div>
         <div class="sub-label">创建时间端 :</div>
         <div class="time-picker">
-          <uni-datetime-picker
-            v-model="temQueryParam.date"
-            type="daterange"
-            rangeSeparator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-          >
+          <uni-datetime-picker v-model="temQueryParam.date" type="datetimerange" rangeSeparator="至"
+            start-placeholder="开始时间" end-placeholder="结束时间">
           </uni-datetime-picker>
         </div>
         <div class="action">
@@ -67,7 +46,7 @@
 </template>
 
 <script setup>
-const levelOptions = ["A级", "B级", "C级", "D级"];
+const levelOptions = ["保养", "点检", "盘点"];
 import filter from "@/static/filter.png";
 
 import { ref, toRefs } from "vue";
@@ -80,7 +59,7 @@ const tagInfo = [
     code: 4,
   },
   {
-    name: "待审核",
+    name: "已提交",
     code: 6,
   },
   {
@@ -132,15 +111,18 @@ const popupRef = ref();
   display: flex;
   align-items: center;
   margin: 10px;
+
   .tag-box {
     flex: 1;
   }
+
   .filter-icon {
     display: flex;
     line-height: 20px;
     font-size: 14px;
     color: rgba($color: #000000, $alpha: 0.9);
   }
+
   .icon {
     width: 20px;
     height: 20px;
@@ -154,18 +136,21 @@ const popupRef = ref();
     color: rgba($color: #000000, $alpha: 0.5);
     border-radius: 4px;
     margin-right: 8px;
+
     &.active {
       color: #fff;
       background: $uni-color-primary;
     }
   }
 }
+
 .sub-label {
   font-size: 14px;
   color: #000;
   font-weight: bold;
   margin: 12px 0 16px;
 }
+
 .level-box {
   display: flex;
   gap: 16rpx;
@@ -193,6 +178,7 @@ const popupRef = ref();
   display: flex;
   margin: 28px 0 10px;
   gap: 8px;
+
   button {
     flex: 1;
   }

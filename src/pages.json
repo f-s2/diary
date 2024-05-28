@@ -13,69 +13,24 @@
         "enablePullDownRefresh": true
       }
     },
-    {
-      "path": "pages_work/detail/index",
-      "style": {
-        "navigationBarTitleText": "工单详情"
-      }
-    },
-    {
-      "path": "pages_work/process/index",
-      "style": {
-        "navigationBarTitleText": "处理工单"
-      }
-    },
+   
+   
   
-    {
-      "path": "pages_clock/index/index",
-      "style": {
-        "navigationBarTitleText": "打卡"
-      }
-    },
-    {
-      "path": "pages_clock/save/index",
-      "style": {
-        "navigationBarTitleText": "打卡"
-      }
-    },
-    {
-      "path": "pages_clock/count/index",
-      "style": {
-        "navigationBarTitleText": "打卡统计"
-      }
-    },
     {
       "path": "pages_mine/mine/index",
 
       "style": {
         "navigationBarTitleText": "我的"
       }
-    },
-    {
-      "path": "pages_mine/photo/index",
-      "style": {
-        "navigationBarTitleText": "我的相册"
-      }
-    },
-    {
-      "path": "pages_mine/load/index",
-      "style": {
-        "navigationBarTitleText": "我的相册"
-      }
-    },
-    {
-      "path": "pages_mine/personal/index",
-
-      "style": {
-        "navigationBarTitleText": "个人信息"
-      }
     }
+   
+   
+    
   ],
   "tabBar": {
     "custom": true,
     "list": [
       { "pagePath": "pages_work/index/index", "text": "工单" },
-      { "pagePath": "pages_clock/index/index", "text": "打卡" },
       { "pagePath": "pages_mine/mine/index", "text": "我的" }
     ]
   },
@@ -91,6 +46,7 @@
     "autoscan": true,
     "custom": {
       "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+      "^uv-(.*)": "@climblee/uv-ui/components/uv-$1/uv-$1.vue",
       "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
     }
   }

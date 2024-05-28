@@ -27,7 +27,7 @@ export class UserApi {
     }
     static loginOut(data) {
         return request({
-            url: prefix + '/logout-for-wechat',
+            url: prefix + '/loginOut',
             method: 'get',
             params: {},
             data

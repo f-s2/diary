@@ -1,11 +1,5 @@
 <template>
-  <uni-popup
-    ref="popup"
-    :safe-area="false"
-    @maskClick="$emit('maskClick')"
-    v-bind="$attrs"
-    @change="handelChange"
-  >
+  <uv-popup ref="popup" :safe-area="false" @maskClick="$emit('maskClick')" v-bind="$attrs" @change="handelChange">
     <div class="pup-head" v-if="head">
       <div class="left" @click="handleBack">
         <uni-icons v-if="back" type="back" size="16"></uni-icons>
@@ -16,7 +10,7 @@
       </div>
     </div>
     <slot />
-  </uni-popup>
+  </uv-popup>
 </template>
 
 <script setup>
@@ -68,11 +62,13 @@ watch(
   align-items: center;
   position: relative;
   margin-bottom: 20px;
+
   .title {
     font-size: 16px;
     font-weight: bold;
     color: #000;
   }
+
   .left {
     position: absolute;
     left: 0;
@@ -81,6 +77,7 @@ watch(
     display: flex;
     align-items: center;
   }
+
   .right {
     position: absolute;
     right: 0;

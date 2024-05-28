@@ -6,15 +6,15 @@
       <div class="title">
         用户登录 / USER LOGIN
       </div>
-      <uni-forms class="form" ref="formRef" :rules="rules" :modelValue="formData" label-position="top">
-        <uni-forms-item label="用户账号" name="loginAccount">
-          <uni-easyinput prefixIcon="person" v-model="formData.loginAccount" placeholder="请输入用户账号" />
-        </uni-forms-item>
-        <uni-forms-item label="登录密码" name="password">
-          <uni-easyinput type="password" prefixIcon="locked" v-model="formData.password" placeholder="请输入登录密码" />
-        </uni-forms-item>
+      <uv-form class="form" ref="formRef" :rules="rules" :model="formData" label-position="top" labelWidth="auto">
+        <uv-form-item label="用户账号" prop="loginAccount">
+          <uv-input prefixIcon="account" v-model="formData.loginAccount" placeholder="请输入用户账号" />
+        </uv-form-item>
+        <uv-form-item label="登录密码" prop="password">
+          <uv-input type="password" prefixIcon="lock" v-model="formData.password" placeholder="请输入登录密码" />
+        </uv-form-item>
         <button type="primary" @click="save">登录</button>
-      </uni-forms>
+      </uv-form>
     </div>
   </div>
 </template>
@@ -31,21 +31,16 @@ onShow(() => {
   uni.hideTabBar()
 })
 
-const formData = ref({})
-
+const formData = ref({ loginAccount: undefined, password: undefined })
 
 const rules = {
   loginAccount: {
-    rules: [{
-      required: true,
-      errorMessage: '请输入用户名'
-    }]
+    required: true,
+    message: '请输入用户名'
   },
   password: {
-    rules: [{
-      required: true,
-      errorMessage: '请输入密码'
-    }]
+    required: true,
+    message: '请输入密码'
   },
 }
 const formRef = ref()
@@ -90,7 +85,6 @@ init()
   display: block;
   width: 100%;
   background-color: #fff;
-  text-align: center;
   height: 100vh;
 
   .title {
@@ -98,6 +92,7 @@ init()
     font-size: 24px;
     font-weight: bold;
     padding: 20% 0;
+    text-align: center;
   }
 }
 
@@ -105,8 +100,6 @@ init()
   margin: auto;
   padding: 24px;
 
-  ::v-deep .uni-forms-item__label {
-    color: #000;
-  }
+
 }
 </style>

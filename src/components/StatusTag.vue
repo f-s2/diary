@@ -1,57 +1,90 @@
 <template>
-  <div v-if="type == 0" :class="['status', { bg: needBg }]">
-    <span class="doing" v-if="status === 4">待完成</span>
-    <span class="waiting" v-else-if="status === 6">待审核</span>
-    <span class="done" v-else-if="status === 5">已完成</span>
+  <div v-if="tag">
+    <span :class="`tag_${item.value} tag`" v-for="item in tagInfo" v-show="item.value === status"> <img :src="item.icon"
+        alt=""> {{ item.name
+      }}</span>
+
   </div>
-  <div class="types" v-else-if="type == 1">
-    <span class="tag" v-for="(item, index) in types" :key="index">
-      {{ item }}
-    </span>
+  <div v-else :class="['status', { bg: needBg }]">
+    <span class="doing" v-if="status === 0">待完成</span>
+    <span class="done" v-else-if="status === 1">已提交</span>
+    <span class="done" v-else-if="status === 2">已完成</span>
   </div>
-  <div class="levels" v-else-if="type == 2">
-    <span class="text" v-for="(item, index) in levels?.split('+')" :key="index">
-      {{ item }}
-    </span>
-  </div>
+
 </template>
 
 <script setup>
+import icon1 from '@/static/tag_1.png';
+import icon2 from '@/static/tag_2.png';
+import icon3 from '@/static/tag_3.png';
+const tagInfo = [
+  { name: '保养', icon: icon1, value: 0 },
+  { name: '点检', icon: icon3, value: 1 },
+  { name: '盘点', icon: icon2, value: 2 },
+]
 defineProps({
-  type: {
-    type: [Number, String],
-    default: 0,
+  tag: {
+    type: Boolean,
+    default: false
   },
+
   needBg: {
     type: Boolean,
     default: false,
   },
   status: Number,
-  types: Array,
-  levels: String,
 });
 </script>
 
 <style lang="scss" scoped>
+.tag {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  gap: 4px;
+  padding: 2px 4px;
+  border-radius: 2px;
+
+  &.tag_1 {
+    color: #15B4A0;
+    background-color: rgba($color: #15B4A0, $alpha: 0.1);
+  }
+
+  &.tag_0 {
+    color: #1890FF;
+    background-color: rgba($color: #1890FF, $alpha: 0.1);
+  }
+
+  &.tag_2 {
+    color: #FA8C16;
+    background-color: rgba($color: #FA8C16, $alpha: 0.1);
+  }
+}
+
 .status {
   font-size: 14px;
   font-weight: bold;
+
   &.bg {
     .done {
-      background-color: rgba($color: $uni-color-success, $alpha: 0.1);
+      background-color: rgba($color: $uv-success, $alpha: 0.1);
     }
+
     .doing {
-      background-color: rgba($color: $uni-color-warning, $alpha: 0.1);
+      background-color: rgba($color: $uv-warning, $alpha: 0.1);
     }
+
     .waiting {
-      background-color: rgba($color: $uni-color-primary, $alpha: 0.1);
+      background-color: rgba($color: $uv-primary, $alpha: 0.1);
     }
   }
+
   .done,
   .waiting,
   .doing {
     padding: 2px 8px;
     border-radius: 4px;
+
     &::before {
       content: "";
       display: inline-block;
@@ -62,58 +95,28 @@ defineProps({
       vertical-align: middle;
     }
   }
+
   .done {
-    color: $uni-color-success;
+    color: $uv-success;
+
     &::before {
-      background-color: $uni-color-success;
+      background-color: $uv-success;
     }
   }
+
   .doing {
-    color: $uni-color-warning;
+    color: $uv-warning;
+
     &::before {
-      background-color: $uni-color-warning;
+      background-color: $uv-warning;
     }
   }
+
   .waiting {
-    color: $uni-color-primary;
+    color: $uv-primary;
+
     &::before {
-      background-color: $uni-color-primary;
-    }
-  }
-}
-.types {
-  display: inline-flex;
-  gap: 8rpx;
-  flex-wrap: wrap;
-  .tag {
-    padding: 2px 4px;
-    line-height: 16px;
-    gap: 8px;
-    font-size: 12px;
-    background: rgba($color: #000000, $alpha: 0.05);
-    color: rgba($color: #000000, $alpha: 0.5);
-    border-radius: 2px;
-  }
-}
-.levels {
-  border-radius: 2px;
-  background: rgba(22, 93, 255, 0.1);
-  color: $uni-color-primary;
-  font-size: 12px;
-  display: inline-flex;
-  gap: 8rpx;
-  line-height: 20px;
-  padding: 0 8rpx;
-  border-radius: 2px;
-  .text {
-    &:not(:last-child)::after {
-      content: "";
-      height: 8px;
-      display: inline-block;
-      width: 1px;
-      background-color: $uni-color-primary;
-      vertical-align: baseline;
-      margin-left: 8rpx;
+      background-color: $uv-primary;
     }
   }
 }

@@ -4,27 +4,27 @@
       <filter-head @load="reload" :queryParam="queryParam" />
     </div>
     <div class="content" v-if="workList.length">
-      <uni-card @click="jump(item)" padding="10px 4px" v-for="item in workList" :key="item.id" :isFull="true"
+      <uni-card @click="jump(item)" padding="10px 4px" v-for="(item, index) in workList" :key="item.id" :isFull="true"
         :border="false" :is-shadow="false">
         <div class="work-item">
           <div class="item-head">
             <div class="item-title ellipsis">
-              {{ item.customerName }}
+              {{ item.customerName }}303展位
             </div>
             <div class="item-status">
-              <status-tag :status="item.finishStatus" />
+              <status-tag :status="item.finishStatus ?? 1" />
             </div>
           </div>
-          <div class="item-mid">
-            <status-tag style="margin-right: 8rpx" type="1" :types="item.typeVOList.map((item) => item.name)" />
-            <status-tag type="2" :levels="item.orderType" />
-          </div>
+
           <div class="item-bottom">
+            <status-tag :status="item.finishStatus ?? index" :tag="true" />
             <img class="icon" :src="icon1" alt="" /><span>
               {{ item.code }}
+              DJ-0001
             </span>
             <img style="margin-left: 8px" class="icon" :src="icon2" alt="" />
             <span>{{ item.createTime }} </span>
+            2024-05-14 12:13:00
           </div>
         </div>
       </uni-card>
@@ -46,7 +46,7 @@ import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
 const userStore = useUserStore();
 onShow(() => {
-  reload();
+  // reload();
 
 });
 
@@ -63,9 +63,9 @@ const queryParam = ref({
   finishStatus: null,
   date: [],
 });
-const workList = ref([]);
+const workList = ref([{}, {}, {}]);
 const reload = () => {
-  getCount();
+  // getCount();
   uni.showLoading();
   WorkApi.list({ ...queryParam.value })
     .then((res) => {
@@ -119,9 +119,7 @@ const jump = (item) => {
     margin-right: 20px;
   }
 
-  .item-mid {
-    margin: 8px 0;
-  }
+
 }
 
 .item-bottom {
@@ -131,6 +129,7 @@ const jump = (item) => {
   font-size: 12px;
   align-items: center;
   gap: 4rpx;
+  margin-top: 10px;
 
   .icon {
     height: 14px;

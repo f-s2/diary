@@ -2,7 +2,8 @@
   <div class="tabs-box">
     <div :class="['tab-item', { active: activeIndex === index }]" v-for="(item, index) in tabInfo" :key="item.name"
       @click="jump(item)">
-      <uni-badge v-if="item.custom" :text="+userStore.unFinishCount || ''" type="error" :max-num="99" absolute="rightTop">
+      <uni-badge v-if="item.custom" :text="+userStore.unFinishCount || ''" type="error" :max-num="99"
+        absolute="rightTop">
         <img class="icon" :src="item.icon" alt="" />
       </uni-badge>
       <img v-else class="icon" :src="item.icon" alt="" />
@@ -15,22 +16,16 @@
 <script setup>
 import { useUserStore } from "@/store/user";
 import { onShow } from "@dcloudio/uni-app";
-import icon1 from "../static/tab/clock.png";
 import icon2 from "../static/tab/mine.png";
 import icon3 from "../static/tab/work.png";
 const userStore = useUserStore();
 defineProps({ activeIndex: Number });
 const tabInfo = [
   {
-    name: "工单",
+    name: "任务",
     icon: icon3,
     path: "/pages_work/index/index",
     custom: true,
-  },
-  {
-    name: "打卡",
-    icon: icon1,
-    path: "/pages_clock/index/index",
   },
   {
     name: "我的",
