@@ -9,8 +9,38 @@
     {
       "path": "pages_work/index/index",
       "style": {
-        "navigationBarTitleText": "我的工单",
+        "navigationBarTitleText": "任务清单",
         "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages_work/maintenance/index",
+      "style": {
+        "navigationBarTitleText": "任务详情"
+      }
+    },
+    {
+      "path": "pages_work/maintenance/plan",
+      "style": {
+        "navigationBarTitleText": "编辑计划"
+      }
+    },
+    {
+      "path": "pages_work/maintenance/handle",
+      "style": {
+        "navigationBarTitleText": "处理任务"
+      }
+    },
+    {
+      "path": "pages_work/inspection/index",
+      "style": {
+        "navigationBarTitleText": "任务详情"
+      }
+    },
+    {
+      "path": "pages_work/inventory/index",
+      "style": {
+        "navigationBarTitleText": "任务详情"
       }
     },
    

@@ -34,7 +34,7 @@ page {
   padding: 0 32rpx;
   display: flex;
   flex-direction: column;
-  font-size: 32rpx;
+  font-size: 14px;
 
   .describe-item {
     display: flex;
@@ -46,15 +46,25 @@ page {
     &:not(:first-child) {
       border-top: 1px solid #f7f8fa;
     }
+
+    &.wrap {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .describe-value {
+        width: 100%;
+      }
+    }
   }
 
   .describe-label {
     font-weight: 400;
     flex-shrink: 0;
+    color: rgba(0, 0, 0, 0.50);
   }
 
   .describe-value {
-    color: rgb(0, 0, 0, 0.5);
+    color: rgb(0, 0, 0, 0.9);
     display: inline-flex;
     flex-wrap: wrap;
     word-break: break-all;
@@ -92,5 +102,46 @@ button[type="primary"][plain] {
 
 .uv-popup__content.bottom {
   padding: 20px;
+}
+
+.item-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+
+  .item-tag {
+    border-radius: 2px;
+    background: rgba(151, 155, 155, 0.10);
+    display: flex;
+    padding: 2px 4px;
+    color: rgba(0, 0, 0, 0.50);
+  }
+
+}
+
+.uv-form-item__body__left__content__required {
+  position: initial !important;
+}
+
+
+.form-required {
+  // left: -9px;
+  color: #f56c6c;
+  line-height: 20px;
+  font-size: 20px;
+  position: relative;
+  display: inline-block;
+
+}
+
+.uv-form-item__body__right__content__slot {
+  flex-direction: row-reverse !important;
+}
+
+.input-right {
+  .uv-input__content__field-wrapper__field {
+    text-align: right !important;
+  }
 }
 </style>

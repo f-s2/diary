@@ -6,7 +6,7 @@
     </div>
     <div class="filter-bottom">
       <div class="tag-box">
-        <span @click="selectTag(item)" :class="['tag', { active: queryParam.finishStatus === item.code }]"
+        <span @click="selectTag(item)" :class="['tag', { active: queryParam.status === item.code }]"
           v-for="item in tagInfo" :key="item.code">
           {{ item.name }}
         </span>
@@ -16,14 +16,14 @@
         筛选
       </div>
     </div>
-    <u-popup ref="popupRef" v-model:show="show" mode="bottom" title="工单筛选" :round="10">
+    <u-popup ref="popupRef" v-model:show="show" mode="bottom" title="任务筛选" :round="10">
       <div class="popup">
-        <div class="sub-label">工单类型 :</div>
+        <div class="sub-label">任务类型 :</div>
         <div class="level-box">
           <span :class="[
         'level-tag',
-        { active: temQueryParam.orderTypes?.includes(item) },
-      ]" @click="selectLevel(item)" v-for="item in levelOptions" :key="item">
+        { active: temQueryParam.types?.includes(index) },
+      ]" @click="selectLevel(index)" v-for="(item, index) in levelOptions" :key="item">
             {{ item }}
           </span>
         </div>
@@ -56,15 +56,15 @@ const { queryParam } = toRefs(props);
 const tagInfo = [
   {
     name: "待完成",
-    code: 4,
+    code: 0,
   },
   {
     name: "已提交",
-    code: 6,
+    code: 1,
   },
   {
     name: "已完成",
-    code: 5,
+    code: 2,
   },
   {
     name: "全部",
@@ -72,20 +72,20 @@ const tagInfo = [
   },
 ];
 const selectTag = ({ code }) => {
-  queryParam.value.finishStatus = code;
+  queryParam.value.status = code;
   emit("load");
 };
 const selectLevel = (code) => {
-  if (!temQueryParam.value.orderTypes) {
-    temQueryParam.value.orderTypes = [];
+  if (!temQueryParam.value.types) {
+    temQueryParam.value.types = [];
   }
-  const index = temQueryParam.value.orderTypes?.findIndex(
+  const index = temQueryParam.value.types?.findIndex(
     (item) => item === code
   );
   if (index === -1) {
-    temQueryParam.value.orderTypes.push(code);
+    temQueryParam.value.types.push(code);
   } else {
-    temQueryParam.value.orderTypes.splice(index, 1);
+    temQueryParam.value.types.splice(index, 1);
   }
 };
 const show = ref(false);
@@ -95,10 +95,10 @@ const handleOpen = () => {
   show.value = true;
 };
 const handleOk = () => {
-  const { orderTypes, date } = temQueryParam.value;
-  queryParam.value.orderTypes = orderTypes;
-  queryParam.value.startTime = date[0];
-  queryParam.value.endTime = date[1];
+  const { types, date } = temQueryParam.value;
+  queryParam.value.types = types;
+  queryParam.value.createTimeStart = date[0];
+  queryParam.value.createTimeEnd = date[1];
   queryParam.value.date = date;
   show.value = false;
   emit("load");

@@ -1,49 +1,18 @@
 import request from '@/utils/request'
 
 
-const prefix = `/business/execute-order`
+const prefix = `/business`
 export class WorkApi {
 
     static list(data) {
         return request({
-            url: prefix + '/list',
+            url: prefix + '/task/pageList',
             method: 'post',
             params: {},
             data
         })
     }
-    static statistics(data) {
-        return request({
-            url: prefix + '/statistics',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
-    static temSave(data) {
-        return request({
-            url: prefix + '/save-inventory',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
-    static saveFiles(data) {
-        return request({
-            url: prefix + '/save-files',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
-    static pictures(data) {
-        return request({
-            url: prefix + '/pictures',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
+
     static detail(id) {
         return request({
             url: prefix + '/' + id,
@@ -51,55 +20,49 @@ export class WorkApi {
             params: {},
         })
     }
-    static reply(data) {
-        return request({
-            url: prefix + '/reply',
-            method: 'post',
-            data,
-        })
-    }
 
-    static finish(data) {
-        return request({
-            url: prefix + '/finish',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
-    static getDeviceInfo(data) {
-        return request({
-            url: prefix + '/get-inventory-by-order-device-id',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
     static getCount() {
         return request({
-            url: prefix + '/count-unfinished',
+            url: prefix + '/task/count-unfinished',
             method: 'get',
             params: {},
         })
     }
-    static updateSingle(data) {
-        return request({
-            url: `/business/inventory-outbound/update`,
-            method: 'post',
-            params: {},
-            data
-        })
-    }
-    static searchSpare(data) {
-        return request({
-            url: `/business/spare-parts-inventory/list`,
-            method: 'post',
-            params: {},
-            data
-        })
-    }
 }
 const sparePrefix = `/business/inventory-type`
+export class MaintenanceApi {
+    static detail(id) {
+        return request({
+            url: prefix + '/maintenance/' + id,
+            method: 'get',
+            params: {},
+        })
+    }
+    static planDetail(id) {
+        return request({
+            url: prefix + '/maintenance-plan/' + id,
+            method: 'get',
+            params: {},
+        })
+    }
+    static itemList(data) {
+        return request({
+            url: prefix + '/maintenance-benchmark/item/list',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static updateItem(data) {
+        return request({
+            url: prefix + '/maintenance-plan/item/update',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+
+}
 export class SpareApi {
     static tree(data) {
         return request({
