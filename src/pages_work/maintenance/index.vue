@@ -6,7 +6,7 @@
             <status-tag :status="+baseInfo.taskStatus" :needBg="true" />
         </div>
         <div class="describe-box" style="margin-bottom: 12px">
-            <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in baseConfig" :key="item.name">
+            <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in taskConfig" :key="item.name">
                 <div class="describe-label">
                     {{ item.name }}</div>
                 <div class="describe-value">
@@ -20,40 +20,119 @@
                 </div>
             </div>
         </div>
-        <div class="sub-title">
-            预览计划
-            <div class="btn" @click="updatePlan" v-if="baseInfo.taskStatus == 0"> <uv-icon name="edit-pen"
-                    color="#1890FF"></uv-icon> 编辑计划</div>
-        </div>
-        <div class="describe-box" style="margin-bottom: 12px">
-            <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in mainConfig" :key="item.name">
-                <div class="describe-label">
-                    {{ item.name }}</div>
-                <div class="describe-value">
-                    <span v-if="!item.custom">
-                        {{ planInfo?.[item.code] || "--" }}
-                    </span>
-                    <span v-else-if="item.code === 'itemList'">
-                        <div class="item-tags">
-                            <span class="item-tag" v-for="item in baseInfo.itemList">{{ item.name }}</span>
-                        </div>
-                    </span>
-                    <span v-else-if="item.code === 'deviceList'">
-                        {{ planInfo.deviceList?.map(item => `${item.name}`)?.join('、') ?? '-' }}
-                    </span>
-                    <span v-else-if="item.code === 'roleList'">
-                        {{ planInfo.roleList?.map(item => `${item.name}`)?.join('、') ?? '-' }}
-                    </span>
+        <template v-if="+baseInfo.taskStatus === 0">
+
+            <div class="sub-title">
+                预览计划
+                <div class="btn" @click="updatePlan" v-if="baseInfo.taskStatus == 0"> <uv-icon name="edit-pen"
+                        color="#1890FF"></uv-icon> 编辑计划</div>
+            </div>
+            <div class="describe-box" style="margin-bottom: 12px">
+                <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in mainConfig" :key="item.name">
+                    <div class="describe-label">
+                        {{ item.name }}</div>
+                    <div class="describe-value">
+                        <span v-if="!item.custom">
+                            {{ planInfo?.[item.code] || "--" }}
+                        </span>
+                        <span v-else-if="item.code === 'itemList'">
+                            <div class="item-tags">
+                                <span class="item-tag" v-for="item in baseInfo.itemList">{{ item.name }}</span>
+                            </div>
+                        </span>
+                        <span v-else-if="item.code === 'deviceList'">
+                            {{ planInfo.deviceList?.map(item => `${item.name}`)?.join('、') ?? '-' }}
+                        </span>
+                        <span v-else-if="item.code === 'roleList'">
+                            {{ planInfo.roleList?.map(item => `${item.name}`)?.join('、') ?? '-' }}
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
+        <template v-else>
+
+            <div class="sub-title">
+                保养记录
+
+            </div>
+            <div class="describe-box" style="margin-bottom: 1px;">
+                <div class="info-title">
+                    设备信息
+                </div>
+                <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in deviceConfig" :key="item.name"
+                    style="border: none;">
+                    <div class="describe-label">
+                        {{ item.name }}</div>
+                    <div class="describe-value">
+                        <span v-if="!item.custom">
+                            {{ baseInfo?.[item.code] || "--" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="describe-box" style="margin-bottom: 12px">
+                <div class="info-title">
+                    保养信息
+                </div>
+                <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in baseConfig" :key="item.name"
+                    style="border: none;">
+                    <div class="describe-label">
+                        {{ item.name }}</div>
+                    <div class="describe-value">
+                        <span v-if="!item.custom">
+                            {{ baseInfo?.[item.code] || "--" }}
+                        </span>
+                        <span @click="itemShow = true" v-else-if="item.code === 'itemList'"
+                            style="display: flex;align-items: center;">
+                            <span style="color:#1890FF ;"> 查看记录</span> <uv-icon name="arrow-right" size="16"></uv-icon>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="sub-title">
+                备件领用
+            </div>
+            <div class="spare-list">
+                <div class="spare-item" v-for="(item, index) in baseInfo.sparePartsList">
+                    <div class="item-top">
+                        <span>
+                            {{ item.name ?? item.sparePartsName }}
+                        </span>
+
+                    </div>
+                    <div class="item-value">
+                        <uv-row>
+                            <uv-col span="4">
+                                <div class="name">货位</div>
+                                <div class="value">{{ item.allocation ?? '-' }}</div>
+                            </uv-col>
+                            <uv-col span="4">
+                                <div class="name">数量</div>
+                                <div class="value">{{ item.quantity }}</div>
+                            </uv-col>
+                            <uv-col span="4">
+                                <div class="name">使用数量</div>
+                                <div class="value">{{ item.usedQuantity }}</div>
+                            </uv-col>
+                        </uv-row>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+
         <div class="bottom-btn" v-if="baseInfo.taskStatus == 0">
-            <button type="primary">处理任务</button>
+            <button type="primary" @click="handleSave">处理任务</button>
         </div>
+        <ViewItem v-model:show="itemShow" :data="baseInfo.itemList" />
     </div>
 </template>
 
 <script setup>
+import ViewItem from './ViewItem.vue';
+
 import { MaintenanceApi } from "@/api/WorkApi";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
@@ -68,8 +147,51 @@ onLoad((data) => {
 onShow(() => {
     getInfo()
 })
+const deviceConfig = [
+    {
+        name: '设备编码',
+        code: 'deviceCode'
+    },
+    {
+        name: '设备名称',
+        code: 'deviceName'
+    },
+    {
+        name: '设备型号',
+        code: 'deviceModel'
+    },
+    {
+        name: '设备类型',
+        code: 'deviceTypeName'
+    },
+    {
+        name: '设备组',
+        code: 'deviceGroupName'
+    },
+
+]
 
 const baseConfig = [
+    {
+        name: '任务编码',
+        code: 'code'
+    },
+    {
+        name: '保养时间',
+        code: 'maintainTime'
+    },
+    {
+        name: '保养人员',
+        code: 'maintainUserName'
+    },
+    {
+        name: '保养记录',
+        code: 'itemList',
+        custom: true
+    },
+]
+
+const taskConfig = [
     {
         name: '任务编号',
         code: 'taskCode'
@@ -120,6 +242,8 @@ const mainConfig = [
         code: 'startTime'
     },
 ]
+
+const itemShow = ref(false)
 const getInfo = () => {
     loading.value = true
     const { id, planId } = baseInfo.value
@@ -141,6 +265,24 @@ const updatePlan = () => {
         url: `/pages_work/maintenance/plan?info=${JSON.stringify({ itemList, maintenanceId: id, id: planId, benchmarkId })}`,
     });
 
+}
+const handleSave = () => {
+    const { fillStatus, itemList, id, planId } = baseInfo.value
+    if (fillStatus === 0) {
+        MaintenanceApi.updateItem({ id: planId, maintenanceId: id, itemIds: itemList.map(item => item.id) }).then(res => {
+            if (res.code === 0) {
+                uni.navigateTo({
+                    url: `/pages_work/maintenance/handle?id=${id}`
+                })
+            }
+        })
+
+    } else {
+        uni.navigateTo({
+            url: `/pages_work/maintenance/handle?id=${id}`
+        })
+
+    }
 }
 
 </script>
@@ -164,5 +306,39 @@ const updatePlan = () => {
     align-items: center;
     display: flex;
     gap: 4px;
+    font-weight: 500;
+}
+
+.spare-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    >div {
+        border-radius: 4px;
+        background: #FFF;
+        display: flex;
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 16px;
+
+    }
+
+    .name {
+        color: rgba(0, 0, 0, 0.50);
+        margin-bottom: 6px;
+    }
+}
+
+.info-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.90);
+    margin: 10px 0;
+}
+
+.line {
+    height: 1px;
+    background-color: #f7f8fa;
 }
 </style>

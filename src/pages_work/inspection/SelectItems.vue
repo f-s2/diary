@@ -1,5 +1,5 @@
 <template>
-    <u-popup :show="show" @update:show="(bol) => $emit('update:show', bol)" mode="bottom" title="选择保养项" :cancel="true"
+    <u-popup :show="show" @update:show="(bol) => $emit('update:show', bol)" mode="bottom" title="选择点检项" :cancel="true"
         :back="false" :round="10">
         <!-- <div class="search">
             <uni-easyinput prefixIcon="search" type="search" v-model="keywords" placeholder="用户名" />
@@ -10,7 +10,7 @@
                 <div :class="['device-item', { active: selectIds.includes(item.id) }]" v-for="item in computedList"
                     :key="item.id" @click="trigger(item)">
                     <span>
-                        {{ item.name }}({{ item.code }})-{{ item.period }}天
+                        {{ item.name }}({{ item.code }})-{{ item.period }}月
                     </span>
                     <uni-icons v-show="selectIds.includes(item.id)" type="checkmarkempty" size="16"
                         color="#1890FF"></uni-icons>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { MaintenanceApi } from "@/api/WorkApi";
+import { InspectionkApi } from "@/api/WorkApi";
 
 import { computed, ref, watch } from "vue";
 const props = defineProps({ show: Boolean, data: Object });
@@ -34,7 +34,7 @@ const emit = defineEmits(["update:show", "ok",]);
 const handleOk = () => {
     if (!selection.value?.length) {
         uni.showToast({
-            title: '请选择保养项',
+            title: '请选择点检项',
             icon: 'none'
         })
         return
@@ -42,7 +42,7 @@ const handleOk = () => {
     const list = selection.value.map(item => item.period)
     if ([...new Set(list)].length > 1) {
         uni.showToast({
-            title: '保养项周期需保持一致',
+            title: '点检项周期需保持一致',
             icon: 'none'
         })
         return
@@ -71,7 +71,7 @@ const computedList = computed(() => {
 })
 const load = () => {
     uni.showLoading();
-    MaintenanceApi.itemList({ ...props.data })
+    InspectionkApi.itemList({ ...props.data })
         .then((res) => {
             personList.value = res.data;
         })

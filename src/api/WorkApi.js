@@ -29,7 +29,6 @@ export class WorkApi {
         })
     }
 }
-const sparePrefix = `/business/inventory-type`
 export class MaintenanceApi {
     static detail(id) {
         return request({
@@ -53,6 +52,14 @@ export class MaintenanceApi {
             data
         })
     }
+    static handle(data) {
+        return request({
+            url: prefix + '/maintenance/handle',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
     static updateItem(data) {
         return request({
             url: prefix + '/maintenance-plan/item/update',
@@ -63,10 +70,50 @@ export class MaintenanceApi {
     }
 
 }
-export class SpareApi {
-    static tree(data) {
+export class InspectionkApi {
+    static detail(id) {
         return request({
-            url: sparePrefix + '/list-all',
+            url: prefix + '/inspection/' + id,
+            method: 'get',
+            params: {},
+        })
+    }
+    static planDetail(id) {
+        return request({
+            url: prefix + '/inspection-plan/' + id,
+            method: 'get',
+            params: {},
+        })
+    }
+    static itemList(data) {
+        return request({
+            url: prefix + '/inspection-benchmark/item/list',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static handle(data) {
+        return request({
+            url: prefix + '/inspection/handle',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static updateItem(data) {
+        return request({
+            url: prefix + '/inspection-plan/item/update',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+}
+export class SpareApi {
+    static list(data) {
+        return request({
+            url: prefix + '/spare-parts/list',
             method: 'post',
             params: {},
             data

@@ -8,7 +8,7 @@
         <filter-head @load="reload" :queryParam="queryParam" />
       </div>
     </template>
-    <uni-card @click="jump(item)" padding="10px 4px" style="margin:12px 16px ;" v-for="(item, index) in workList"
+    <uni-card @click="jump(item)" padding="10px 4px" style="margin:0 12px 16px ;" v-for="(item, index) in workList"
       :key="item.id" :isFull="true" :border="false" :is-shadow="false">
       <div class="work-item">
         <div class="item-head">

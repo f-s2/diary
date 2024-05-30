@@ -35,6 +35,7 @@ page {
   display: flex;
   flex-direction: column;
   font-size: 14px;
+  border-radius: 4px;
 
   .describe-item {
     display: flex;
@@ -97,7 +98,9 @@ button[type="primary"][plain] {
   position: fixed;
   left: 16px;
   right: 16px;
-  bottom: 32px;
+  bottom: 0;
+  padding-bottom: 32px;
+  background-color: #f7f8fa;
 }
 
 .uv-popup__content.bottom {

@@ -1,10 +1,10 @@
 <template>
     <div class="page-body">
         <div class="title">
-            填写保养记录
+            填写点检记录
         </div>
         <div class="sub-title">
-            保养记录
+            点检记录
         </div>
         <div class="describe-box" style="margin-bottom: 1px;">
             <div class="info-title">
@@ -23,7 +23,7 @@
         </div>
         <div class="describe-box" style="margin-bottom: 12px">
             <div class="info-title">
-                保养信息
+                点检信息
             </div>
             <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in baseConfig" :key="item.name"
                 style="border: none;">
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="describe-item" style="border: none;">
-                <div class="describe-label"> <span style="color: red;">*</span>保养记录</div>
+                <div class="describe-label"> <span style="color: red;">*</span>点检记录</div>
                 <div class="describe-value" @click="handleFill">
 
                     <div class="done-btn" v-if="baseInfo.itemList?.every(item => Number.isInteger(item.checked))">
@@ -52,56 +52,20 @@
                 </div>
             </div>
         </div>
-        <div class="sub">
-            <div class="sub-title">
-                备件领用
-            </div>
-            <span class="select-btn" @click="handleSelectSpare">+ 选择备件</span>
-        </div>
-        <div class="spare-list">
-            <div class="spare-item" v-for="(item, index) in baseInfo.sparePartsList">
-                <div class="item-top">
-                    <span>
-                        {{ item.name }}({{ item.code }})
-                    </span>
-                    <uv-icon @click="baseInfo.sparePartsList.splice(index, 1)" color="#999" name="close"></uv-icon>
 
-                </div>
-                <div class="item-value">
-                    <uv-row>
-                        <uv-col span="4">
-                            <div class="name">货位</div>
-                            <div class="value">{{ item.allocation }}</div>
-                        </uv-col>
-                        <uv-col span="4">
-                            <div class="name">数量</div>
-                            <div class="value">{{ item.quantity }}</div>
-                        </uv-col>
-                        <uv-col span="4">
-                            <div class="name">使用数量</div>
-                            <uv-input type="number" placeholder="点击填写" border="none" v-model="item.usedQuantity"
-                                @blur="val => handleChange(val, item)"></uv-input>
-                        </uv-col>
-                    </uv-row>
-                </div>
-            </div>
-
-        </div>
         <div class="bottom-btn">
             <button type="primary" @click="handleSave">提交</button>
         </div>
         <FillItem v-model:show="modalState.show" :data="baseInfo.itemList" @ok="(list) => baseInfo.itemList = list" />
-        <selectSpare v-model:show="modalState.spareShow" :data="baseInfo.sparePartsList" @ok="handleAddOk" />
     </div>
 </template>
 
 <script setup>
-import { MaintenanceApi } from "@/api/WorkApi";
+import { InspectionkApi } from "@/api/WorkApi";
 
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { reactive, ref } from "vue";
 import FillItem from './FillItem.vue';
-import SelectSpare from './SelectSpare.vue';
 const baseInfo = ref({})
 onLoad(({ id }) => {
     baseInfo.value.id = id
@@ -139,12 +103,12 @@ const baseConfig = [
         code: 'code'
     },
     {
-        name: '保养时间',
-        code: 'maintainTime'
+        name: '点检时间',
+        code: 'inspectTime'
     },
     {
-        name: '保养人员',
-        code: 'maintainUserName'
+        name: '点检人员',
+        code: 'inspectUserName'
     },
 ]
 
@@ -157,38 +121,14 @@ const handleFill = () => {
     modalState.show = true
 
 }
-const handleSelectSpare = () => {
-    modalState.spareShow = true
 
-}
-const handleAddOk = (list) => {
-    if (baseInfo.value.sparePartsList) {
-        list.forEach(element => {
-            const val = baseInfo.value.sparePartsList.find(item => item.id === element.id)
-            if (!val) {
-                baseInfo.value.sparePartsList.unshift(element)
-            }
-        });
-
-    } else {
-        baseInfo.value.sparePartsList = list
-    }
-}
 const getInfo = () => {
-    MaintenanceApi.detail(baseInfo.value.id).then(res => {
+    InspectionkApi.detail(baseInfo.value.id).then(res => {
         baseInfo.value = res.data
     })
 
 }
-const handleChange = (val, item) => {
-    if (val > item.quantity) {
-        item.usedQuantity = item.quantity
-    } else if (val < 1) {
-        item.usedQuantity = 1
-    } else {
-        item.usedQuantity = +val
-    }
-}
+
 const handleSave = () => {
     const { itemList, sparePartsList } = baseInfo.value
     if (itemList.some(item => !Number.isInteger(item.checked))) {
@@ -198,20 +138,12 @@ const handleSave = () => {
         })
         return
     }
-    if (sparePartsList?.length) {
-        if (sparePartsList.some(item => !Number.isInteger(item.usedQuantity))) {
-            uni.showToast({
-                title: '请填写备件使用数量!',
-                icon: 'none'
-            })
-            return
-        }
-    }
+
     uni.showModal({
         title: '是否提交任务?',
         success: ({ confirm }) => {
-            confirm & MaintenanceApi.handle({
-                ...baseInfo.value, sparePartsList: sparePartsList.map(item => ({ sparePartsId: item.id, usedQuantity: item.usedQuantity }))
+            confirm & InspectionkApi.handle({
+                ...baseInfo.value
             }).then(res => {
                 if (res.code === 0) {
                     uni.showToast({
@@ -293,37 +225,7 @@ const handleSave = () => {
     gap: 2px;
 }
 
-.select-btn {
-    border-radius: 4px;
-    border: 1px solid #1890FF;
-    background: rgba(24, 144, 255, 0.10);
-    display: flex;
-    padding: 4px 8px;
-    align-items: center;
-    color: #1890FF;
-    gap: 4px;
-}
 
-.spare-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    >div {
-        border-radius: 4px;
-        background: #FFF;
-        display: flex;
-        padding: 12px 16px;
-        flex-direction: column;
-        gap: 16px;
-
-    }
-
-    .name {
-        color: rgba(0, 0, 0, 0.50);
-        margin-bottom: 6px;
-    }
-}
 
 .item-top {
     display: flex;
