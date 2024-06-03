@@ -6,7 +6,7 @@
 
       </div>
       <div class="describe">
-        {{ baseInfo.customerName || "-" }}
+        {{ baseInfo.organizeName || "-" }}
       </div>
       <div class="mobile">
         <uv-icon name="phone"></uv-icon>{{ baseInfo.mobile }}
@@ -102,6 +102,7 @@ const handleLoginOut = () => {
     gap: 6px;
     height: 20px;
     border-top: 1px solid #ebe9e9;
+    width: 50%;
     position: relative;
     padding: 12px 0;
 

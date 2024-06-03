@@ -146,5 +146,9 @@ button[type="primary"][plain] {
   .uv-input__content__field-wrapper__field {
     text-align: right !important;
   }
+
+  .uv-form-item__body__right__message {
+    text-align: right;
+  }
 }
 </style>

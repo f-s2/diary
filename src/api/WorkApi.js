@@ -21,11 +21,12 @@ export class WorkApi {
         })
     }
 
-    static getCount() {
+    static getCount(data) {
         return request({
             url: prefix + '/task/count-unfinished',
-            method: 'get',
+            method: 'post',
             params: {},
+            data
         })
     }
 }
@@ -119,4 +120,23 @@ export class SpareApi {
             data
         })
     }
+}
+export class InventoryApi {
+    static detailPage(data) {
+        return request({
+            url: prefix + '/inventory/count/detail/pageList',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static confirm(data) {
+        return request({
+            url: prefix + '/inventory/confirm',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+
 }

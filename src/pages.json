@@ -9,8 +9,7 @@
     {
       "path": "pages_work/index/index",
       "style": {
-        "navigationBarTitleText": "任务清单",
-        "enablePullDownRefresh": true
+        "navigationBarTitleText": "任务清单"
       }
     },
     {
@@ -57,8 +56,18 @@
         "navigationBarTitleText": "任务详情"
       }
     },
-   
-   
+     {
+      "path": "pages_work/inventory/handle",
+      "style": {
+        "navigationBarTitleText": "处理任务"
+      }
+    },
+     {
+      "path": "pages_work/inventory/done",
+      "style": {
+        "navigationBarTitleText": "盘点记录"
+      }
+    },
   
     {
       "path": "pages_mine/mine/index",

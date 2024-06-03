@@ -1,6 +1,6 @@
 <template>
     <div class="page-body">
-        <u-loading v-show="loading" />
+        <u-loading v-if="loading" />
         <div class="sub-title">
             基础信息
             <status-tag :status="+baseInfo.taskStatus" :needBg="true" />
@@ -24,8 +24,8 @@
 
             <div class="sub-title">
                 预览计划
-                <div class="btn" @click="updatePlan" v-if="baseInfo.taskStatus == 0"> <uv-icon name="edit-pen"
-                        color="#1890FF"></uv-icon> 编辑计划</div>
+                <div class="btn" @click="updatePlan" v-if="baseInfo.taskStatus == 0 && baseInfo.fillStatus === 0">
+                    <uv-icon name="edit-pen" color="#1890FF"></uv-icon> 编辑计划</div>
             </div>
             <div class="describe-box" style="margin-bottom: 12px">
                 <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in mainConfig" :key="item.name">

@@ -1,6 +1,6 @@
 <template>
 
-  <z-paging ref="paging" v-model="workList" @query="queryList">
+  <z-paging ref="paging" v-model="workList" @query="queryList" :auto-show-system-loading="true">
     <!-- z-paging默认铺满全屏，此时页面所有view都应放在z-paging标签内，否则会被盖住 -->
     <!-- 需要固定在页面顶部的view请通过slot="top"插入，包括自定义的导航栏 -->
     <template #top>
@@ -46,21 +46,20 @@ import { WorkApi } from "@/api/WorkApi";
 import icon1 from "@/static/code.png";
 import icon2 from "@/static/time.png";
 import { useUserStore } from "@/store/user";
-import { onPullDownRefresh } from "@dcloudio/uni-app";
+import { onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
 import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
 const userStore = useUserStore();
 
-
 const getCount = () => {
   WorkApi.getCount().then((res) => {
-    userStore.unFinishCount = res.data;
+    userStore.unFinishCount = res.data.uncompleted;
   });
 };
-onPullDownRefresh(() => {
-  reload();
-});
+onShow(() => {
+  reload()
+})
 const queryParam = ref({
   searchContent: "",
   finishStatus: null,
@@ -69,7 +68,7 @@ const queryParam = ref({
 const workList = ref([]);
 
 const queryList = (pageNo, pageSiz) => {
-  // getCount()
+  getCount()
   WorkApi.list({ ...queryParam.value, currentPage: pageNo, pageSize: pageSiz })
     .then((res) => {
       paging.value.complete(res.data?.records)
@@ -80,7 +79,7 @@ const queryList = (pageNo, pageSiz) => {
 }
 const paging = ref(null)
 const reload = () => {
-  queryList(1, 10)
+  paging.value?.reload()
 
 };
 const jump = (item) => {
