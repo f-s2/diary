@@ -25,7 +25,8 @@
             <div class="sub-title">
                 预览计划
                 <div class="btn" @click="updatePlan" v-if="baseInfo.taskStatus == 0 && baseInfo.fillStatus === 0">
-                    <uv-icon name="edit-pen" color="#1890FF"></uv-icon> 编辑计划</div>
+                    <uv-icon name="edit-pen" color="#1890FF"></uv-icon> 编辑计划
+                </div>
             </div>
             <div class="describe-box" style="margin-bottom: 12px">
                 <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in mainConfig" :key="item.name">
@@ -35,19 +36,52 @@
                         <span v-if="!item.custom">
                             {{ planInfo?.[item.code] || "--" }}
                         </span>
-                        <span v-else-if="item.code === 'itemList'">
-                            <div class="item-tags">
-                                <span class="item-tag" v-for="item in baseInfo.itemList">{{ item.name }}</span>
-                            </div>
-                        </span>
-                        <span v-else-if="item.code === 'deviceList'">
-                            {{ planInfo.deviceList?.map(item => `${item.name}`)?.join('、') ?? '-' }}
-                        </span>
+
                         <span v-else-if="item.code === 'roleList'">
                             {{ planInfo.roleList?.map(item => `${item.name}`)?.join('、') ?? '-' }}
                         </span>
                     </div>
                 </div>
+            </div>
+            <div class="plan-list">
+                <div class="plan-item" v-for="item in planInfo.detailList">
+                    <div class="plan-title">
+                        <img :src="icon1" alt="">
+                        ({{ item.deviceName }}) {{ item.deviceCode }}
+                    </div>
+                    <uv-grid :col="2">
+                        <uv-grid-item style="align-items: start">
+                            <div class="label">设备编码</div>
+                            <div class="value">{{ item.deviceCode }}</div>
+                        </uv-grid-item>
+                        <uv-grid-item style="align-items: start">
+                            <div class="label">基准</div>
+                            <div class="value">{{ item.benchmark }}</div>
+                        </uv-grid-item>
+                        <uv-grid-item style="align-items: start">
+                            <div class="label">保养项</div>
+                            <div class="value">{{ item.item }}</div>
+                        </uv-grid-item>
+                        <uv-grid-item style="align-items: start">
+                            <div class="label">周期(月)</div>
+                            <div class="value">{{ item.period }}</div>
+                        </uv-grid-item>
+
+                    </uv-grid>
+
+
+                    <div class="line" style="margin: 12px 0;" />
+                    <uv-grid :col="3" style="margin: 0 -8px;">
+                        <uv-grid-item v-for="val in item.timeTable" :key="val.time" style="align-items: start">
+                            <div :class="['month-item', { active: val.checked }]"><span>{{ val.time }}</span> <img
+                                    :src="icon2" alt="">
+                            </div>
+                        </uv-grid-item>
+                    </uv-grid>
+
+                </div>
+
+
             </div>
         </template>
         <template v-else>
@@ -131,6 +165,8 @@
 </template>
 
 <script setup>
+import icon1 from '@/static/device.png';
+import icon2 from '@/static/tag_1.png';
 import ViewItem from './ViewItem.vue';
 
 import { MaintenanceApi } from "@/api/WorkApi";
@@ -212,35 +248,13 @@ const mainConfig = [
         name: '计划编码',
         code: 'code'
     },
-    {
-        name: '设备类型',
-        code: 'deviceTypeName'
-    },
-    {
-        name: '设备',
-        code: 'deviceList',
-        custom: true
 
-    },
     {
         name: '责任人角色',
         code: 'roleList',
         custom: true
+    },
 
-    },
-    {
-        name: '保养基准',
-        code: 'benchmarkName'
-    },
-    {
-        name: '保养项',
-        code: 'itemList',
-        custom: true
-    },
-    {
-        name: '开始时间',
-        code: 'startTime'
-    },
 ]
 
 const itemShow = ref(false)
@@ -259,19 +273,18 @@ const getInfo = () => {
 }
 
 const updatePlan = () => {
-    const { itemList, id, planId } = baseInfo.value
-    const { benchmarkId } = planInfo
-    uni.navigateTo({
-        url: `/pages_work/maintenance/plan?info=${JSON.stringify({ itemList, maintenanceId: id, id: planId, benchmarkId })}`,
+    const { detail, id } = baseInfo.value
+    uni.reLaunch({
+        url: `/pages_work/maintenance/plan?info=${JSON.stringify({ ...detail, maintenanceId: id })}`,
     });
 
 }
 const handleSave = () => {
-    const { fillStatus, itemList, id, planId } = baseInfo.value
+    const { fillStatus, id } = baseInfo.value
     if (fillStatus === 0) {
-        MaintenanceApi.updateItem({ id: planId, maintenanceId: id, itemIds: itemList.map(item => item.id) }).then(res => {
+        MaintenanceApi.updateItem({ maintenanceId: id }).then(res => {
             if (res.code === 0) {
-                uni.navigateTo({
+                uni.reLaunch({
                     url: `/pages_work/maintenance/handle?id=${id}`
                 })
             }
@@ -340,5 +353,69 @@ const handleSave = () => {
 .line {
     height: 1px;
     background-color: #f7f8fa;
+}
+
+.plan-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .plan-item {
+        background-color: #fff;
+        border-radius: 4px;
+        padding: 16px;
+        font-size: 12px
+    }
+
+    .plan-title {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 14px;
+        gap: 4px;
+
+        img {
+            width: 20px;
+            height: 20px
+        }
+    }
+
+
+    .label {
+        color: rgba(0, 0, 0, 0.5);
+        line-height: 20px;
+        margin: 10px 0
+    }
+
+    .value {
+        color: rgba(0, 0, 0, 0.9);
+    }
+
+    .month-item {
+        padding: 4px 8px;
+        border-radius: 4px;
+        flex: 1;
+        align-self: stretch;
+        display: flex;
+        justify-content: space-between;
+        background-color: rgba(247, 248, 250, 1);
+        align-items: center;
+        margin: 8px;
+
+        img {
+            width: 12px;
+            height: 12px;
+            display: none;
+        }
+
+        &.active {
+            color: #1890FF;
+            background-color: rgba(24, 144, 255, 0.15);
+
+            img {
+                display: inline-block;
+            }
+        }
+    }
 }
 </style>

@@ -111,16 +111,6 @@ export class InspectionkApi {
         })
     }
 }
-export class SpareApi {
-    static list(data) {
-        return request({
-            url: prefix + '/spare-parts/list',
-            method: 'post',
-            params: {},
-            data
-        })
-    }
-}
 export class InventoryApi {
     static detailPage(data) {
         return request({
@@ -133,6 +123,14 @@ export class InventoryApi {
     static confirm(data) {
         return request({
             url: prefix + '/inventory/confirm',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static list(data) {
+        return request({
+            url: prefix + '/inventory/list',
             method: 'post',
             params: {},
             data

@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { SpareApi } from "@/api/WorkApi";
+import { InventoryApi } from "@/api/WorkApi";
 
 import { computed, ref, watch } from "vue";
 const props = defineProps({ show: Boolean, data: Array });
@@ -54,7 +54,7 @@ const computedList = computed(() => {
 })
 const load = () => {
     uni.showLoading();
-    SpareApi.list({})
+    InventoryApi.list({})
         .then((res) => {
             spareList.value = res.data;
         })

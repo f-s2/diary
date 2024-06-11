@@ -9,6 +9,14 @@
         </div>
         <z-paging :auto-show-system-loading="true" :use-page-scroll="true" ref="paging" v-model="spareList"
             @query="queryList" default-page-size="5">
+            <template #empty>
+                <div class="empty">
+                    <img :src="icon" alt="">
+                    <b>恭喜完成全部盘点!</b>
+                    <button @click="handleBack" class="btn" type="primary">返回任务列表</button>
+                </div>
+
+            </template>
             <div class="spare-item" v-for="item in spareList" :key="item.id">
                 <div class="top">
                     <span class="name">{{ item.sparePartsName }} ({{ item.sparePartsCode }})</span>
@@ -66,6 +74,8 @@
 </template>
 
 <script setup>
+import icon from '@/static/task.png';
+
 import { InventoryApi } from '@/api/WorkApi';
 import { onLoad, onPageScroll, onReachBottom } from '@dcloudio/uni-app';
 import { ref } from 'vue';
@@ -130,6 +140,11 @@ const handleSave = ({ id, quantity }) => {
 
     })
 
+}
+const handleBack = () => {
+    uni.reLaunch({
+        url: '/pages_work/index/index'
+    })
 }
 </script>
 <style lang='scss' scoped>
@@ -221,5 +236,20 @@ const handleSave = ({ id, quantity }) => {
     width: 100%;
     gap: 10px;
     margin: 12px 0
+}
+
+.empty {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+    b {
+        margin: 20px 0;
+    }
+
+    .btn {
+        padding: 0 40px;
+    }
 }
 </style>
