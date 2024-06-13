@@ -157,7 +157,7 @@
             </div>
         </template>
 
-        <div class="bottom-btn" v-if="baseInfo.taskStatus == 0">
+        <div class="bottom-btn" v-if="baseInfo.taskStatus == 0 && baseInfo.fillStatus !== -1">
             <button type="primary" @click="handleSave">处理任务</button>
         </div>
         <ViewItem v-model:show="itemShow" :data="baseInfo.itemList" />
@@ -274,7 +274,7 @@ const getInfo = () => {
 
 const updatePlan = () => {
     const { detail, id } = baseInfo.value
-    uni.reLaunch({
+    uni.navigateTo({
         url: `/pages_work/maintenance/plan?info=${JSON.stringify({ ...detail, maintenanceId: id })}`,
     });
 
@@ -284,7 +284,7 @@ const handleSave = () => {
     if (fillStatus === 0) {
         MaintenanceApi.updateItem({ maintenanceId: id }).then(res => {
             if (res.code === 0) {
-                uni.reLaunch({
+                uni.navigateTo({
                     url: `/pages_work/maintenance/handle?id=${id}`
                 })
             }

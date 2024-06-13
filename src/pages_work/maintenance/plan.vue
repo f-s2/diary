@@ -84,9 +84,16 @@ const save = () => {
                 uni.showToast({
                     title: '请求成功'
                 })
-                uni.navigateTo({
-                    url: `/pages_work/maintenance/handle?id=${maintenanceId}`
-                })
+                if (res.data === 0) {
+                    uni.navigateTo({
+                        url: `/pages_work/maintenance/handle?id=${maintenanceId}`
+                    })
+                } else {
+                    uni.reLaunch({
+                        url: '/pages_work/index/index'
+                    })
+                }
+
 
             }
         })

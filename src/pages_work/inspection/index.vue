@@ -130,7 +130,7 @@
 
         </template>
 
-        <div class="bottom-btn" v-if="baseInfo.taskStatus == 0">
+        <div class="bottom-btn" v-if="baseInfo.taskStatus == 0 && baseInfo.fillStatus !== -1">
             <button type="primary" @click="handleSave">处理任务</button>
         </div>
         <ViewItem v-model:show="itemShow" :data="baseInfo.itemList" />
