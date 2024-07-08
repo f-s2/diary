@@ -32,7 +32,7 @@ stages:
   - deploy_k8s # 应用部署阶段
 
 nodejs-package:
-  image: harbor.kymatrix.cn/public/node:16.20.2
+  image: harbor.kymatrix.cn/public/node:20.11.0
   stage: package
   # 缓存依赖
   cache:
