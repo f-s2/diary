@@ -1,0 +1,70 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: always
+    - when: never
+
+variables:
+  #镜像仓库地址
+  IMAGE_REPOSITORY: 'harbor.kymatrix.cn'
+  #镜像仓库用户名
+  IMAGE_REPOSITORY_USER: 'admin'
+  #镜像仓库密码
+  IMAGE_REPOSITORY_PASSWD: 'Harbor12345'
+
+  # ------ 应用相关 -------
+  #在k8s当中使用的服务名，不能使用下划线（_），且必须小写
+  SERVICE_NAME: 'kycmms-mobile'
+  # 程序运行的端口
+  PORT: '80'
+  # 对外访问用的端口
+  NODEPORT: '31346'
+  #镜像名
+  IMAGENAME: $IMAGE_REPOSITORY/$CI_PROJECT_PATH:$CI_PIPELINE_ID
+  #项目部署到的命名空间
+  NAMESPACE: 'dev'
+
+stages:
+  - package # 源码打包阶段
+  - docker_build # 镜像构建和打包推送阶段
+  - deploy_k8s # 应用部署阶段
+
+nodejs-package:
+  image: harbor.kymatrix.cn/public/node:16.20.2
+  stage: package
+  # 缓存依赖
+  cache:
+    key:
+      files:
+        - package.json
+    paths:
+      - node_modules
+  # 打包命令
+  script:
+    # 设置私服地址
+    - yarn config set registry  https://registry.npmmirror.com
+    - yarn
+    - yarn run build
+  # 制品
+  artifacts:
+    paths:
+      - dist
+
+docker-build:
+  image: harbor.kymatrix.cn/public/docker:latest
+  stage: docker_build
+  script:
+    - echo "Building Dockerfile-based application..."
+    - echo $IMAGE_REPOSITORY_PASSWD | docker login $IMAGE_REPOSITORY --username $IMAGE_REPOSITORY_USER --password-stdin # 登录镜像仓
+    - docker build -t $IMAGENAME . # 构建镜像
+    - docker push $IMAGENAME # push镜像
+
+k8s-deploy:
+  image: harbor.kymatrix.cn/public/kubctl:v1.25.5 # 使用kubectl镜像来进行最终的部署
+  stage: deploy_k8s
+  script:
+    - echo "deploy to k8s cluster..."
+    - envsubst <  /deployment.yaml  | kubectl --kubeconfig /config apply -n $NAMESPACE -f - # 替换deployment中的镜像 && 应用资源清单文件
+
