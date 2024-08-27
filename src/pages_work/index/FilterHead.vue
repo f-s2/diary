@@ -29,9 +29,13 @@
         </div>
         <div class="sub-label">创建时间端 :</div>
         <div class="time-picker">
-          <uni-datetime-picker v-model="temQueryParam.date" type="datetimerange" rangeSeparator="至"
-            start-placeholder="开始时间" end-placeholder="结束时间">
-          </uni-datetime-picker>
+          <span @click="openTime('createTimeStart')">{{ temQueryParam.createTimeStart ?? '开始时间' }} </span>
+          至
+          <span @click="openTime('createTimeEnd')">{{ temQueryParam.createTimeEnd ?? '结束时间' }}</span>
+
+          <uv-datetime-picker ref="datePicker" :value="temQueryParam.date" mode="datetime" @confirm="confirm">
+          </uv-datetime-picker>
+
         </div>
         <div class="action">
           <button @click="show = false" type="primary" plain>取消</button>
@@ -48,6 +52,7 @@
 <script setup>
 const levelOptions = ["保养", "点检", "盘点"];
 import filter from "@/static/filter.png";
+import dayjs from "dayjs";
 
 import { ref, toRefs } from "vue";
 const props = defineProps({ queryParam: Object });
@@ -89,21 +94,46 @@ const selectLevel = (code) => {
   }
 };
 const show = ref(false);
+const confirm = ({ value }) => {
+  temQueryParam.value[timeMode] = dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+  const { createTimeEnd, createTimeStart } = temQueryParam.value
+
+  if (createTimeEnd && createTimeStart) {
+    const minus = dayjs(createTimeEnd).valueOf() - dayjs(createTimeStart).valueOf()
+    console.log(minus, dayjs(createTimeEnd).valueOf());
+    if (minus < 0) {
+      temQueryParam.value[timeMode] = undefined
+      uni.showToast({
+        title: '结束时间需大于开始时间',
+        icon: 'none'
+      })
+    }
+  }
+
+}
 const temQueryParam = ref({});
 const handleOpen = () => {
   temQueryParam.value = JSON.parse(JSON.stringify(queryParam.value));
   show.value = true;
 };
 const handleOk = () => {
-  const { types, date } = temQueryParam.value;
+  const { types, createTimeStart, createTimeEnd } = temQueryParam.value;
   queryParam.value.types = types;
-  queryParam.value.createTimeStart = date[0];
-  queryParam.value.createTimeEnd = date[1];
-  queryParam.value.date = date;
+  queryParam.value.createTimeStart = createTimeStart;
+  queryParam.value.createTimeEnd = createTimeEnd;
   show.value = false;
+
   emit("load");
 };
 const popupRef = ref();
+
+const datePicker = ref()
+let timeMode = ''
+const openTime = (mode) => {
+  timeMode = mode
+  temQueryParam.value.date = dayjs(temQueryParam.value?.[mode]).valueOf()
+  datePicker.value.open()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -139,7 +169,7 @@ const popupRef = ref();
 
     &.active {
       color: #fff;
-      background: $uni-color-primary;
+      background: $uv-primary;
     }
   }
 }
@@ -168,8 +198,8 @@ const popupRef = ref();
     border: 1px solid transparent;
 
     &.active {
-      color: $uni-color-primary;
-      border: 1px solid $uni-color-primary;
+      color: $uv-primary;
+      border: 1px solid $uv-primary;
     }
   }
 }
@@ -181,6 +211,22 @@ const popupRef = ref();
 
   button {
     flex: 1;
+  }
+}
+
+.time-picker {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+
+  span {
+    flex: 1;
+    text-align: center;
+    background-color: #f7f8fa;
+    padding: 10px 0;
+    border-radius: 4px;
+    font-size: 14px;
   }
 }
 </style>

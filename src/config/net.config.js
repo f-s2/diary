@@ -1,7 +1,7 @@
 
 export const netConfig = {
     // axios 基础url地址
-    baseURL: 'http://192.168.3.209:8388',
+    baseURL: 'http://opentest.shlongtian.com:31342',
     baseName: '/kycmms',
     // baseURL: 'https://cmms.hrgly.com/kycmms',
     // 为开发服务器配置 CORS。默认启用并允许任何源，传递一个 选项对象 来调整行为或设为 false 表示禁用

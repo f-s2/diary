@@ -2,7 +2,7 @@
   <uv-popup ref="popup" :safe-area="false" @maskClick="$emit('maskClick')" v-bind="$attrs" @change="handelChange">
     <div class="pup-head" v-if="head">
       <div class="left" @click="handleBack">
-        <uni-icons v-if="back" type="back" size="16"></uni-icons>
+        <uv-icon v-if="back" name="arrow-left" size="16"></uv-icon>
       </div>
       <span class="title ele">{{ title }}</span>
       <div class="right" @click="$emit('update:show', false)">

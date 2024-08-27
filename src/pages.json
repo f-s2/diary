@@ -3,7 +3,10 @@
     {
       "path": "pages/login/index",
       "style": {
-        "navigationBarTitleText": "登录"
+        "navigationBarTextStyle":"custom",
+         "app-plus": {
+	              "titleNView": false 
+        }
       }
     },
     {
@@ -68,12 +71,27 @@
         "navigationBarTitleText": "盘点记录"
       }
     },
+     {
+      "path": "pages_work/repair/index",
+      "style": {
+        "navigationBarTitleText": "报修",
+        "navigationBarTextStyle": "white",
+         "h5": {
+	              "titleNView": {
+                  "type":"transparent"
+                } 
+              }
+
+      }
+    },
   
     {
       "path": "pages_mine/mine/index",
 
       "style": {
-        "navigationBarTitleText": "我的"
+        "navigationBarTitleText": "报修"
+            
+
       }
     }
    
@@ -84,21 +102,20 @@
     "custom": true,
     "list": [
       { "pagePath": "pages_work/index/index", "text": "工单" },
+      { "pagePath": "pages_work/repair/index", "text": "报修" },
       { "pagePath": "pages_mine/mine/index", "text": "我的" }
     ]
   },
 
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#fff",
-    "backgroundColor": "#f7f8fa"
+    "navigationBarBackgroundColor": "#fff"
   },
+   
   "lazyCodeLoading": "requiredComponents",
   "easycom": {
     "autoscan": true,
     "custom": {
-      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
       "^uv-(.*)": "@climblee/uv-ui/components/uv-$1/uv-$1.vue",
       "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
     }

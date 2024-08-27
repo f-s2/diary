@@ -18,12 +18,13 @@ export default {
 
 <style lang="scss">
 @import '@climblee/uv-ui/index.scss';
-@import '@climblee/uv-ui/theme.scss';
 /*每个页面公共css */
 
-page {
+page,
+uni-page-wrapper {
   background-color: #f7f8fa;
 }
+
 
 .page-body {
   padding: 36rpx 32rpx 60rpx;
@@ -81,7 +82,6 @@ button[type="primary"][plain] {
   border-color: $uv-primary;
   color: $uv-primary;
 }
-
 
 
 

@@ -8,8 +8,8 @@
         <filter-head @load="reload" :queryParam="queryParam" />
       </div>
     </template>
-    <uni-card @click="jump(item)" padding="10px 4px" style="margin:0 12px 16px ;" v-for="(item, index) in workList"
-      :key="item.id" :isFull="true" :border="false" :is-shadow="false">
+    <div @click="jump(item)" v-for="(item, index) in workList" :key="item.id" :isFull="true" :border="false"
+      :is-shadow="false">
       <div class="work-item">
         <div class="item-head">
           <div class="item-title ellipsis">
@@ -28,7 +28,7 @@
           <span>{{ item.createTime }} </span>
         </div>
       </div>
-    </uni-card>
+    </div>
     <template #bottom>
       <div class="bottom" style="height: 80px;">
         <TabBar :activeIndex="0" />
@@ -62,8 +62,7 @@ onShow(() => {
 })
 const queryParam = ref({
   searchContent: "",
-  finishStatus: null,
-  date: [],
+  finishStatus: null
 });
 const workList = ref([]);
 
@@ -118,15 +117,20 @@ const jump = (item) => {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  // height: calc(100vh - 360rpx);
-  // overflow-y: auto;
+
 }
 
 .work-item {
+  margin: 16px 12px;
+  background-color: #fff;
+  padding: 12px 16px;
+  border-radius: 6px;
+
   .item-head {
     display: flex;
 
     justify-content: space-between;
+
   }
 
   .item-title {

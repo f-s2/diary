@@ -2,13 +2,12 @@
   <div class="tabs-box">
     <div :class="['tab-item', { active: activeIndex === index }]" v-for="(item, index) in tabInfo" :key="item.name"
       @click="jump(item)">
-      <uni-badge v-if="item.custom" :text="+userStore.unFinishCount || ''" type="error" :max-num="99"
-        absolute="rightTop">
-        <img class="icon" :src="item.icon" alt="" />
-      </uni-badge>
-      <img v-else class="icon" :src="item.icon" alt="" />
+
+      <img class="icon" :src="item.icon" alt="" />
 
       <div class="label">{{ item.name }}</div>
+      <uv-badge class="dot" v-if="item.custom" :value="+userStore.unFinishCount || ''" type="error" :max="99" />
+
     </div>
   </div>
 </template>
@@ -28,6 +27,12 @@ const tabInfo = [
     custom: true,
   },
   {
+    name: "报修",
+    icon: icon3,
+    path: "/pages_work/repair/index",
+  },
+
+  {
     name: "我的",
     icon: icon2,
     path: "/pages_mine/mine/index",
@@ -45,6 +50,9 @@ onShow(() => {
 <style lang="scss" scoped>
 .dot {
   color: red;
+  position: absolute;
+  left: 50%;
+  top: 0;
 }
 
 .tabs-box {
@@ -65,9 +73,10 @@ onShow(() => {
   justify-content: center;
   align-items: center;
   font-size: 22rpx;
+  position: relative;
 
   &.active {
-    color: $uni-color-primary;
+    color: $uv-primary;
   }
 
   .icon {

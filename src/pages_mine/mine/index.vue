@@ -17,7 +17,7 @@
       <div class="describe-item" @click="handleLoginOut">
         <div class="describe-label" style="color: red">退出登录</div>
         <div class="describe-value">
-          <uni-icons color="rgba(0, 0, 0, 0.9)" type="forward" size="24" />
+          <uv-icon name="arrow-right" color="rgba(0, 0, 0, 0.9)" size="24"></uv-icon>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import { netConfig } from './src/config/net.config'
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/' ?? '/cmms-mobile',
   plugins: [
     uni(),
     // basicSsl()

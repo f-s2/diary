@@ -5,7 +5,6 @@
             <uv-form-item label="开始时间" prop="startTime" :required="true">
                 <span @click="$refs.datePicker.open()">{{ formData.startTime }} </span>
                 <uv-datetime-picker ref="datePicker" :value="formData.startTime" mode="year-month" @confirm="confirm" />
-
             </uv-form-item>
 
         </uv-form>

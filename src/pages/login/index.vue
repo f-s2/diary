@@ -1,20 +1,26 @@
 <template>
   <div class="login-box">
-
     <div class="login-form">
 
       <div class="title">
-        用户登录 / USER LOGIN
+        密码登录
       </div>
       <uv-form class="form" ref="formRef" :rules="rules" :model="formData" label-position="top" labelWidth="auto">
-        <uv-form-item label="用户账号" prop="loginAccount">
-          <uv-input prefixIcon="account" v-model="formData.loginAccount" placeholder="请输入用户账号" />
+        <uv-form-item prop="loginAccount" :borderBottom="true">
+          <uv-input style="margin: 0 40rpx;" border="none" v-model="formData.loginAccount" placeholder="请输入用户账号" />
         </uv-form-item>
-        <uv-form-item label="登录密码" prop="password">
-          <uv-input type="password" prefixIcon="lock" v-model="formData.password" placeholder="请输入登录密码" />
+        <uv-form-item prop="password" key="password">
+          <uv-input style="margin:0   40rpx;" clearable border="none" :password="hidePassword"
+            v-model="formData.password" placeholder="请输入密码">
+            <template #suffix>
+              <uv-icon @click="hidePassword = !hidePassword" :name="hidePassword ? 'eye' : 'eye-off-outline'"></uv-icon>
+            </template>
+
+          </uv-input>
         </uv-form-item>
-        <button type="primary" @click="save">登录</button>
       </uv-form>
+      <uv-button class="btn" type="primary" @click="save">登录</uv-button>
+
     </div>
   </div>
 </template>
@@ -32,7 +38,7 @@ onShow(() => {
 })
 
 const formData = ref({ loginAccount: undefined, password: undefined })
-
+const hidePassword = ref(true)
 const rules = {
   loginAccount: {
     required: true,
@@ -84,22 +90,33 @@ init()
 .login-form {
   display: block;
   width: 100%;
-  background-color: #fff;
+  background-color: #F6F7F9;
   height: 100vh;
 
   .title {
     color: #000;
-    font-size: 24px;
+    font-size: 48rpx;
     font-weight: bold;
     padding: 20% 0;
     text-align: center;
+  }
+
+  .btn {
+    margin: 20rpx 100rpx;
   }
 }
 
 .form {
   margin: auto;
-  padding: 24px;
 
+}
 
+.uv-form-item {
+  background-color: #fff;
+}
+
+.uv-form {
+  border-radius: 10px;
+  overflow: hidden;
 }
 </style>

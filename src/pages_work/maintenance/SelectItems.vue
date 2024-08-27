@@ -1,10 +1,7 @@
 <template>
     <u-popup :show="show" @update:show="(bol) => $emit('update:show', bol)" mode="bottom" title="选择保养项" :cancel="true"
         :back="false" :round="10">
-        <!-- <div class="search">
-            <uni-easyinput prefixIcon="search" type="search" v-model="keywords" placeholder="用户名" />
 
-        </div> -->
         <div class="content">
             <div v-if="computedList?.length" class="device-box">
                 <div :class="['device-item', { active: selectIds.includes(item.id) }]" v-for="item in computedList"
@@ -12,8 +9,9 @@
                     <span>
                         {{ item.name }}({{ item.code }})-{{ item.period }}天
                     </span>
-                    <uni-icons v-show="selectIds.includes(item.id)" type="checkmarkempty" size="16"
-                        color="#1890FF"></uni-icons>
+
+                    <uv-icon v-show="selectIds.includes(item.id)" name="checkbox-mark" color="#1890FF"
+                        size="16"></uv-icon>
                 </div>
 
             </div>
@@ -119,7 +117,7 @@ watch(
 
 
         &.active {
-            color: $uni-color-primary ;
+            color: $uv-primary ;
 
 
         }
