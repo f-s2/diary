@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 
 const prefix = `/business`
@@ -7,6 +7,14 @@ export class WorkApi {
     static list(data) {
         return request({
             url: prefix + '/task/pageList',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static repairList(data) {
+        return request({
+            url: prefix + '/repair/pageList',
             method: 'post',
             params: {},
             data
@@ -137,4 +145,53 @@ export class InventoryApi {
         })
     }
 
+}
+export class RepairApi {
+    static detail(id) {
+        return request({
+            url: prefix + '/repair/' + id,
+            method: 'get',
+            params: {},
+        })
+    }
+    static handle(data) {
+        return request({
+            url: prefix + '/repair/handle',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static preHandle(data) {
+        return request({
+            url: prefix + '/repair/pre-handle',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static add(data) {
+        return request({
+            url: prefix + '/repair/add',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static finish(data) {
+        return request({
+            url: prefix + '/repair/finish',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+    static delete(data) {
+        return request({
+            url: prefix + '/repair/delete',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
 }

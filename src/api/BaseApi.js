@@ -1,5 +1,7 @@
 
 import { netConfig } from '@/config/net.config'
+import request from '@/utils/request'
+
 export class BaseApi {
     static upload(file) {
 
@@ -17,5 +19,15 @@ export class BaseApi {
             })
         })
 
+    }
+    static getDict(dictCode) {
+        return request({
+            url: '/userservice/system/dict/child/pageList',
+            method: 'post',
+            params: {},
+            data: {
+                dictCode
+            }
+        })
     }
 }

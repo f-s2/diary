@@ -17,10 +17,12 @@
 import icon1 from '@/static/tag_1.png';
 import icon2 from '@/static/tag_2.png';
 import icon3 from '@/static/tag_3.png';
+import icon4 from '@/static/tag_4.png';
 const tagInfo = [
   { name: '保养', icon: icon1, value: 0 },
   { name: '点检', icon: icon3, value: 1 },
   { name: '盘点', icon: icon2, value: 2 },
+  { name: '维修', icon: icon4, value: 3 },
 ]
 defineProps({
   tag: {
@@ -58,6 +60,11 @@ defineProps({
   &.tag_2 {
     color: #FA8C16;
     background-color: rgba($color: #FA8C16, $alpha: 0.1);
+  }
+
+  &.tag_3 {
+    color: #0087FA;
+    background-color: rgba($color: #0087FA, $alpha: 0.1);
   }
 }
 

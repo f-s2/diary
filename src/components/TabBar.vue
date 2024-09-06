@@ -3,8 +3,7 @@
     <div :class="['tab-item', { active: activeIndex === index }]" v-for="(item, index) in tabInfo" :key="item.name"
       @click="jump(item)">
 
-      <img class="icon" :src="item.icon" alt="" />
-
+      <uv-icon :size="24" :name="activeIndex === index ? item.icon + '-fill' : item.icon"></uv-icon>
       <div class="label">{{ item.name }}</div>
       <uv-badge class="dot" v-if="item.custom" :value="+userStore.unFinishCount || ''" type="error" :max="99" />
 
@@ -15,26 +14,23 @@
 <script setup>
 import { useUserStore } from "@/store/user";
 import { onShow } from "@dcloudio/uni-app";
-import icon2 from "../static/tab/mine.png";
-import icon3 from "../static/tab/work.png";
 const userStore = useUserStore();
 defineProps({ activeIndex: Number });
 const tabInfo = [
   {
+    name: "首页",
+    icon: 'home',
+    path: "/pages_home/index",
+  },
+  {
     name: "任务",
-    icon: icon3,
+    icon: 'file-text',
     path: "/pages_work/index/index",
     custom: true,
   },
   {
-    name: "报修",
-    icon: icon3,
-    path: "/pages_work/repair/index",
-  },
-
-  {
     name: "我的",
-    icon: icon2,
+    icon: 'account',
     path: "/pages_mine/mine/index",
   },
 ];
@@ -49,7 +45,6 @@ onShow(() => {
 
 <style lang="scss" scoped>
 .dot {
-  color: red;
   position: absolute;
   left: 50%;
   top: 0;
@@ -72,11 +67,15 @@ onShow(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 22rpx;
+  font-size: 24rpx;
   position: relative;
 
   &.active {
     color: $uv-primary;
+
+    :deep(.uvicon) {
+      color: $uv-primary !important;
+    }
   }
 
   .icon {

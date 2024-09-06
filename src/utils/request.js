@@ -4,7 +4,6 @@ import mpAdapter from "axios-miniprogram-adapter";
 axios.defaults.adapter = mpAdapter;
 const { baseName, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
-let tokenLose = true;
 
 const instance = axios.create({
     baseURL: baseName,

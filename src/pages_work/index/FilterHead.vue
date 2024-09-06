@@ -1,7 +1,10 @@
 <template>
   <div>
+    <uv-tabs class="tabs" :list="tabsList" :lineWidth="12" :lineHeight="4"
+      :activeStyle="{ fontWeight: 'bold', color: '#000' }" :inactiveStyle="{ color: '#000' }"
+      v-model:current="currentTab" @change="changeTab" lineColor="#003A8B"></uv-tabs>
     <div class="search">
-      <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、设备组" @search="$emit('load')"
+      <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、设备名称、设备编码" @search="$emit('load')"
         @clear="$emit('load')" :showAction="false" />
     </div>
     <div class="filter-bottom">
@@ -18,15 +21,7 @@
     </div>
     <u-popup ref="popupRef" v-model:show="show" mode="bottom" title="任务筛选" :round="10">
       <div class="popup">
-        <div class="sub-label">任务类型 :</div>
-        <div class="level-box">
-          <span :class="[
-        'level-tag',
-        { active: temQueryParam.types?.includes(index) },
-      ]" @click="selectLevel(index)" v-for="(item, index) in levelOptions" :key="item">
-            {{ item }}
-          </span>
-        </div>
+
         <div class="sub-label">创建时间端 :</div>
         <div class="time-picker">
           <span @click="openTime('createTimeStart')">{{ temQueryParam.createTimeStart ?? '开始时间' }} </span>
@@ -38,11 +33,11 @@
 
         </div>
         <div class="action">
-          <button @click="show = false" type="primary" plain>取消</button>
+          <uv-button @click="reset" type="primary" plain>重置</uv-button>
 
-          <button hover-class="none" type="primary" @click="handleOk">
+          <uv-button hover-class="none" type="primary" @click="handleOk">
             确定
-          </button>
+          </uv-button>
         </div>
       </div>
     </u-popup>
@@ -50,7 +45,6 @@
 </template>
 
 <script setup>
-const levelOptions = ["保养", "点检", "盘点"];
 import filter from "@/static/filter.png";
 import dayjs from "dayjs";
 
@@ -76,23 +70,25 @@ const tagInfo = [
     code: null,
   },
 ];
+const tabsList = [
+  { name: '维修任务', key: 3 },
+  { name: '点检任务', key: 0 },
+  { name: '保养任务', key: 1 },
+  { name: '盘点任务', key: 2 },
+]
+const currentTab = ref(0)
+
+const changeTab = ({ index, key }) => {
+  currentTab.value = index
+  queryParam.value.types = [key];
+  emit("load");
+
+}
 const selectTag = ({ code }) => {
   queryParam.value.status = code;
   emit("load");
 };
-const selectLevel = (code) => {
-  if (!temQueryParam.value.types) {
-    temQueryParam.value.types = [];
-  }
-  const index = temQueryParam.value.types?.findIndex(
-    (item) => item === code
-  );
-  if (index === -1) {
-    temQueryParam.value.types.push(code);
-  } else {
-    temQueryParam.value.types.splice(index, 1);
-  }
-};
+
 const show = ref(false);
 const confirm = ({ value }) => {
   temQueryParam.value[timeMode] = dayjs(value).format('YYYY-MM-DD HH:mm:ss')
@@ -117,14 +113,16 @@ const handleOpen = () => {
   show.value = true;
 };
 const handleOk = () => {
-  const { types, createTimeStart, createTimeEnd } = temQueryParam.value;
-  queryParam.value.types = types;
+  const { createTimeStart, createTimeEnd } = temQueryParam.value;
   queryParam.value.createTimeStart = createTimeStart;
   queryParam.value.createTimeEnd = createTimeEnd;
   show.value = false;
-
   emit("load");
 };
+const reset = () => {
+  temQueryParam.value.createTimeStart = undefined
+  temQueryParam.value.createTimeEnd = undefined
+}
 const popupRef = ref();
 
 const datePicker = ref()
@@ -137,10 +135,21 @@ const openTime = (mode) => {
 </script>
 
 <style lang="scss" scoped>
+.tabs {
+  background: #FFFFFF;
+
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.search {
+  margin: 20rpx 40rpx;
+}
+
 .filter-bottom {
   display: flex;
   align-items: center;
   margin: 10px;
+  margin-bottom: 0;
 
   .tag-box {
     flex: 1;
@@ -159,17 +168,18 @@ const openTime = (mode) => {
   }
 
   .tag {
-    font-size: 14px;
+    font-size: 20rpx;
     display: inline-block;
-    padding: 4px 8px;
-    background: rgba($color: #000000, $alpha: 0.05);
-    color: rgba($color: #000000, $alpha: 0.5);
-    border-radius: 4px;
-    margin-right: 8px;
+    padding: 14rpx;
+    background: #fff;
+    color: #5F6877;
+    border-radius: 16rpx;
+    margin-right: 20rpx;
+    border: 1px solid transparent;
 
     &.active {
-      color: #fff;
-      background: $uv-primary;
+      color: $uv-primary;
+      border: 1px solid $uv-primary;
     }
   }
 }
@@ -209,9 +219,12 @@ const openTime = (mode) => {
   margin: 28px 0 10px;
   gap: 8px;
 
-  button {
-    flex: 1;
+  .uv-button-wrapper {
+    flex: 1
   }
+
+
+
 }
 
 .time-picker {

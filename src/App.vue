@@ -75,13 +75,25 @@ uni-page-wrapper {
 
 
 button[type="primary"] {
-  background-color: $uv-primary;
+  background-color: $uv-primary ;
 }
 
 button[type="primary"][plain] {
   border-color: $uv-primary;
   color: $uv-primary;
 }
+
+.uv-button--primary {
+  background: linear-gradient(274deg, #117ACD -6%, #117ACD -3%, #0255B5 109%);
+  font-size: 32rpx !important;
+  border-radius: 20rpx !important;
+  height: 96rpx !important;
+}
+
+.uv-button--plain {
+  background: #fff;
+}
+
 
 
 
@@ -138,13 +150,15 @@ button[type="primary"][plain] {
 
 }
 
-.uv-form-item__body__right__content__slot {
-  flex-direction: row-reverse !important;
-}
+
 
 .input-right {
   .uv-input__content__field-wrapper__field {
     text-align: right !important;
+  }
+
+  .uv-form-item__body__right__content__slot {
+    flex-direction: row-reverse !important;
   }
 
   .uv-form-item__body__right__message {

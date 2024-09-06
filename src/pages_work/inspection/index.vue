@@ -64,7 +64,7 @@
                             <div class="value">{{ item.item }}</div>
                         </uv-grid-item>
                         <uv-grid-item style="align-items: start">
-                            <div class="label">周期(月)</div>
+                            <div class="label">周期(天)</div>
                             <div class="value">{{ item.period }}</div>
                         </uv-grid-item>
 
