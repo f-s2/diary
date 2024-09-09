@@ -1,7 +1,7 @@
 html结构
 <template>
-    <button @click="openQrcode">扫码</button>
-    <button @click="stopScan">停止</button>
+    <uv-button @click="openQrcode">扫码</uv-button>
+    <uv-button @click="stopScan">停止</uv-button>
     <div class="reader-box" v-if="isScaning">
         <div class="reader" id="reader"></div>
     </div>

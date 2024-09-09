@@ -25,7 +25,7 @@
             <div class="sub-title">
                 预览计划
                 <div class="btn" @click="updatePlan" v-if="baseInfo.taskStatus == 0 && baseInfo.fillStatus === 0">
-                    <uv-icon name="edit-pen" color="#1890FF"></uv-icon> 编辑计划
+                    <uv-icon name="edit-pen" color="#003A8B"></uv-icon> 编辑计划
                 </div>
             </div>
             <div class="describe-box" style="margin-bottom: 12px">
@@ -119,7 +119,7 @@
                         </span>
                         <span @click="itemShow = true" v-else-if="item.code === 'itemList'"
                             style="display: flex;align-items: center;">
-                            <span style="color:#1890FF ;"> 查看记录</span> <uv-icon name="arrow-right" size="16"></uv-icon>
+                            <span style="color:#003A8B ;"> 查看记录</span> <uv-icon name="arrow-right" size="16"></uv-icon>
                         </span>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
         </template>
 
         <div class="bottom-btn" v-if="baseInfo.taskStatus == 0 && baseInfo.fillStatus !== -1">
-            <button type="primary" @click="handleSave">处理任务</button>
+            <uv-button type="primary" @click="handleSave">处理任务</uv-button>
         </div>
         <ViewItem v-model:show="itemShow" :data="baseInfo.itemList" />
     </div>
@@ -314,7 +314,7 @@ const handleSave = () => {
 }
 
 .btn {
-    color: #1890FF;
+    color: #003A8B;
     font-size: 14px;
     align-items: center;
     display: flex;
@@ -409,7 +409,7 @@ const handleSave = () => {
         }
 
         &.active {
-            color: #1890FF;
+            color: #003A8B;
             background-color: rgba(24, 144, 255, 0.15);
 
             img {

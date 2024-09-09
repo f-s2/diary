@@ -3,7 +3,7 @@
         <div class="title">
             盘点执行
             <div class="done-btn" @click="jump">
-                <uv-icon name="order" color="#1890FF"></uv-icon>
+                <uv-icon name="order" color="#003A8B"></uv-icon>
                 已确认盘点
             </div>
         </div>
@@ -13,7 +13,7 @@
                 <div class="empty">
                     <img :src="icon" alt="">
                     <b>恭喜完成全部盘点!</b>
-                    <button @click="handleBack" class="btn" type="primary">返回任务列表</button>
+                    <uv-button @click="handleBack" class="btn" type="primary">返回任务列表</uv-button>
                 </div>
 
             </template>
@@ -59,9 +59,9 @@
                     </uv-row>
                 </div>
                 <div class="action">
-                    <button @click="handleUpdate(item)" type="primary" plain
-                        style="background: rgba(24, 144, 255, 0.10);width: 30%;">修改</button>
-                    <button @click="handleSave(item)" type="primary" style="flex: 1;">确认</button>
+                    <uv-button @click="handleUpdate(item)" type="primary" plain
+                        style="background: rgba(24, 144, 255, 0.10);width: 30%;">修改</uv-button>
+                    <uv-button @click="handleSave(item)" type="primary" style="flex: 1;">确认</uv-button>
                 </div>
 
             </div>
@@ -156,7 +156,7 @@ const handleBack = () => {
     margin-bottom: 20px;
 
     .done-btn {
-        color: #1890FF;
+        color: #003A8B;
         font-size: 14px;
         font-weight: 400;
         display: flex;
@@ -190,7 +190,7 @@ const handleBack = () => {
         align-self: baseline;
 
         b {
-            color: #1890FF;
+            color: #003A8B;
             font-size: 18px;
         }
 

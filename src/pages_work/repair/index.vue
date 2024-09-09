@@ -306,10 +306,22 @@ const handleComplete = () => {
     font-size: 16px;
     font-weight: bold;
     margin: 12px 0;
+    text-indent: 10px;
+
+    &::before {
+        width: 6px;
+        height: 18px;
+        content: '';
+        display: inline-block;
+        background-color: #003A8B;
+        margin-right: 8px;
+        border-radius: 2px;
+        position: absolute;
+    }
 }
 
 .btn {
-    color: #1890FF;
+    color: #003A8B;
     font-size: 14px;
     align-items: center;
     display: flex;

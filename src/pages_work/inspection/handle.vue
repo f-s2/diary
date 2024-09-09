@@ -44,7 +44,7 @@
                         已填写
                     </div>
                     <div class="fill-btn" v-else>
-                        <uv-icon name="edit-pen" color="#1890FF" size="16"></uv-icon>
+                        <uv-icon name="edit-pen" color="#003A8B" size="16"></uv-icon>
                         填写记录
                     </div>
 
@@ -54,7 +54,7 @@
         </div>
 
         <div class="bottom-btn">
-            <button type="primary" @click="handleSave">提交</button>
+            <uv-button type="primary" @click="handleSave">提交</uv-button>
         </div>
         <FillItem v-model:show="modalState.show" :data="baseInfo.itemList" @ok="(list) => baseInfo.itemList = list" />
     </div>
@@ -195,7 +195,7 @@ const handleSave = () => {
         height: 18px;
         content: '';
         display: inline-block;
-        background-color: #1890Ff;
+        background-color: #003A8B;
         margin-right: 8px;
         border-radius: 2px;
     }
@@ -221,7 +221,7 @@ const handleSave = () => {
 
 .fill-btn {
     display: flex;
-    color: #1890Ff;
+    color: #003A8B;
     gap: 2px;
 }
 

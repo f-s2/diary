@@ -29,7 +29,7 @@
             <u-empty v-else></u-empty>
         </div>
         <div class="bottom">
-            <button type="primary" @click="handleOk" hover-class="none">确认</button>
+            <uv-button type="primary" @click="handleOk" hover-class="none">确认</uv-button>
         </div>
     </u-popup>
 </template>

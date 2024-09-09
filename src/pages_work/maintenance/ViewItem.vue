@@ -93,7 +93,7 @@ watch(
 
     .index {
         font-size: 12px;
-        background-color: #1890FF;
+        background-color: #003A8B;
         border-radius: 2px;
         color: #fff;
         padding: 2px 6px;

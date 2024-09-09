@@ -10,7 +10,7 @@
                         {{ item.name }}({{ item.code }})-{{ item.period }}天
                     </span>
 
-                    <uv-icon v-show="selectIds.includes(item.id)" name="checkbox-mark" color="#1890FF"
+                    <uv-icon v-show="selectIds.includes(item.id)" name="checkbox-mark" color="#003A8B"
                         size="16"></uv-icon>
                 </div>
 
@@ -18,7 +18,7 @@
             <u-empty v-else></u-empty>
         </div>
         <div class="bottom">
-            <button type="primary" @click="handleOk" hover-class="none">确认</button>
+            <uv-button type="primary" @click="handleOk" hover-class="none">确认</uv-button>
         </div>
     </u-popup>
 </template>

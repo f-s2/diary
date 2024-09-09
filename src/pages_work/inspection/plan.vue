@@ -40,7 +40,7 @@
         </div>
         <div class="bottom-btn">
 
-            <button type="primary" @click="save">保存</button>
+            <uv-button type="primary" @click="save">保存</uv-button>
 
         </div>
 

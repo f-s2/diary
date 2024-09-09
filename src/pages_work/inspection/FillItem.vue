@@ -25,7 +25,7 @@
             <u-empty v-else></u-empty>
         </div>
         <div class="bottom">
-            <button type="primary" @click="handleOk" hover-class="none">确认</button>
+            <uv-button type="primary" @click="handleOk" hover-class="none">确认</uv-button>
         </div>
     </u-popup>
 </template>
@@ -100,7 +100,7 @@ watch(
 
     .index {
         font-size: 12px;
-        background-color: #1890FF;
+        background-color: #003A8B;
         border-radius: 2px;
         color: #fff;
         padding: 2px 6px;

@@ -22,8 +22,8 @@
 
 
         <div class="bottom-btn">
-            <button v-if="baseInfo.taskStatus == 0" type="primary" @click="handleSave">处理任务</button>
-            <button v-else type="primary" @click="handleView">盘点详情</button>
+            <uv-button v-if="baseInfo.taskStatus == 0" type="primary" @click="handleSave">处理任务</uv-button>
+            <uv-button v-else type="primary" @click="handleView">盘点详情</uv-button>
         </div>
     </div>
 </template>

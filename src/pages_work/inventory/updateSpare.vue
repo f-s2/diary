@@ -16,7 +16,7 @@
         </div>
 
         <div class="bottom">
-            <button type="primary" @click="handleOk" hover-class="none">确定</button>
+            <uv-button type="primary" @click="handleOk" hover-class="none">确定</uv-button>
         </div>
 
     </u-popup>

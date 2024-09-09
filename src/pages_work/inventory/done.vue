@@ -98,7 +98,7 @@ const queryList = (currentPage, pageSize) => {
     margin-bottom: 20px;
 
     .done-btn {
-        color: #1890FF;
+        color: #003A8B;
         font-size: 14px;
         font-weight: 400;
         display: flex;
@@ -132,7 +132,7 @@ const queryList = (currentPage, pageSize) => {
         align-self: baseline;
 
         b {
-            color: #1890FF;
+            color: #003A8B;
             font-size: 18px;
         }
 

@@ -363,6 +363,8 @@ const handleAddOk = (list) => {
     font-size: 16px;
     font-weight: bold;
     margin: 12px 0;
+
+
 }
 
 .btn {
