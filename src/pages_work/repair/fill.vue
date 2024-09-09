@@ -37,14 +37,16 @@
                 </uv-form-item>
                 <uv-form-item label="图片视频" labelPosition="top">
                     <div>
-
                         <htz-image-upload :dataType="1" :max="9" mediaType="all"
                             :action="netConfig.baseName + '/business/picture/upload'" v-model="formData.repairFiles"
                             :uploadSuccess="uploadSuccess"></htz-image-upload>
                     </div>
                 </uv-form-item>
             </div>
-            <div class="form-card" style="margin-top: 20px;">
+            <div class="sub-title" style="margin-top: 20px;">
+                维修信息
+            </div>
+            <div class="form-card">
 
                 <uv-form-item class="input-right" label="维修人" borderBottom>
 
@@ -72,9 +74,14 @@
                 <uv-form-item label="维修情况描述" required labelPosition="top" prop="repairDescription">
                     <uv-textarea border="none" v-model="formData.repairDescription" placeholder="请输入内容"></uv-textarea>
                 </uv-form-item>
+                <uv-form-item label="图片视频" labelPosition="top">
+                    <div>
+                        <htz-image-upload :dataType="1" :max="9" mediaType="all"
+                            :action="netConfig.baseName + '/business/picture/upload'"
+                            v-model="formData.repairFinishFiles" :uploadSuccess="uploadSuccess"></htz-image-upload>
+                    </div>
+                </uv-form-item>
             </div>
-
-
         </uv-form>
         <div class="sub">
             <div class="sub-title">
@@ -133,7 +140,7 @@ import { RepairApi } from "@/api/WorkApi";
 import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
 import { netConfig } from '@/config/net.config';
 import { useUserStore } from '@/store/user';
-import { onLoad, onShow } from "@dcloudio/uni-app";
+import { onLoad } from "@dcloudio/uni-app";
 import dayjs from 'dayjs';
 import SelectSpare from '../maintenance/SelectSpare.vue';
 
@@ -144,11 +151,9 @@ const loading = ref(false)
 const baseInfo = ref({})
 onLoad((data) => {
     baseInfo.value = data
-
-})
-onShow(() => {
     getInfo()
 })
+
 const rules = {
     repairStatus: {
         required: true,
@@ -226,9 +231,18 @@ const getInfo = () => {
     loading.value = true
     const { id } = baseInfo.value
     RepairApi.detail(id).then(res => {
-        const { repairFiles, sparePartsList } = res.data
+        const { repairFiles, repairFinishFiles, sparePartsList } = res.data
         formData.value = {
-            ...res.data, repairFiles: repairFiles.map(item => {
+            ...res.data,
+            repairFiles: repairFiles.map(item => {
+
+                return {
+                    url: userStore.userInfo.urlPrefix + item.relContext,
+                    type: item.fileType === 0 ? 0 : 1,
+                    name: item.relContext
+                }
+            }),
+            repairFinishFiles: repairFinishFiles.map(item => {
 
                 return {
                     url: userStore.userInfo.urlPrefix + item.relContext,
@@ -273,7 +287,9 @@ const handleSave = async (commit) => {
 
 
     RepairApi.handle({
-        ...formData.value, repairFiles: repairFiles.map(item => ({ fileType: item.type, relContext: item.name })),
+        ...formData.value,
+        repairFiles: repairFiles.map(item => ({ fileType: item.type, relContext: item.name })),
+        repairFinishFiles: repairFiles.map(item => ({ fileType: item.type, relContext: item.name })),
         sparePartsList: sparePartsList.map(item => ({ sparePartsId: item.id, usedQuantity: item.usedQuantity })),
         commit
     }).then(res => {

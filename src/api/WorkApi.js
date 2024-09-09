@@ -154,6 +154,14 @@ export class RepairApi {
             params: {},
         })
     }
+    static deviceDetail(id) {
+        return request({
+            url: prefix + '/device/' + id,
+            method: 'get',
+            params: {},
+        })
+    }
+
     static handle(data) {
         return request({
             url: prefix + '/repair/handle',

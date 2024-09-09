@@ -112,7 +112,7 @@ button[type="primary"][plain] {
   right: 16px;
   bottom: 0;
   padding-bottom: 32px;
-  background-color: #f7f8fa;
+  z-index: 999;
 }
 
 .uv-popup__content.bottom {

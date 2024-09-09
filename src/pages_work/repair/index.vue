@@ -119,14 +119,15 @@
 
         </div>
         <uv-modal ref="modal" title="请确认是否为故障" @confirm="confirm" :showCancelButton="true">
-            <uv-radio-group v-model="modalValue" placement="column" activeColor="#0C6EC6" shape="square">
-
+            <uv-radio-group v-model="modalValue.repairStatus" placement="column" activeColor="#0C6EC6" shape="square">
                 <div class="modal-item">
                     不是故障，取消维修 <uv-radio :name="4"></uv-radio>
                 </div>
                 <div class="modal-item">
                     是故障，需要维修 <uv-radio :name="2"></uv-radio>
                 </div>
+                <uv-textarea v-if="modalValue.repairStatus === 4" v-model="modalValue.cancelReason"
+                    placeholder="请输入取消原因"></uv-textarea>
             </uv-radio-group>
 
         </uv-modal>
@@ -245,7 +246,7 @@ const getInfo = () => {
 }
 
 const modal = ref()
-const modalValue = ref(2)
+const modalValue = ref({})
 const handleConfirm = () => {
     modal.value.open()
 }
@@ -253,7 +254,7 @@ const confirm = () => {
     const { id } = baseInfo.value
     loading.value = true
 
-    RepairApi.preHandle({ id, repairStatus: modalValue.value }).then(res => {
+    RepairApi.preHandle({ id, ...modalValue.value }).then(res => {
         if (res.code === 0) {
             uni.showToast({
                 title: '请求成功'
@@ -306,16 +307,16 @@ const handleComplete = () => {
     font-size: 16px;
     font-weight: bold;
     margin: 12px 0;
-    text-indent: 10px;
+    position: relative;
+    text-indent: 20rpx;
 
     &::before {
-        width: 6px;
-        height: 18px;
+        width: 12rpx;
+        height: 36rpx;
         content: '';
         display: inline-block;
         background-color: #003A8B;
-        margin-right: 8px;
-        border-radius: 2px;
+        border-radius: 4rpx;
         position: absolute;
     }
 }

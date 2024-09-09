@@ -1,39 +1,105 @@
 <template>
-    <div class="repair-body">
-        <uv-navbar title="设备报修" bg-color="linear-gradient(103deg, #0051B2 -6%, #127ED0 105%)" :titleStyle="{
-            color: '#fff',
-            fontWeight: 'bold'
-        }" leftIconColor="#fff">
-        </uv-navbar>
-
-        <div class="main-info">
-
-            <div class="info-item">
-                <span class="label">设备名称</span>
-            </div>
-
+    <div class="page-body">
+        <div class="sub-title">
+            设备信息
         </div>
-        <htz-image-upload mediaType="all" :max="3" v-model="fileList" :uploadSuccess="uploadSuccess"
-            :action="netConfig.baseName + '/business/picture/upload'"></htz-image-upload>
+        <div class="describe-box" style="margin-bottom: 12px">
+            <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in baseConfig" :key="item.name">
+                <div class="describe-label">
+                    {{ item.name }}</div>
+                <div class="describe-value">
+                    <span v-if="!item.custom">
+                        {{ formData?.[item.code] || "--" }}
+                    </span>
+                    <span v-if="item.code === 'type'">
+                        <status-tag :status="3" :tag="true" />
+                    </span>
+
+                </div>
+            </div>
+        </div>
+        <uv-form labelPosition="left" :model="formData" :rules="rules" ref="formRef" labelWidth="auto">
+
+            <div class="form-card">
+
+                <uv-form-item label="故障描述 :" prop="malfunctionDescription" labelPosition="top" borderBottom>
+
+                    <uv-textarea border="none" v-model="formData.malfunctionDescription"
+                        placeholder="请输入内容"></uv-textarea>
+
+
+                </uv-form-item>
+                <uv-form-item label="图片视频 :" labelPosition="top">
+                    <div>
+
+                        <htz-image-upload :dataType="1" :max="9" mediaType="all"
+                            :action="netConfig.baseName + '/business/picture/upload'" v-model="formData.repairFiles"
+                            :uploadSuccess="uploadSuccess"></htz-image-upload>
+                    </div>
+                </uv-form-item>
+            </div>
+        </uv-form>
+        <div class="bottom-btn">
+            <uv-button type="primary" @click="handleSave"> 报修 </uv-button>
+        </div>
 
     </div>
 </template>
 
 <script setup>
+import { RepairApi } from "@/api/WorkApi";
 import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
 import { netConfig } from '@/config/net.config';
+import { useUserStore } from '@/store/user';
+import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
+
+
+const userStore = useUserStore()
 uni.hideTabBar()
 
-const fileList = ref([])
+const formData = ref({})
+const baseId = ref('')
+onLoad(({ id }) => {
+    baseId.value = id ?? '1818483262738796544'
+    getInfo()
+})
+
+
+const getInfo = () => {
+    RepairApi.deviceDetail(baseId.value).then(res => {
+        const { code, name, factoryModelName, id: deviceId } = res.data
+        formData.value = { deviceId, code, name, factoryModelName, malfunctionDescription: '', repairFiles: [] }
+    })
+}
+const rules = {}
+
+
+const baseConfig = [
+    {
+        name: '设备名称',
+        code: 'name'
+    },
+    {
+        name: '设备编码',
+        code: 'code'
+    },
+
+    {
+        name: '位置',
+        code: 'factoryModelName'
+    },
+
+]
+
 
 const uploadSuccess = (res) => {
     const _res = JSON.parse(res.data);
-    console.log(_res, 'res',);
     if (_res.code == 0) {
         return {
             success: true,
-            url: 'http://opentest.shlongtian.com:31342/profile/' + _res.data.name
+            url: userStore.userInfo.urlPrefix + _res.data.name,
+            name: _res.data.name
         }
     } else {
         return {
@@ -43,21 +109,53 @@ const uploadSuccess = (res) => {
     }
 }
 
+const formRef = ref()
+const handleSave = async () => {
+    await formRef.value.validate()
+    uni.showModal({
+        content: '请确定是否提交报修?',
+        success: function (res) {
+            if (res.confirm) {
+                const { repairFiles } = formData.value
+                RepairApi.add({
+                    ...formData.value, repairFiles: repairFiles.map(item => ({ fileType: item.type, relContext: item.name })),
+                }).then(res => {
+                    if (res.code === 0) {
+                        uni.showToast({
+                            title: '请求成功'
+                        })
+                        uni.switchTab({
+                            url: '/pages_work/index/index'
+                        })
+                    }
+                })
+
+            }
+        }
+    })
+
+
+}
 
 
 </script>
 <style lang='scss' scoped>
-.repair-body {
+.page-body {
     display: flex;
     flex-direction: column;
     gap: 20rpx;
-    margin-top: $header-height;
-    padding: 20rpx;
+    padding-bottom: 100px;
 }
 
-.main-info {
+.sub-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-indent: 10px;
+}
+
+.form-card {
     background-color: #fff;
-    border-radius: 10px;
-    padding: 40rpx;
+    padding: 20rpx;
+    border-radius: 10rpx;
 }
 </style>

@@ -28,11 +28,14 @@
 <script setup>
 import { UserApi } from '@/api/UserApi';
 import { useUserStore } from "@/store/user";
-import { onShow } from '@dcloudio/uni-app';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 
 const userStore = useUserStore();
-
+let redirectPath
+onLoad(({ from }) => {
+  redirectPath = (from && (!from.startsWith('/pages/login/index'))) ? from : '/pages_work/index/index'
+})
 onShow(() => {
   uni.hideTabBar()
 })
@@ -63,7 +66,7 @@ const save = () => {
         uni.setStorageSync('id', id)
         userStore.userInfo = res.data
         uni.reLaunch({
-          url: '/pages_work/index/index'
+          url: redirectPath
         })
       }
     })
@@ -76,7 +79,7 @@ const init = () => {
     if (res.code === 0) {
       userStore.userInfo = res.data
       uni.reLaunch({
-        url: '/pages_work/index/index'
+        url: redirectPath
       })
     }
 

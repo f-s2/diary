@@ -4,8 +4,8 @@
       :activeStyle="{ fontWeight: 'bold', color: '#000' }" :inactiveStyle="{ color: '#000' }"
       v-model:current="currentTab" @change="changeTab" lineColor="#003A8B"></uv-tabs>
     <div class="search">
-      <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、设备名称、设备编码" @search="$emit('load')"
-        @clear="$emit('load')" :showAction="false" />
+      <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、设备组、设备名称、设备编码"
+        @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
     </div>
     <div class="filter-bottom">
       <div class="tag-box">

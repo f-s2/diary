@@ -4,7 +4,6 @@ import mpAdapter from "axios-miniprogram-adapter";
 axios.defaults.adapter = mpAdapter;
 const { baseName, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
-
 const instance = axios.create({
     baseURL: baseName,
     timeout: requestTimeout,
@@ -39,13 +38,17 @@ instance.interceptors.response.use(
         if (successCode.includes(res.code)) {
             return res
         } else if (invalidCode.includes(res.code)) {
+
+
             uni.setStorageSync('token', '')
             uni.setStorageSync("id", '');
             uni.showToast({
                 title: '请重新登录'
             })
+            const pages = getCurrentPages()
+            const from = pages[pages.length - 1].$page.fullPath
             uni.reLaunch({
-                url: '/pages/login/index'
+                url: '/pages/login/index?from=' + from
             })
         } else {
             uni.showToast({

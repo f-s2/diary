@@ -104,13 +104,7 @@
      {
       "path": "pages_work/report-repair/index",
       "style": {
-        "navigationBarTitleText": "报修",
-        "navigationBarTextStyle": "white",
-         "h5": {
-	              "titleNView": {
-                  "type":"transparent"
-                } 
-              }
+        "navigationBarTitleText": "报修"
       }
     },
   

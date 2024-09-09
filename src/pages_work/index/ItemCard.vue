@@ -70,16 +70,11 @@ defineProps({ data: Object })
     color: rgba($color: #000000, $alpha: 0.3);
     display: flex;
     line-height: 20px;
-    font-size: 12px;
-    align-items: center;
+    font-size: 18rpx;
     gap: 4rpx;
     margin-top: 10px;
     justify-content: space-between;
 
-    .icon {
-        height: 14px;
-        width: 14px;
-        display: inline-block;
-    }
+
 }
 </style>
