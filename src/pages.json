@@ -12,7 +12,10 @@
       {
       "path": "pages_home/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "h5":{
+          "titleNView":false
+        }
             
       }
     }

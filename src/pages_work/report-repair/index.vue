@@ -29,6 +29,12 @@
 
 
                 </uv-form-item>
+                <!-- <uv-form-item label="" prop="malfunctionDescription" labelPosition="top" borderBottom>
+                    <recorder ref='recorder' @success='handlerSuccess' @error='handlerError' />
+                    {{ isRun }}
+                    <button @touchstart="handlerOnCahnger" @touchend="handlerOnCahnger">按住录音</button>
+                    <audio-wave />
+                </uv-form-item> -->
                 <uv-form-item label="图片视频 :" labelPosition="top">
                     <div>
 
@@ -61,7 +67,7 @@ uni.hideTabBar()
 const formData = ref({})
 const baseId = ref('')
 onLoad(({ id }) => {
-    baseId.value = id ?? '1818483262738796544'
+    baseId.value = id
     getInfo()
 })
 
@@ -109,6 +115,9 @@ const uploadSuccess = (res) => {
     }
 }
 
+const recorder = ref()
+
+
 const formRef = ref()
 const handleSave = async () => {
     await formRef.value.validate()
@@ -135,6 +144,44 @@ const handleSave = async () => {
     })
 
 
+}
+
+const isRun = ref(false)
+const handlerOnCahnger = () => {
+    if (isRun.value) {
+        recorder.value.stop()
+    } else {
+        recorder.value.start()
+    }
+    isRun.value = !isRun.value
+}
+const localUrl = ref('')
+const innerAudioContext = uni.createInnerAudioContext();
+
+const handlerSuccess = async (res) => {
+    localUrl.value = res.localUrl
+    innerAudioContext.src = res.localUrl
+    innerAudioContext.play()
+}
+
+const handlerError = (code) => {
+    switch (code) {
+        case '101':
+            uni.showModal({
+                content: '当前浏览器版本较低，请更换浏览器使用，推荐在微信中打开。'
+            })
+            break;
+        case '201':
+            uni.showModal({
+                content: '麦克风权限被拒绝，请刷新页面后授权麦克风权限。'
+            })
+            break
+        default:
+            uni.showModal({
+                content: '未知错误，请刷新页面重试'
+            })
+            break
+    }
 }
 
 
