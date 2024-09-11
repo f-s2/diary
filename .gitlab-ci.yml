@@ -20,7 +20,7 @@ variables:
   # 程序运行的端口
   PORT: '80'
   # 对外访问用的端口
-  NODEPORT: '31350'
+  NODEPORT: '30030'
   #镜像名
   IMAGENAME: $IMAGE_REPOSITORY/$CI_PROJECT_PATH:$CI_PIPELINE_ID
   #项目部署到的命名空间
