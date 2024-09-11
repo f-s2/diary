@@ -57,7 +57,7 @@ onShow(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 20rpx 0 40rpx;
+  padding: 20rpx 0;
   background-color: #fff;
 }
 

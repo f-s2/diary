@@ -20,6 +20,37 @@
         </div>
         <div class="map-box">
             <div class="box-title"> <img class="icon" src="../static/home/inspect.png" alt=""> 点检概览</div>
+            <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.deviceGroupName, key: item.id }))"
+                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
+                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
+                @change="(({ index }) => inspectIndex = index)" lineColor="#003A8B"></uv-tabs>
+            <div class="map-card">
+                <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 今日完成情况</div>
+                <div class="mid-items">
+                    <div class="mid-item" v-for="item in completeInfo">
+                        <div class="label">{{ item.name }}</div>
+                        <div class="value">{{ item.transform ? item.transform(inspectionInfo[inspectIndex]?.[item.code])
+                    :
+                    inspectionInfo[inspectIndex]?.[item.code] }}</div>
+                    </div>
+                </div>
+                <div class="map-head">
+                    <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 月度点检曲线</div>
+                    <div class="legend">
+                        <i style="background: #0B66C6;" class="square"></i>
+                        <span class="label">总数 </span>
+                        <i style="background: #14C9C9;" class="square"></i>
+                        <span class="label">已完成 </span>
+                        <i style="background: #14C9C9;" class="line"></i>
+                        <span class="label">完成率 </span>
+                    </div>
+                </div>
+                <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" />
+
+            </div>
+        </div>
+        <div class="map-box">
+            <div class="box-title"> <img class="icon" src="../static/home/mt.png" alt=""> 保养概览</div>
             <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.deviceGroupName, key: item.id }))"
                 :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                 :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
@@ -34,7 +65,7 @@
                     </div>
                 </div>
                 <div class="map-head">
-                    <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 月度点检曲线</div>
+                    <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 年度保养曲线</div>
                     <div class="legend">
                         <i style="background: #0B66C6;" class="square"></i>
                         <span class="label">总数 </span>
@@ -44,10 +75,11 @@
                         <span class="label">完成率 </span>
                     </div>
                 </div>
-                <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList ?? []" />
+                <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" />
 
             </div>
         </div>
+
     </div>
     <TabBar :activeIndex="0" />
 
@@ -100,11 +132,13 @@ init()
 <style lang='scss' scoped>
 .home-body {
     background: linear-gradient(180deg, #EBF1FA 0%, #F5F7FA 41.72%, #fff 100%);
-    height: 100vh;
+    background: #F5F7FA;
     padding: 32rpx;
     display: flex;
     flex-direction: column;
     gap: 48rpx;
+    padding-bottom: 100rpx;
+
 }
 
 .title {

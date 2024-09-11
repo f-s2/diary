@@ -1,6 +1,6 @@
 <template>
     <view class="charts-box">
-        <qiun-data-charts type="mix" :opts="opts" :chartData="chartData" />
+        <qiun-data-charts ref="chartRef" type="mix" :opts="opts" :chartData="chartData" />
     </view>
 </template>
 
@@ -12,16 +12,14 @@ export default {
             default: () => []
         }
     },
-    computed() {
 
-    },
     data() {
         return {
             chartData: {},
 
             opts: {
-                color: ["#0B66C6", "#14C9C9", "#14C9C9",],
-                padding: [15, 0, 0, 5],
+                color: ["#0B66C6", "rgba(20, 201, 201, 0.5)", "#14C9C9",],
+                padding: [15, 10, 0, 5],
                 enableScroll: false,
                 dataLabel: false,
                 legend: {
@@ -29,18 +27,19 @@ export default {
                 },
                 xAxis: {
                     disableGrid: true,
-                    labelCount: 5
+                    labelCount: 4
                 },
                 yAxis: {
                     data: [
                         {
                             position: "left",
-                            title: '数量'
+                            title: '数量',
+                            axisLine: false
                         },
                         {
                             position: "right",
-                            title: '完成率',
-                            textAlign: "right",
+                            title: '完成率(%)',
+                            axisLine: false
 
                         },
 
@@ -49,53 +48,67 @@ export default {
                 extra: {
                     mix: {
                         column: {
-                            width: 8,
-                            barBorderCircle: true,
+                            width: 8
+                        },
+                        line: {
+                            width: 2
                         }
 
-                    }
+                    },
+
+
                 }
 
 
             }
         };
     },
-    mounted() {
-        this.getServerData();
+
+    watch: {
+        dataSource: {
+            handler(val) {
+                val?.length && this.getServerData()
+
+            }
+            , immediate: false
+        }
     },
     methods: {
         getServerData() {
-            //模拟从服务器获取数据时的延时
-            setTimeout(() => {
-                //模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
-                let res = {
-                    categories: this.dataSource.map(item => item.time),
-                    series: [
-                        {
-                            name: "已完成",
-                            type: "column",
-                            index: 0,
-                            data: this.dataSource.map(item => +item.finished)
-                        },
-                        {
-                            name: "总数",
-                            type: "column",
-                            index: 0,
 
-                            data: this.dataSource.map(item => item.total)
-                        },
-                        {
-                            name: "完成率",
-                            type: "line",
-                            index: 1,
+            const data = {
+                categories: this.dataSource.map(item => item.time),
+                series: [
+                    {
+                        name: "已完成",
+                        type: "column",
+                        index: 0,
+                        data: this.dataSource.map(item => +item.finished)
+                    },
+                    {
+                        name: "总数",
+                        type: "column",
+                        index: 0,
+                        data: this.dataSource.map(item => +item.total)
+                    },
+                    {
+                        name: "完成率",
+                        type: "line",
+                        index: 1,
+                        data: this.dataSource.map(item => +item.finishRate),
 
-                            data: this.dataSource.map(item => item.finishRate)
-                        }
-                    ]
-                };
-                console.log(res, this.dataSource);
-                this.chartData = JSON.parse(JSON.stringify(res));
-            }, 3000);
+                        setShadow: [
+                            3,
+                            8,
+                            10,
+                            "#1890FF"
+                        ],
+                    },
+
+                ]
+            };
+
+            this.chartData = data;
         },
     }
 };
@@ -106,5 +119,6 @@ export default {
 .charts-box {
     width: 100%;
     height: 600rpx;
+    margin-top: 48rpx;
 }
 </style>
