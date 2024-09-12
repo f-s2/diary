@@ -38,14 +38,14 @@
                     <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 月度点检曲线</div>
                     <div class="legend">
                         <i style="background: #0B66C6;" class="square"></i>
-                        <span class="label">总数 </span>
-                        <i style="background: #14C9C9;" class="square"></i>
                         <span class="label">已完成 </span>
+                        <i style="background: #14C9C9;" class="square"></i>
+                        <span class="label">总数 </span>
                         <i style="background: #14C9C9;" class="line"></i>
                         <span class="label">完成率 </span>
                     </div>
                 </div>
-                <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" />
+                <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" mode="D" />
 
             </div>
         </div>
@@ -68,14 +68,14 @@
                     <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 年度保养曲线</div>
                     <div class="legend">
                         <i style="background: #0B66C6;" class="square"></i>
-                        <span class="label">总数 </span>
-                        <i style="background: #14C9C9;" class="square"></i>
                         <span class="label">已完成 </span>
+                        <i style="background: #14C9C9;" class="square"></i>
+                        <span class="label">总数 </span>
                         <i style="background: #14C9C9;" class="line"></i>
                         <span class="label">完成率 </span>
                     </div>
                 </div>
-                <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" />
+                <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" mode="M" />
 
             </div>
         </div>

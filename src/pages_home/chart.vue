@@ -5,12 +5,15 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
+
 export default {
     props: {
         dataSource: {
             type: Array,
             default: () => []
-        }
+        },
+        mode: String
     },
 
     data() {
@@ -27,7 +30,7 @@ export default {
                 },
                 xAxis: {
                     disableGrid: true,
-                    labelCount: 4
+                    labelCount: 8
                 },
                 yAxis: {
                     data: [
@@ -77,7 +80,7 @@ export default {
         getServerData() {
 
             const data = {
-                categories: this.dataSource.map(item => item.time),
+                categories: this.dataSource.map(item => this.mode === 'D' ? dayjs(item.time).get(this.mode) + '号' : dayjs(item.time).get(this.mode) + 1 + '月'),
                 series: [
                     {
                         name: "已完成",
@@ -118,7 +121,7 @@ export default {
 /* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
 .charts-box {
     width: 100%;
-    height: 600rpx;
+    height: 450rpx;
     margin-top: 48rpx;
 }
 </style>

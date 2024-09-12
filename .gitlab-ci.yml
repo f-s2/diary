@@ -46,7 +46,7 @@ nodejs-package:
     # 设置私服地址
     - yarn config set registry  https://registry.npmmirror.com
     - yarn
-    - yarn run build
+    - yarn run build:dev
   # 制品
   artifacts:
     paths:

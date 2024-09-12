@@ -112,7 +112,6 @@ button[type="primary"][plain] {
   right: 16px;
   bottom: 0;
   padding-bottom: 32px;
-  z-index: 999;
 }
 
 .uv-popup__content.bottom {
