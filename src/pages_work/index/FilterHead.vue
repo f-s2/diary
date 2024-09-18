@@ -72,8 +72,8 @@ const tagInfo = [
 ];
 const tabsList = [
   { name: '维修任务', key: 3 },
-  { name: '点检任务', key: 0 },
-  { name: '保养任务', key: 1 },
+  { name: '保养任务', key: 0 },
+  { name: '点检任务', key: 1 },
   { name: '盘点任务', key: 2 },
 ]
 const currentTab = ref(0)
