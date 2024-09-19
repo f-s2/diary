@@ -259,7 +259,7 @@ const confirm = () => {
             uni.showToast({
                 title: '请求成功'
             })
-            if (modalValue.value === 2) {
+            if (modalValue.value.repairStatus === 2) {
                 getInfo()
             } else {
                 uni.navigateBack()
