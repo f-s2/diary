@@ -133,9 +133,9 @@ const handleSave = async () => {
                         uni.showToast({
                             title: '请求成功'
                         })
-                        uni.switchTab({
-                            url: '/pages_work/index/index'
-                        })
+                        // uni.switchTab({
+                        //     url: '/pages_work/index/index'
+                        // })
                     }
                 })
 
