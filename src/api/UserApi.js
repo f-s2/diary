@@ -1,4 +1,4 @@
-import { netConfig } from '@/config/net.config'
+import {netConfig} from '@/config/net.config'
 import request from '@/utils/request'
 
 
@@ -6,7 +6,7 @@ const prefix = `/userservice/system/user`
 
 /**
  * @description 授权登录
- * @param {*} data 
+ * @param {*} data
  */
 
 export class UserApi {
@@ -18,6 +18,7 @@ export class UserApi {
             data
         })
     }
+
     static getUserInfo(params) {
         return request({
             url: prefix + '/get-info',
@@ -25,6 +26,7 @@ export class UserApi {
             params,
         })
     }
+
     static loginOut(data) {
         return request({
             url: prefix + '/loginOut',
@@ -33,6 +35,7 @@ export class UserApi {
             data
         })
     }
+
     static getPhone(data) {
         return request({
             url: prefix + '/get-phone',
@@ -42,6 +45,22 @@ export class UserApi {
         })
     }
 
+    static getUsers(data) {
+        return request({
+            url: prefix + '/getUsersByQuery',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+
+    static getPrefix() {
+        return request({
+            url: prefix + '/get-prefix',
+            method: 'get',
+            params: {},
+        })
+    }
 
 }
 
