@@ -3,31 +3,27 @@
     {
       "path": "pages/login/index",
       "style": {
-        "navigationBarTextStyle":"custom",
-         "app-plus": {
-	              "titleNView": false 
+        "navigationBarTextStyle": "custom",
+        "app-plus": {
+          "titleNView": false
         }
       }
     },
-      {
+    {
       "path": "pages_home/index",
       "style": {
         "navigationBarTitleText": "首页",
-        "h5":{
-          "titleNView":false
+        "h5": {
+          "titleNView": false
         }
-            
       }
-    }
-   ,
+    },
     {
       "path": "pages_work/index/index",
       "style": {
         "navigationBarTitleText": "任务列表",
-        "navigationBarBackgroundColor":"#127ED0",
+        "navigationBarBackgroundColor": "#127ED0",
         "navigationBarTextStyle": "#fff"
-
-        
       }
     },
     {
@@ -37,29 +33,15 @@
       }
     },
     {
-      "path": "pages_work/maintenance/plan",
-      "style": {
-        "navigationBarTitleText": "编辑计划"
-      }
-    },
-   
-    {
       "path": "pages_work/inspection/index",
       "style": {
         "navigationBarTitleText": "任务详情"
       }
     },
-   
-     {
+    {
       "path": "pages_work/maintenance/handle",
       "style": {
         "navigationBarTitleText": "处理任务"
-      }
-    },
-    {
-      "path": "pages_work/inspection/plan",
-      "style": {
-        "navigationBarTitleText": "编辑计划"
       }
     },
     {
@@ -68,74 +50,76 @@
         "navigationBarTitleText": "处理任务"
       }
     },
-     {
+    {
       "path": "pages_work/inventory/index",
       "style": {
         "navigationBarTitleText": "任务详情"
       }
     },
-     {
+    {
       "path": "pages_work/inventory/handle",
       "style": {
         "navigationBarTitleText": "处理任务"
       }
     },
-     {
+    {
       "path": "pages_work/inventory/done",
       "style": {
         "navigationBarTitleText": "盘点记录"
       }
     },
-     {
+    {
       "path": "pages_work/repair/index",
       "style": {
         "navigationBarTitleText": "任务详情"
       }
     },
-     {
+    {
       "path": "pages_work/repair/complete",
       "style": {
         "navigationBarTitleText": "任务详情"
       }
     },
-     {
+    {
       "path": "pages_work/repair/fill",
       "style": {
         "navigationBarTitleText": "任务详情"
       }
     },
-     {
+    {
       "path": "pages_work/report-repair/index",
       "style": {
         "navigationBarTitleText": "报修"
       }
     },
-  
     {
       "path": "pages_mine/mine/index",
-
       "style": {
         "navigationBarTitleText": "我的"
       }
     }
-  
-   
-    
   ],
   "tabBar": {
     "custom": true,
     "list": [
-      { "pagePath": "pages_home/index", "text": "首页" },
-      { "pagePath": "pages_work/index/index", "text": "工单" },
-      { "pagePath": "pages_mine/mine/index", "text": "我的" }
+      {
+        "pagePath": "pages_home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages_work/index/index",
+        "text": "工单"
+      },
+      {
+        "pagePath": "pages_mine/mine/index",
+        "text": "我的"
+      }
     ]
   },
-
   "globalStyle": {
     "navigationBarTextStyle": "#fff",
     "navigationBarBackgroundColor": "#127ED0"
   },
-   
   "lazyCodeLoading": "requiredComponents",
   "easycom": {
     "autoscan": true,

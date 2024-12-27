@@ -5,16 +5,16 @@
     <!-- 需要固定在页面顶部的view请通过slot="top"插入，包括自定义的导航栏 -->
     <template #top>
       <div class="head">
-        <filter-head @load="reload" :queryParam="queryParam" />
+        <filter-head @load="reload" :queryParam="queryParam"/>
       </div>
     </template>
     <div @click="jump(item)" v-for="(item, index) in workList" :key="item.id" :isFull="true" :border="false"
-      :is-shadow="false">
-      <ItemCard :data="item" />
+         :is-shadow="false">
+      <ItemCard :data="item"/>
     </div>
     <template #bottom>
       <div class="bottom" style="height: 80px;">
-        <TabBar :activeIndex="1" />
+        <TabBar :activeIndex="1"/>
       </div>
 
     </template>
@@ -24,13 +24,14 @@
 </template>
 
 <script setup>
-import { WorkApi } from "@/api/WorkApi";
-import { useUserStore } from "@/store/user";
-import { onShow } from "@dcloudio/uni-app";
-import { ref } from "vue";
+import {WorkApi} from "@/api/WorkApi";
+import {useUserStore} from "@/store/user";
+import {onShow} from "@dcloudio/uni-app";
+import {ref} from "vue";
 import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
 import ItemCard from './ItemCard.vue';
+
 const userStore = useUserStore();
 
 const getCount = () => {
@@ -50,13 +51,13 @@ const workList = ref([]);
 
 const queryList = (pageNo, pageSiz) => {
   getCount()
-  WorkApi.list({ ...queryParam.value, currentPage: pageNo, pageSize: pageSiz })
-    .then((res) => {
-      paging.value.complete(res.data?.records)
-    })
-    .finally(() => {
-      uni.stopPullDownRefresh()
-    });
+  WorkApi.list({...queryParam.value, currentPage: pageNo, pageSize: pageSiz})
+      .then((res) => {
+        paging.value.complete(res.data?.records)
+      })
+      .finally(() => {
+        uni.stopPullDownRefresh()
+      });
 }
 const paging = ref(null)
 const reload = () => {
@@ -64,7 +65,7 @@ const reload = () => {
 
 };
 const jump = (item) => {
-  const { type, status, realId, createTime, code, planId, id } = item
+  const {type, status, realId, createTime, code} = item
   let page
   if (type === 0) {
     page = 'maintenance'
@@ -75,14 +76,14 @@ const jump = (item) => {
     page = 'inventory'
   } else {
     page = 'repair'
-    const { id, fillStatus, repairStatus } = item
+    const {id, fillStatus, repairStatus} = item
     uni.navigateTo({
       url: `/pages_work/${page}/index?id=${id}&repairStatus=${repairStatus}&fillStatus=${fillStatus}`,
     });
     return
   }
   uni.navigateTo({
-    url: `/pages_work/${page}/index?id=${realId}&taskStatus=${status}&taskCreateTime=${createTime}&taskType=${type}&taskCode=${code}&planId=${planId}`,
+    url: `/pages_work/${page}/index?id=${realId}&taskStatus=${status}&taskCreateTime=${createTime}&taskType=${type}&taskCode=${code}`,
   });
 
 };
@@ -92,7 +93,6 @@ const jump = (item) => {
 .page-body {
   padding-bottom: 150rpx;
 }
-
 
 
 .empty {
