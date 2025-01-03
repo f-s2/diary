@@ -8,11 +8,13 @@
 
       <div class="form-card">
 
-        <uv-form-item class="input-right" label="报障人" borderBottom>
-
-          {{ formData.reportPersonName }}
+        <uv-form-item required class="input-right" @click="multiple=false;modalState.userShow=true" label="报障人"
+                      prop="reportPerson" borderBottom>
+          <span v-if="formData.reportPersonName"> {{ formData.reportPersonName }}</span>
+          <span v-else style="color:#c0c4cc">请选择</span>
 
         </uv-form-item>
+
         <uv-form-item class="input-right" label="保障时间" borderBottom>
 
           {{ formData.reportTime }}
@@ -53,7 +55,8 @@
           {{ formData.reportPersonName }}
 
         </uv-form-item>
-        <uv-form-item class="input-right" @click="modalState.userShow = true" label="协助人员" borderBottom>
+        <uv-form-item class="input-right" @click="multiple=true;modalState.userShow = true" label="协助人员"
+                      borderBottom>
                     <span v-if="formData.assistUserList?.length">
                         {{ formData.assistUserList?.map(item => item.username)?.join('、') }}
                     </span>
@@ -61,7 +64,7 @@
 
 
         </uv-form-item>
-        <uv-form-item class="input-right" required label="完成时间" prop="userInfo.sex" borderBottom @click="showTime">
+        <uv-form-item class="input-right" required label="完成时间" borderBottom @click="showTime">
           <uv-input v-model="formData.finishTime" disabled disabledColor="#ffffff" placeholder="完成时间"
                     border="none">
           </uv-input>
@@ -149,7 +152,7 @@
       <uv-button type="primary" @click="handleSave(1)">提交</uv-button>
     </div>
     <select-spare v-model:show="modalState.spareShow" :data="baseInfo.assistUserList" @ok="handleAddOk"/>
-    <select-users v-model:show="modalState.userShow" @ok="handleUserOk"/>
+    <select-users :multiple="multiple" v-model:show="modalState.userShow" @ok="handleUserOk"/>
 
   </div>
 </template>
@@ -175,6 +178,7 @@ onLoad((data) => {
   baseInfo.value = data
   getInfo()
 })
+const multiple = ref(true)
 
 const rules = {
   repairStatus: {
@@ -296,7 +300,7 @@ const handleSelect = ({name, value}) => {
 }
 const formRef = ref()
 const handleSave = async (commit) => {
-  const {repairFiles, sparePartsList} = formData.value
+  const {repairFiles, sparePartsList, repairFinishFiles} = formData.value
 
   if (commit) {
     await formRef.value.validate()
@@ -315,7 +319,7 @@ const handleSave = async (commit) => {
   RepairApi.handle({
     ...formData.value,
     repairFiles: repairFiles.map(item => ({fileType: item.type, relContext: item.name})),
-    repairFinishFiles: repairFiles.map(item => ({fileType: item.type, relContext: item.name})),
+    repairFinishFiles: repairFinishFiles.map(item => ({fileType: item.type, relContext: item.name})),
     sparePartsList: sparePartsList.map(item => ({sparePartsId: item.id, usedQuantity: item.usedQuantity})),
     commit
   }).then(res => {
@@ -376,8 +380,14 @@ const handleAddOk = (list) => {
 }
 
 const handleUserOk = (data) => {
-  formData.value.assistUserList = data
-  formData.value.assistUserIds = data.map(item => item.id)
+  if (multiple.value) {
+    formData.value.assistUserList = data
+    formData.value.assistUserIds = data.map(item => item.id)
+  } else {
+    formData.value.reportPersonName = data[0]?.username
+    formData.value.reportPerson = data[0]?.id
+  }
+
 }
 
 

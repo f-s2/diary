@@ -12,7 +12,7 @@
                         <span>
                             {{ item.username }}
                         </span>
-            <uv-checkbox-group style="flex: none;" v-model="item.selected">
+            <uv-checkbox-group style="flex: none;" v-model="item.selected" @change="val=> changeChecked(val,item)">
               <uv-checkbox :name="true"></uv-checkbox>
             </uv-checkbox-group>
           </div>
@@ -33,7 +33,12 @@ import {UserApi} from "@/api/UserApi";
 
 import {computed, ref, watch} from "vue";
 
-const props = defineProps({show: Boolean});
+const props = defineProps({
+  show: Boolean, multiple: {
+    type: Boolean,
+    default: true
+  }
+});
 const emit = defineEmits(["update:show", "ok",]);
 const handleOk = () => {
 
@@ -47,6 +52,18 @@ const keywords = ref('')
 const computedList = computed(() => {
   return userList.value.filter(item => item.username?.includes(keywords.value))
 })
+const changeChecked = (item, val) => {
+  if (props.multiple) {
+    const [bol] = item
+    if (bol) {
+      userList.value.forEach(item => {
+        item.selected = [false]
+      })
+      val.selected = [true]
+    }
+  }
+  console.log(item)
+}
 const load = () => {
   uni.showLoading();
   UserApi.getUsers({})
