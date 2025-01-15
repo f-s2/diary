@@ -53,7 +53,7 @@ const computedList = computed(() => {
   return userList.value.filter(item => item.username?.includes(keywords.value))
 })
 const changeChecked = (item, val) => {
-  if (props.multiple) {
+  if (!props.multiple) {
     const [bol] = item
     if (bol) {
       userList.value.forEach(item => {
@@ -62,7 +62,6 @@ const changeChecked = (item, val) => {
       val.selected = [true]
     }
   }
-  console.log(item)
 }
 const load = () => {
   uni.showLoading();
