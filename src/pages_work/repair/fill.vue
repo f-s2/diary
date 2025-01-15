@@ -80,8 +80,8 @@
 
           </uv-input>
         </uv-form-item>
-        <uv-form-item required label="巡检维保时长(小时)" prop="solution" borderBottom>
-          <uv-input type="number" inputAlign="right" v-model="formData.solution" placeholder="巡检维保时长"
+        <uv-form-item required label="巡检维保时长(小时)" prop="maintenanceDuration" borderBottom>
+          <uv-input type="number" inputAlign="right" v-model="formData.maintenanceDuration" placeholder="巡检维保时长"
                     border="none">
 
           </uv-input>
