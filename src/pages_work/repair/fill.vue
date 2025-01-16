@@ -33,9 +33,9 @@
             <uv-icon name="arrow-right"></uv-icon>
           </template>
         </uv-form-item>
-        <uv-form-item label="故障描述" borderBottom labelPosition="top">
+        <uv-form-item label="故障内容" borderBottom labelPosition="top">
           <uv-textarea border="none" v-model="formData.malfunctionDescription"
-                       placeholder="请输入故障描述"></uv-textarea>
+                       placeholder="请输入故障内容"></uv-textarea>
         </uv-form-item>
         <uv-form-item label="图片视频" labelPosition="top">
           <div>
@@ -95,7 +95,7 @@
         <uv-form-item label="故障原因" required borderBottom labelPosition="top" prop="malfunctionReason">
           <uv-textarea border="none" v-model="formData.malfunctionReason" placeholder="请输入内容"></uv-textarea>
         </uv-form-item>
-        <uv-form-item label="维修情况描述" required labelPosition="top" prop="repairDescription">
+        <uv-form-item label="维修内容" required labelPosition="top" prop="repairDescription">
           <uv-textarea border="none" v-model="formData.repairDescription" placeholder="请输入内容"></uv-textarea>
         </uv-form-item>
         <uv-form-item label="图片视频" labelPosition="top">

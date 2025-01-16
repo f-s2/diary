@@ -23,14 +23,14 @@
 
       <div class="form-card">
 
-        <uv-form-item label="故障描述 :" prop="malfunctionDescription" labelPosition="top" borderBottom>
+        <uv-form-item label="故障内容 :" prop="malfunctionDescription" labelPosition="top" borderBottom>
 
           <uv-textarea border="none" v-model="formData.malfunctionDescription"
                        placeholder="请输入内容"></uv-textarea>
 
 
         </uv-form-item>
-      
+
         <uv-form-item label="图片视频 :" labelPosition="top">
           <div>
 
