@@ -61,6 +61,10 @@
                             <span style="color:#003A8B ;"> 查看记录</span>
             <uv-icon name="arrow-right" size="16"></uv-icon>
                         </span>
+          <span v-else-if="item.code === 'assistUserList'">
+                            {{ baseInfo.assistUserList?.map(item => item.username)?.join('、') ?? '-' }}
+                        </span>
+
         </div>
       </div>
 
@@ -154,12 +158,20 @@ const baseConfig = [
   {
     name: '保养人员',
     code: 'maintainUserName'
+  }, {
+    name: '保养工时',
+    code: 'maintainHour'
+  }, {
+    name: '协同人员',
+    custom: true,
+    code: 'assistUserList',
   },
   {
     name: '保养记录',
     code: 'itemList',
     custom: true
   },
+
 ]
 
 const taskConfig = [
@@ -182,7 +194,7 @@ const taskConfig = [
 const itemShow = ref(false)
 const getInfo = () => {
   loading.value = true
-  const {id, planId} = baseInfo.value
+  const {id} = baseInfo.value
   MaintenanceApi.detail(id).then(res => {
     baseInfo.value = {...res.data, ...baseInfo.value}
   }).finally(() => {

@@ -37,7 +37,12 @@ const props = defineProps({
   show: Boolean, multiple: {
     type: Boolean,
     default: true
+  },
+  disabledIds: {
+    type: Array,
+    default: () => []
   }
+
 });
 const emit = defineEmits(["update:show", "ok",]);
 const handleOk = () => {
@@ -50,7 +55,7 @@ const userList = ref([])
 const keywords = ref('')
 
 const computedList = computed(() => {
-  return userList.value.filter(item => item.username?.includes(keywords.value))
+  return userList.value.filter(item => item.username?.includes(keywords.value) && !props.disabledIds.includes(item.id))
 })
 const changeChecked = (item, val) => {
   if (!props.multiple) {
