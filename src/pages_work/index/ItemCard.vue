@@ -1,6 +1,6 @@
 <template>
   <div class="work-item">
-    <template v-if="data.type === 2">
+    <template v-if="data.type !== 3">
 
       <div class="item-head">
         <div class="item-title ellipsis">
@@ -17,23 +17,7 @@
         <span>{{ data.createTime }} </span>
       </div>
     </template>
-    <template v-else-if="data.type === 0 || data.type === 1">
-
-      <div class="item-head">
-        <div class="item-title ellipsis">
-          {{ data.description ?? '-' }}
-        </div>
-        <div class="item-status">
-          <status-tag :status="data.status"/>
-        </div>
-      </div>
-      <div class="item-bottom">
-                <span>
-                    {{ data.code }}
-                </span>
-        <span>{{ data.createTime }} </span>
-      </div>
-    </template>
+   
     <template v-else>
       <div class="item-head">
         <div class="item-title ellipsis">

@@ -156,7 +156,7 @@ const taskConfig = [
 const itemShow = ref(false)
 const getInfo = () => {
   loading.value = true
-  const {id, planId} = baseInfo.value
+  const {id} = baseInfo.value
   InspectionkApi.detail(id).then(res => {
     baseInfo.value = {...res.data, ...baseInfo.value}
   }).finally(() => {
