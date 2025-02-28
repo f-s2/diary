@@ -62,6 +62,10 @@
             <uv-icon name="arrow-right"
                      size="16"/>
           </span>
+          <span v-else-if="item.code === 'assistUserList'">
+                            {{ baseInfo.assistUserList?.map(item => item.username)?.join('、') ?? '-' }}
+                        </span>
+
         </div>
       </div>
 
@@ -128,12 +132,20 @@ const baseConfig = [
   {
     name: '点检人员',
     code: 'inspectUserName'
+  }, {
+    name: '点检工时',
+    code: 'inspectHour'
+  }, {
+    name: '协同人员',
+    custom: true,
+    code: 'assistUserList',
   },
   {
     name: '点检记录',
     code: 'itemList',
     custom: true
   },
+
 ]
 
 const taskConfig = [
@@ -156,7 +168,7 @@ const taskConfig = [
 const itemShow = ref(false)
 const getInfo = () => {
   loading.value = true
-  const {id} = baseInfo.value
+  const {id, planId} = baseInfo.value
   InspectionkApi.detail(id).then(res => {
     baseInfo.value = {...res.data, ...baseInfo.value}
   }).finally(() => {
@@ -168,22 +180,12 @@ const getInfo = () => {
 
 
 const handleSave = () => {
-  const {fillStatus, id} = baseInfo.value
-  if (fillStatus === 0) {
-    InspectionkApi.updateItem({inspectionId: id}).then(res => {
-      if (res.code === 0) {
-        uni.navigateTo({
-          url: `/pages_work/inspection/handle?id=${id}`
-        })
-      }
-    })
+  const {id} = baseInfo.value
 
-  } else {
-    uni.navigateTo({
-      url: `/pages_work/inspection/handle?id=${id}`
-    })
+  uni.navigateTo({
+    url: `/pages_work/inspection/handle?id=${id}`
+  })
 
-  }
 }
 
 </script>

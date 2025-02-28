@@ -205,22 +205,10 @@ const getInfo = () => {
 
 
 const handleSave = () => {
-  const {fillStatus, id} = baseInfo.value
-  if (fillStatus === 0) {
-    MaintenanceApi.updateItem({maintenanceId: id}).then(res => {
-      if (res.code === 0) {
-        uni.navigateTo({
-          url: `/pages_work/maintenance/handle?id=${id}`
-        })
-      }
-    })
-
-  } else {
-    uni.navigateTo({
-      url: `/pages_work/maintenance/handle?id=${id}`
-    })
-
-  }
+  const {id} = baseInfo.value
+  uni.navigateTo({
+    url: `/pages_work/maintenance/handle?id=${id}`
+  })
 }
 
 </script>
