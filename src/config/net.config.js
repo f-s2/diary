@@ -14,7 +14,7 @@ export const netConfig = {
     //操作正常code，支持String、Array、int多种类型
     successCode: [200, 0, 1013],
     //登录失效code
-    invalidCode: [1004],
+    invalidCode: [1004, 1015],
     //无权限code
     noPermissionCode: -1,
 
