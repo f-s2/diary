@@ -1,5 +1,6 @@
 <template>
-  <div class="page-body">
+  <div class="page-body custom-nav-page">
+    <nav-bar />
     <u-loading v-if="loading"/>
     <div class="sub-title">
       基础信息
@@ -154,6 +155,7 @@ import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
 import {useUserStore} from '@/store/user';
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
+import NavBar from "@/components/NavBar.vue";
 
 const userStore = useUserStore()
 const loading = ref(false)
