@@ -29,6 +29,10 @@ uni-page-wrapper {
 .page-body {
   padding: 36rpx 32rpx 60rpx;
 }
+.custom-nav-page{
+  padding-top: 44px;
+}
+
 
 .describe-box {
   background: #fff;

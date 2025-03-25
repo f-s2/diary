@@ -21,21 +21,21 @@
     {
       "path": "pages_work/index/index",
       "style": {
-        "navigationBarTitleText": "任务列表",
-        "navigationBarBackgroundColor": "#127ED0",
-        "navigationBarTextStyle": "#fff"
+        "navigationBarTitleText": "任务列表"
       }
     },
     {
       "path": "pages_work/maintenance/index",
       "style": {
-        "navigationBarTitleText": "任务详情"
+        "navigationBarTitleText": "任务详情",
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages_work/inspection/index",
       "style": {
-        "navigationBarTitleText": "任务详情"
+        "navigationBarTitleText": "任务详情",
+        "navigationStyle": "custom"
       }
     },
     {
@@ -71,7 +71,8 @@
     {
       "path": "pages_work/repair/index",
       "style": {
-        "navigationBarTitleText": "任务详情"
+        "navigationBarTitleText": "任务详情",
+        "navigationStyle": "custom"
       }
     },
     {

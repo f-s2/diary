@@ -1,5 +1,7 @@
 <template>
-  <div class="page-body">
+
+  <div class="page-body custom-nav-page" >
+    <nav-bar />
     <u-loading v-if="loading"/>
     <div class="sub-title">
       基础信息
@@ -111,6 +113,7 @@ import ViewItem from './ViewItem.vue';
 import {MaintenanceApi} from "@/api/WorkApi";
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
+import NavBar from "@/components/NavBar.vue";
 
 const loading = ref(false)
 const baseInfo = ref({})
