@@ -56,7 +56,7 @@
             <uv-icon name="calendar" size="20"></uv-icon>
           </template>
         </uv-form-item>
-        <uv-datetime-picker ref="datePicker" :value="datetime" mode="datetime" @confirm="selectTime"/>
+        <uv-datetime-picker ref="datePicker" :value="datetime" mode="date" @confirm="selectTime"/>
         <uv-form-item label="点检工时" required prop="inspectHour" borderBottom>
           <uv-input type="number" inputAlign="right" v-model="formData.inspectHour" placeholder="点检工时"
                     border="none">
@@ -151,7 +151,7 @@ const showTime = () => {
   datePicker.value.open()
 }
 const selectTime = ({value}) => {
-  formData.value.inspectTime = dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+  formData.value.inspectTime = dayjs(value).format('YYYY-MM-DD')
 }
 
 
