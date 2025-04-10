@@ -121,7 +121,7 @@
     </template>
 
 
-    <div class="bottom-btn">
+    <div class="bottom-btn" v-if="!isView">
       <uv-button v-if="baseInfo.fillStatus === 0" type="primary" @click="handleConfirm">确认故障</uv-button>
       <uv-button v-if="baseInfo.fillStatus === 1 && baseInfo.repairStatus === 2" type="primary"
                  @click="handleComplete">完成维修
@@ -160,7 +160,10 @@ import NavBar from "@/components/NavBar.vue";
 const userStore = useUserStore()
 const loading = ref(false)
 const baseInfo = ref({})
+const isView = ref(false)
 onLoad((data) => {
+  const {view}=data
+  isView.value = !!view
   baseInfo.value = data
 
 })

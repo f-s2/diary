@@ -37,6 +37,15 @@ export class WorkApi {
             data
         })
     }
+    static getUncompletedWork(data) {
+        return request({
+            url: prefix + '/repair/list-uncompleted',
+            method: 'post',
+            params: {},
+            data
+        })
+    }
+
 }
 export class MaintenanceApi {
     static detail(id) {

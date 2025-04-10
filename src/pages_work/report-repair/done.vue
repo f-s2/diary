@@ -5,35 +5,34 @@ import {WorkApi} from "@/api/WorkApi";
 import {findOne, RepairStatus} from "@/dict";
 
 const baseId = ref('')
+const orderCode = ref('')
 const workList = ref([])
-onLoad(({id}) => {
+onLoad(({id, code}) => {
   baseId.value = id
+  orderCode.value = code
   WorkApi.getUncompletedWork({deviceId: id, overtime: 1})
     .then(res => {
       workList.value = res.data.map(item => ({...item, statusInfo: findOne(item.repairStatus, RepairStatus)}))
     })
 })
-const handleOk = () => {
-  uni.navigateTo({
-    url: `/pages_work/report-repair/handle?id=${baseId.value}`
-  })
-}
 const jumpDetail = (item) => {
   const {id, fillStatus, repairStatus} = item
   uni.navigateTo({
     url: `/pages_work/repair/index?id=${id}&repairStatus=${repairStatus}&fillStatus=${fillStatus}&view=1`,
   });
 }
-const handleView=()=>{
-  uni.navigateTo({
-    url: `/pages_work/report-repair/device?id=${baseId.value}`
-  })
-}
+
 </script>
 
 <template>
   <div class="page-body">
-
+    <div class="done-info">
+      <div class="sub-title">提示 :</div>
+      <div class="content">
+        您本次报修已提交，报修单号为：<a>{{ orderCode }}</a>;
+        如需继续报修，请重新扫描设备报修二维码
+      </div>
+    </div>
     <div class="order-list">
       <div class="sub-title">待完成工单</div>
       <template v-if="workList.length">
@@ -57,35 +56,47 @@ const handleView=()=>{
         </div>
       </template>
       <uv-empty v-else mode="data"></uv-empty>
-      <uv-button type="primary" @click="handleOk">开始报修</uv-button>
 
     </div>
-    <div class="bottom-btn ">
-      <a   @click="handleView" >查看设备信息</a>
-    </div>
+
   </div>
 </template>
 
 <style scoped lang="scss">
-.bottom-btn{
-  text-align: center;
-  font-size: 32rpx;
-  color: $uv-primary;
+.done-info {
+  background-color: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+
 }
-.page-body {
-  padding-bottom: 100px;
+
+.sub-title {
+  font-weight: bold;
 }
+
+.content {
+  word-break: break-all;
+  font-size: 13px;
+  line-height: 24px;
+
+  a {
+    color: $uv-primary;
+    font-weight: bold;
+  }
+}
+
 .order-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   background-color: #fff;
   padding: 12px;
+  border-radius: 6px;
 
-
-  .sub-title {
-    font-weight: bold;
-  }
 
   .item-head {
     display: flex;

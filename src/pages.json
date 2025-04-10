@@ -90,9 +90,27 @@
     {
       "path": "pages_work/report-repair/index",
       "style": {
-        "navigationBarTitleText": "报修"
+        "navigationBarTitleText": "设备报修"
       }
     },
+    {
+      "path": "pages_work/report-repair/handle",
+      "style": {
+        "navigationBarTitleText": "设备报修"
+      }
+    },
+    {
+      "path": "pages_work/report-repair/done",
+      "style": {
+        "navigationBarTitleText": "报修完成"
+      }
+    }, {
+      "path": "pages_work/report-repair/device",
+      "style": {
+        "navigationBarTitleText": "设备信息"
+      }
+    },
+
     {
       "path": "pages_mine/mine/index",
       "style": {
