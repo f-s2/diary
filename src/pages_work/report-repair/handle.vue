@@ -131,7 +131,7 @@ const handleSave = async () => {
         }).then(res => {
           if (res.code === 0) {
             uni.showToast({
-              title: '保修成功'
+              title: '报修成功'
             })
             uni.redirectTo({
               url: `/pages_work/report-repair/done?id=${baseId.value}&code=${res.data}`
