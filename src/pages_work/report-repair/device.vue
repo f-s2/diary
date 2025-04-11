@@ -2,7 +2,11 @@
 import {onLoad} from "@dcloudio/uni-app";
 import {RepairApi} from "@/api/WorkApi";
 import {ref} from "vue";
+import { UserApi } from '@/api/UserApi'
+import { Base64 } from 'js-base64'
+import { getFileName } from '../../utils/file'
 const baseInfo=ref({})
+const prefix=ref('')
 onLoad(({id}) => {
   uni.showLoading({
     title: '加载中',
@@ -13,6 +17,9 @@ onLoad(({id}) => {
         baseInfo.value = res.data
       }).finally(()=>{
         uni.hideLoading()
+  })
+  UserApi.getPrefix().then(res => {
+    prefix.value = res.data
   })
 })
 const baseConfig=[ {
@@ -46,6 +53,16 @@ const baseConfig=[ {
     code: 'maintenanceExpirationDate'
   },
 ]
+const fileData = [
+  { name: 'SOP文档', code: 'sopUrl' },
+  { name: '使用说明', code: 'useManualUrl' },
+  { name: '维保手册', code: 'maintenanceManualUrl' },
+]
+const handleViewFile = (url) => {
+  window.open(
+    `#/preview/onlinePreview?url=` + encodeURIComponent(Base64.encode(prefix.value + url))
+  )
+}
 </script>
 
 <template>
@@ -63,9 +80,28 @@ const baseConfig=[ {
         </div>
       </div>
     </div>
+    <uv-list   >
+      <uv-list-item direction="column"  border  v-for="item in fileData" :key="item.name">
+        <template #header >
+        <span class="file-name"> {{item.name}}</span>
+        </template>
+        <template #footer >
+          <span @click="handleViewFile(baseInfo[item.code])"  v-if="baseInfo[item.code]" class="file-url">{{getFileName(baseInfo[item.code]) }} </span>
+          <span v-else>-</span>
+        </template>
+      </uv-list-item>
+    </uv-list>
   </div>
 </template>
 
-<style scoped lang="less">
+<style scoped lang="scss">
+.file-name{
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+.file-url{
+  color: #007aff;
+  cursor: pointer;
+}
 
 </style>
