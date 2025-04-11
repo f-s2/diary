@@ -20,9 +20,14 @@ export default ({ mode }) => {
           ws: false,
           changeOrigin: true
         },
+       '/preview': {
+          target: netConfig.baseURL,
+          ws: false,
+          changeOrigin: true
+        },
 
       }
     }
   })
 
-} 
+}

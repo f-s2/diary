@@ -60,7 +60,7 @@ const fileData = [
 ]
 const handleViewFile = (url) => {
   window.open(
-    `#/preview/onlinePreview?url=` + encodeURIComponent(Base64.encode(prefix.value + url))
+    `/preview/onlinePreview?url=` + encodeURIComponent(Base64.encode(prefix.value + url))
   )
 }
 </script>
