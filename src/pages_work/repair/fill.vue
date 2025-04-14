@@ -52,7 +52,7 @@
 
         <uv-form-item class="input-right" label="维修人" borderBottom>
 
-          {{ formData.reportPersonName }}
+          {{ formData.repairUserName  }}
 
         </uv-form-item>
         <uv-form-item class="input-right" @click="multiple=true;modalState.userShow = true" label="协助人员"
