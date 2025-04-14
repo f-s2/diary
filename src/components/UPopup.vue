@@ -54,18 +54,7 @@ watch(
   }
 );
 </script>
-<style lang="scss">
-.uv-popup__content.bottom{
-  max-height: 70vh;
-  min-height: 50vh;
-  display: flex !important;
-  flex-direction: column;
-  .content{
-    flex: 1;
-    overflow-y: auto;
-  }
-}
-</style>
+
 <style lang="scss" scoped>
 .pup-head {
   display: flex;

@@ -118,9 +118,19 @@ button[type="primary"][plain] {
   padding-bottom: 32px;
 }
 
-.uv-popup__content.bottom {
+.uv-popup__content.bottom{
+  max-height: 70vh;
+  min-height: 50vh;
+  display: flex !important;
   padding: 20px;
+  flex-direction: column;
+  .content{
+    flex: 1;
+    overflow-y: auto;
+    height: initial;
+  }
 }
+
 
 .item-tags {
   display: flex;
