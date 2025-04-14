@@ -256,9 +256,10 @@ const getInfo = () => {
   loading.value = true
   const {id} = baseInfo.value
   RepairApi.detail(id).then(res => {
-    const {repairFiles, repairFinishFiles, sparePartsList} = res.data
+    const {repairFiles, repairFinishFiles, sparePartsList,repairUserName} = res.data
     formData.value = {
       ...res.data,
+      repairUserName:repairUserName?repairUserName:userStore.userInfo.username,
       repairFiles: repairFiles.map(item => {
 
         return {
