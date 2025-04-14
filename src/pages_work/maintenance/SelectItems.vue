@@ -98,7 +98,7 @@ watch(
 }
 
 .content {
-    height: 65vh;
+    height: calc(70vh - 44px);
     overflow-y: auto;
 }
 

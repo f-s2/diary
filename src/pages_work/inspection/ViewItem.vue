@@ -60,7 +60,7 @@ watch(
 
 <style lang="scss" scoped>
 .content {
-    height: 70vh;
+    height: calc(70vh - 44px);
     overflow-y: auto;
 }
 
