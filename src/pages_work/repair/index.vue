@@ -225,6 +225,10 @@ const reportConfig = [
 ]
 const repairConfig = [
   {
+    name: '维修人',
+    code: 'repairUserName'
+  },
+  {
     name: '协同人员',
     custom: true,
 
