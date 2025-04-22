@@ -1,19 +1,14 @@
-<script>
-export default {
-  globalData: {
-    token: "",
-    pending: false,
-  },
-  onLaunch: function () {
-    console.log("App launch");
-  },
-  onShow: function () {
-    console.log("App Show");
-  },
-  onHide: function () {
-    console.log("App Hide");
-  },
-};
+<script setup>
+import { UserApi } from '@/api/UserApi'
+import { onLaunch } from '@dcloudio/uni-app'
+import { useUserStore } from '@/store/user'
+const userStore = useUserStore()
+onLaunch(()=>{
+  UserApi.getPrefix().then(res => {
+    userStore.urlPrefix = res.data
+  })
+})
+
 </script>
 
 <style lang="scss">

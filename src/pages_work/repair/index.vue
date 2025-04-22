@@ -272,7 +272,7 @@ const getInfo = () => {
       ...res.data, repairFiles: repairFiles.map(item => {
 
         return {
-          url: userStore.userInfo.urlPrefix + item.relContext,
+          url: userStore.urlPrefix + item.relContext,
           type: item.fileType === 0 ? 0 : 1
         }
       }),

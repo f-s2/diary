@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', () => {
     const isLoginOut = ref(false)
     const userInfo = ref({
     })
+    const  urlPrefix=ref('')
     const setUserInfo = (data) => {
         userInfo.value = data
     }
@@ -14,7 +15,8 @@ export const useUserStore = defineStore('user', () => {
         userInfo,
         setUserInfo,
         isLoginOut,
-        unFinishCount
+        unFinishCount,
+        urlPrefix
     }
 
 

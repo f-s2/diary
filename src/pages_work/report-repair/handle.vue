@@ -52,18 +52,16 @@ import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
 import {netConfig} from '@/config/net.config';
 import {onLoad} from '@dcloudio/uni-app';
 import {ref} from 'vue';
-import {UserApi} from "@/api/UserApi";
+import { useUserStore } from '@/store/user'
 uni.hideTabBar()
 
+const userStore = useUserStore()
 const formData = ref({})
 const baseId = ref('')
-const prefix = ref('')
 onLoad(({id}) => {
   baseId.value = id
   getInfo()
-  UserApi.getPrefix().then(res => {
-    prefix.value = res.data
-  })
+
 
 })
 
@@ -100,7 +98,7 @@ const uploadSuccess = (res) => {
   if (_res.code == 0) {
     return {
       success: true,
-      url: prefix.value + _res.data.name,
+      url: userStore.urlPrefix + _res.data.name,
       name: _res.data.name
     }
   } else {
