@@ -3,15 +3,18 @@ import {onLoad} from "@dcloudio/uni-app";
 import {ref} from 'vue'
 import {WorkApi} from "@/api/WorkApi";
 import {findOne, RepairStatus} from "@/dict";
-
+const readMoreRef=ref()
 const baseId = ref('')
 const workList = ref([])
 onLoad(({id}) => {
   baseId.value = id
   WorkApi.getUncompletedWork({deviceId: id, overtime: 1})
     .then(res => {
-      workList.value = res.data.map(item => ({...item, statusInfo: findOne(item.repairStatus, RepairStatus)}))
-    })
+      workList.value = res.data.map(item => ({...item, statusInfo: findOne(item.repairStatus, RepairStatus)}))??[]
+
+    }).finally(()=>{
+    readMoreRef.value?.init()
+  })
 })
 const handleOk = () => {
   uni.navigateTo({
@@ -29,16 +32,16 @@ const handleView=()=>{
     url: `/pages_work/report-repair/device?id=${baseId.value}`
   })
 }
+
 </script>
 
 <template>
   <div class="page-body">
-
     <div class="order-list">
       <div class="sub-title">待完成工单</div>
+              <uv-read-more textIndent="0" ref="readMoreRef" show-height="340px" :toggle="true" closeText="展开更多" >
       <template v-if="workList.length">
-
-        <div v-for="item in workList" :key="item.id" class="order-item" @click="jumpDetail(item)">
+        <div v-for="item in workList"  :key="item.id" class="order-item" @click="jumpDetail(item)">
           <div class="item-head">
             <div class="item-title ellipsis">
               {{ item.factoryModelName }}
@@ -56,8 +59,12 @@ const handleView=()=>{
           </div>
         </div>
       </template>
-      <uv-empty v-else mode="data"></uv-empty>
-      <uv-button type="primary" @click="handleOk">开始报修</uv-button>
+                <uv-empty v-else mode="data"></uv-empty>
+
+              </uv-read-more>
+
+
+      <uv-button style="margin-top: 20px" type="primary" @click="handleOk">开始报修</uv-button>
 
     </div>
     <div class="bottom-btn ">
@@ -71,6 +78,8 @@ const handleView=()=>{
   text-align: center;
   font-size: 32rpx;
   color: $uv-primary;
+  //background: #f7f8fa;
+  //padding-top: 32rpx;
 }
 .page-body {
   padding-bottom: 100px;
@@ -121,6 +130,7 @@ const handleView=()=>{
     padding: 12px;
     border-radius: 6px;
     background-color: #f7f8fa;
+    margin-bottom: 10px;
   }
 }
 
