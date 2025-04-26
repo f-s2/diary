@@ -122,8 +122,8 @@
 
 
     <div class="bottom-btn" v-if="!isView">
-      <uv-button v-if="baseInfo.fillStatus === 0" type="primary" @click="handleConfirm">确认故障</uv-button>
-      <uv-button v-if="baseInfo.fillStatus === 1 && baseInfo.repairStatus === 2" type="primary"
+      <uv-button v-if="baseInfo.fillStatus === 0&&(baseInfo.repairStatus === 1 || baseInfo.repairStatus === 5)" type="primary" @click="handleConfirm">确认故障</uv-button>
+      <uv-button v-if="baseInfo.fillStatus === 1 && (baseInfo.repairStatus === 2||baseInfo.repairStatus === 5)" type="primary"
                  @click="handleComplete">完成维修
       </uv-button>
       <uv-button v-if="baseInfo.fillStatus === 1 && baseInfo.auditStatus === null" type="primary"
