@@ -5,8 +5,9 @@ import {ref} from "vue";
 import { UserApi } from '@/api/UserApi'
 import { Base64 } from 'js-base64'
 import { getFileName } from '../../utils/file'
+import {useUserStore} from "@/store/user";
 const baseInfo=ref({})
-const prefix=ref('')
+const userStore = useUserStore()
 onLoad(({id}) => {
   uni.showLoading({
     title: '加载中',
@@ -18,9 +19,7 @@ onLoad(({id}) => {
       }).finally(()=>{
         uni.hideLoading()
   })
-  UserApi.getPrefix().then(res => {
-    prefix.value = res.data
-  })
+
 })
 const baseConfig=[ {
   name: '设备名称',
@@ -60,7 +59,7 @@ const fileData = [
 ]
 const handleViewFile = (url) => {
   window.open(
-    `/preview/onlinePreview?url=` + encodeURIComponent(Base64.encode(prefix.value + url))
+    `/preview/onlinePreview?url=` + encodeURIComponent(Base64.encode(userStore.urlPrefix + url))
   )
 }
 </script>
