@@ -29,7 +29,7 @@
                        placeholder="请输入内容"></uv-textarea>
         </uv-form-item>
 
-        <uv-form-item label="图片视频 :" labelPosition="top">
+        <uv-form-item label="图片视频 :"  required labelPosition="top" prop="repairFiles">
           <div>
 
             <htz-image-upload :dataType="1" :max="9" mediaType="all"
@@ -72,7 +72,11 @@ const getInfo = () => {
     formData.value = {deviceId, code, name, factoryModelName, malfunctionDescription: '', repairFiles: []}
   })
 }
-const rules = {}
+const rules = {
+  repairFiles: [
+    {required: true, message: '请上传图片或视频'},
+  ],
+}
 
 
 const baseConfig = [
