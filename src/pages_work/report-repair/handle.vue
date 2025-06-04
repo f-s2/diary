@@ -125,7 +125,7 @@ const handleSave = async () => {
       if (res.confirm) {
         const {repairFiles} = formData.value
         uni.showLoading({
-          title: '报修这，请勿离开。。。',
+          title: '报修中，请勿离开。。。',
           mask: true
         })
         RepairApi.add({
