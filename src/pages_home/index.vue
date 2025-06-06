@@ -20,7 +20,7 @@
     </div>
     <div class="map-box">
       <div class="box-title"><img class="icon" src="../static/home/inspect.png" alt=""> 点检概览</div>
-      <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.deviceGroupName, key: item.id }))"
+      <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
                @change="(({ index }) => inspectIndex = index)" lineColor="#003A8B"></uv-tabs>
@@ -54,7 +54,7 @@
     </div>
     <div class="map-box">
       <div class="box-title"><img class="icon" src="../static/home/mt.png" alt=""> 保养概览</div>
-      <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.deviceGroupName, key: item.id }))"
+      <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
                @change="(({ index }) => mtIndex = index)" lineColor="#003A8B"></uv-tabs>

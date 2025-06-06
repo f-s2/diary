@@ -119,7 +119,7 @@
                   @ok="handleUserOk"/>
 
     <FillItem v-model:show="modalState.show" :data="formData.itemList" @ok="(list) => formData.itemList = list"/>
-    <selectSpare v-model:show="modalState.spareShow" :data="formData.sparePartsList" @ok="handleAddOk"/>
+    <selectSpare :query="{deviceId:formData.deviceId}" v-model:show="modalState.spareShow" :data="formData.sparePartsList" @ok="handleAddOk"/>
   </div>
 </template>
 
@@ -167,8 +167,8 @@ const deviceConfig = [
     code: 'deviceTypeName'
   },
   {
-    name: '设备组',
-    code: 'deviceGroupName'
+    name: '所属部门',
+    code: 'ownOrganizeName'
   },
 
 ]

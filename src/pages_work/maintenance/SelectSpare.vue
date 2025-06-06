@@ -38,7 +38,7 @@
 import { InventoryApi } from "@/api/WorkApi";
 
 import { computed, ref, watch } from "vue";
-const props = defineProps({ show: Boolean, data: Array });
+const props = defineProps({ show: Boolean, data: Array ,query:Object});
 const emit = defineEmits(["update:show", "ok",]);
 const handleOk = () => {
 
@@ -54,7 +54,7 @@ const computedList = computed(() => {
 })
 const load = () => {
     uni.showLoading();
-    InventoryApi.list({})
+    InventoryApi.list({...props.query})
         .then((res) => {
             spareList.value = res.data;
         })

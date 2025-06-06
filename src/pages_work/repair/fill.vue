@@ -151,7 +151,7 @@
       <uv-button type="primary" @click="handleSave(0)">保存</uv-button>
       <uv-button type="primary" @click="handleSave(1)">提交</uv-button>
     </div>
-    <select-spare v-model:show="modalState.spareShow" :data="baseInfo.assistUserList" @ok="handleAddOk"/>
+    <select-spare v-model:show="modalState.spareShow" :query="{deviceId:formData.deviceId}" :data="baseInfo.assistUserList" @ok="handleAddOk"/>
     <select-users :multiple="multiple" v-model:show="modalState.userShow" @ok="handleUserOk"/>
 
   </div>

@@ -132,8 +132,8 @@ const deviceConfig = [
     code: 'deviceTypeName'
   },
   {
-    name: '设备组',
-    code: 'deviceGroupName'
+    name: '所属部门',
+    code: 'ownOrganizeName'
   },
 
 ]
