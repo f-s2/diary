@@ -31,7 +31,7 @@ const baseConfig=[ {
   },
   {
     name: '设备型号',
-    code: 'factoryModelName'
+    code: 'model'
   },{
     name: '厂商名称',
     code: 'manufacturerName'
