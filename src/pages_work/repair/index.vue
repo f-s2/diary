@@ -285,7 +285,7 @@ const getInfo = () => {
 }
 
 const modal = ref()
-const modalValue = ref({})
+const modalValue = ref({repairStatus:4})
 const handleConfirm = () => {
   modal.value.open()
 }
