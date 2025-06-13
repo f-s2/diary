@@ -50,7 +50,7 @@ const spareList = ref([])
 const keywords = ref('')
 
 const computedList = computed(() => {
-    return spareList.value.filter(item => item.name.includes(keywords.value) || item.code.includes(keywords.value))
+    return spareList.value.filter(item => item.name?.includes(keywords.value) || item.code?.includes(keywords.value))
 })
 const load = () => {
     uni.showLoading();
