@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "useDefineForClassFields": true,
+    "baseUrl": ".",
+     "allowJs": true,               // 关键：允许 .js 文件
+    "checkJs": false,              // 可选：false 表示不检查 js 类型
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": false,               // 可逐步开启 strict
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "~/*": [
+        "./*"
+      ]
+    },
+    "resolveJsonModule": true,
+    "types": [
+      "vite/client",
+      "@dcloudio/types",
+      "miniprogram-api-typings",
+      "type-fest",
+      "@uni-helper/uni-types"
+    ],
+    "noImplicitThis": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "vueCompilerOptions": {
+    "plugins": [
+      "@uni-helper/uni-types/volar-plugin"
+    ]
+  },
+  "include": [
+    "typings/*.d.ts",
+    "**/*.d.ts",
+    "**/*.tsx",
+    "**/*.ts",
+    "**/*.jsx",
+    "**/*.js",
+    "**/*.vue",
+    "package.json"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",               // ✅ 排除打包输出目录
+    "dist/**",            // ✅ 确保子目录也排除
+  ]
+}
