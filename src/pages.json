@@ -122,6 +122,15 @@
           "titleNView": false
         }
       }
+    },
+    {
+      "path": "pages_mine/userinfo/index",
+      "style": {
+        "navigationBarTitleText": "基础信息",
+         "h5": {
+          "titleNView": false
+        }
+      }
     }
   ],
   "tabBar": {

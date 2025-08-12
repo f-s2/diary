@@ -2538,7 +2538,7 @@
     "@unocss/extractor-arbitrary-variants" "66.4.2"
     "@unocss/rule-utils" "66.4.2"
 
-"@unocss/preset-rem-to-px@^66.0.0":
+"@unocss/preset-rem-to-px@^66.4.2":
   version "66.4.2"
   resolved "https://registry.npmjs.org/@unocss/preset-rem-to-px/-/preset-rem-to-px-66.4.2.tgz#f107a76d715bb8e39b66885b157b18dae9409c2d"
   integrity sha512-3TElb36eaxORVD6NIdSVNbR8Hj8qwBl/JZPWdjv8qXLB6fgYXdTwFrylf84Je/HfGwo67i6xHTkVa7PetDmtwA==
@@ -4463,6 +4463,11 @@ postcss-modules@^4.3.0:
     postcss-modules-scope "^3.0.0"
     postcss-modules-values "^4.0.0"
     string-hash "^1.1.1"
+
+postcss-pxtorem@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.npmjs.org/postcss-pxtorem/-/postcss-pxtorem-6.1.0.tgz#7e6410e30426adef53bad6c4c5f00cd5f586937c"
+  integrity sha512-ROODSNci9ADal3zUcPHOF/K83TiCgNSPXQFSbwyPHNV8ioHIE4SaC+FPOufd8jsr5jV2uIz29v1Uqy1c4ov42g==
 
 postcss-selector-parser@^6.0.2, postcss-selector-parser@^6.0.4, postcss-selector-parser@^6.0.6:
   version "6.0.13"

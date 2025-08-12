@@ -8,6 +8,7 @@ import {
 
   transformerDirectives,
   transformerVariantGroup,
+  presetWind4
 
 } from 'unocss'
 
@@ -32,9 +33,9 @@ const config: UserConfig = defineConfig({
     },
   },
   shortcuts: [
-    ['btn', 'w-60 h-60 flex items-center justify-center rounded-full bg-teal-600 text-white cursor-pointer'],
     ['wh-full', 'w-full h-full'],
-    ['f-c-c', 'flex justify-center items-center'],
+    ['f-c-c', 'flex items-center justify-center'],
+    ['f-c-b', 'flex items-center justify-between'],
     ['flex-col', 'flex flex-col'],
     ['absolute-lt', 'absolute left-0 top-0'],
     ['absolute-lb', 'absolute left-0 bottom-0'],
@@ -48,6 +49,7 @@ const config: UserConfig = defineConfig({
     ],
   ],
   presets: [
+    presetWind4(),
     presetUni({
       uno: {
         dark: darkMode,
@@ -70,7 +72,7 @@ const config: UserConfig = defineConfig({
       },
     }),
     // 保持h5和微信小程序转换比例一致
-    presetRemToPx({ baseFontSize: 2 }),
+    // presetRemToPx({ baseFontSize: 2, mode: 'px2rem' }),
   ],
   transformers: [
     transformerDirectives(),
@@ -82,6 +84,7 @@ const config: UserConfig = defineConfig({
     colors: {
       primary: 'var(--primary-color)',
       error: 'var(--error-color)',
+      textBase: '#333'
     },
   },
 })

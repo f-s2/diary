@@ -8,7 +8,6 @@ onLaunch(()=>{
     userStore.urlPrefix = res.data
   })
 })
-
 </script>
 
 <style lang="scss">
@@ -18,6 +17,13 @@ onLaunch(()=>{
 page,
 uni-page-wrapper {
   background-image: linear-gradient(to bottom, #9ADAFF , #ECFFF9 120px, #F1F9FF 200px);
+  color: #333;
+}
+
+.uni-toast {
+   .uni-toast__icon {
+      margin: 20px auto;
+    }
 }
 
 

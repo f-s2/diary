@@ -3,6 +3,7 @@ import uni from "@dcloudio/vite-plugin-uni";
 import { defineConfig, loadEnv } from "vite";
 import { netConfig } from "./src/config/net.config";
 import path from "path";
+import postCssPxToRem from "postcss-pxtorem";
 
 const resolve = (dir) => path.resolve(__dirname, dir);
 
@@ -11,6 +12,18 @@ export default defineConfig(async ({ mode }) => {
 
   return defineConfig({
     base: loadEnv(mode, process.cwd()).VITE_APP_BASE,
+    css: {
+      postcss: {
+        plugins: [
+          postCssPxToRem({
+            rootValue: 16,
+            propList: ["*"], // 需要转换的属性，这里选择全部都进行转换
+            selectorBlackList: ["norem", "ignore"], // 过滤掉norem-开头的class，不进行rem转换
+            mediaQuery: false, // 允许在媒体查询中转换 px
+          }),
+        ],
+      },
+    },
     plugins: [
       unocss(),
       uni(),
@@ -20,7 +33,7 @@ export default defineConfig(async ({ mode }) => {
       alias: {
         "@": resolve("src"),
       },
-      extensions: ['.js', '.vue', '.json', '.jsx', '.ts', '.tsx'],
+      extensions: [".js", ".vue", ".json", ".jsx", ".ts", ".tsx"],
     },
     server: {
       // https: true,

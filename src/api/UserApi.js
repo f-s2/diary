@@ -62,6 +62,14 @@ export class UserApi {
         })
     }
 
+     static update(params) {
+        return request({
+            url: `${prefix}/update`,
+            method: 'post',
+            data: params
+        })
+  }
+
 }
 
 
