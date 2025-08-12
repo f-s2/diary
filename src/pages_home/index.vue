@@ -1,44 +1,41 @@
 <template>
   <div class="home-body">
-    <div class="title">
-      首页
+    <div class=" bg-center bg-cover h-106px rounded-t-12px flex items-center justify-around"
+      :style="`background-image: url(${BannerBg})`">
+      <div class=" text-center text-white" v-for="item in cardInfo">
+        <div class=" font-600 text-28px">{{ mineInfo[item.code] }}</div>
+        <div class=" text-14px">{{ item.name }}</div>
+      </div>
     </div>
-    <div class="top-card">
-      <div class="top-title">我的业绩</div>
-      <div class="card-items">
-
-        <div class="card-item" v-for="item in cardInfo">
-          <div class="top-item">
-            <img class="icon" :src="item.icon" alt="">
-            <span class="name">{{ item.name }}</span>
-          </div>
-          <div>
-            <span class="value">{{ mineInfo[item.code] }}</span><span class="unit">次</span>
-          </div>
+    <div class=" flex items-center justify-between">
+      <div v-for="nav in navList" :key="nav.name" @click="handleJump(nav)">
+        <div class="h-73px">
+          <img class=" h-full" :src="nav.icon" alt="">
         </div>
+        <div class=" text-#333333 text-center mt-8px text-12px font-500">{{ nav.name }}</div>
       </div>
     </div>
     <div class="map-box">
-      <div class="box-title"><img class="icon" src="../static/home/inspect.png" alt=""> 点检概览</div>
-      <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
+      <div class="module-title"> 点检概览</div>
+      <!-- <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
-               @change="(({ index }) => inspectIndex = index)" lineColor="#003A8B"></uv-tabs>
-      <div class="map-card">
-        <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 今日完成情况</div>
+               @change="(({ index }) => inspectIndex = index)" lineColor="#003A8B"></uv-tabs> -->
+      <div class="map-card module-wrapper">
+        <div class="card-title"> 今日完成情况</div>
         <div class="mid-items">
           <div class="mid-item" v-for="item in completeInfo">
-            <div class="label">{{ item.name }}</div>
             <div class="value">{{
-                item.transform ? item.transform(inspectionInfo[inspectIndex]?.[item.code])
-                    :
-                    inspectionInfo[inspectIndex]?.[item.code]
-              }}
+              (item.transform ? item.transform(inspectionInfo[inspectIndex]?.[item.code])
+                :
+                inspectionInfo[inspectIndex]?.[item.code]) ?? 0
+            }}
             </div>
+            <div class="label">{{ item.name }}</div>
           </div>
         </div>
         <div class="map-head">
-          <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 月度点检曲线</div>
+          <div class="card-title"> 月度点检曲线</div>
           <div class="legend">
             <i style="background: #0B66C6;" class="square"></i>
             <span class="label">已完成 </span>
@@ -48,30 +45,30 @@
             <span class="label">完成率 </span>
           </div>
         </div>
-        <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" mode="D"/>
+        <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" mode="D" />
 
       </div>
     </div>
     <div class="map-box">
-      <div class="box-title"><img class="icon" src="../static/home/mt.png" alt=""> 保养概览</div>
-      <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
+      <div class="box-title module-title"> 保养概览</div>
+      <!-- <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
-               @change="(({ index }) => mtIndex = index)" lineColor="#003A8B"></uv-tabs>
-      <div class="map-card">
-        <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 今日完成情况</div>
+               @change="(({ index }) => mtIndex = index)" lineColor="#003A8B"></uv-tabs> -->
+      <div class="map-card module-wrapper">
+        <div class="card-title">今日完成情况</div>
         <div class="mid-items">
           <div class="mid-item" v-for="item in completeInfo">
-            <div class="label">{{ item.name }}</div>
             <div class="value">{{
-                item.transform ? item.transform(maintenanceInfo[mtIndex]?.[item.code]) :
-                    maintenanceInfo[mtIndex]?.[item.code]
-              }}
+              (item.transform ? item.transform(maintenanceInfo[mtIndex]?.[item.code]) :
+                maintenanceInfo[mtIndex]?.[item.code]) ?? 0
+            }}
             </div>
+            <div class="label">{{ item.name }}</div>
           </div>
         </div>
         <div class="map-head">
-          <div class="card-title"><img class="dot" src="../static/home/dot.png" alt=""> 年度保养曲线</div>
+          <div class="card-title"> 年度保养曲线</div>
           <div class="legend">
             <i style="background: #0B66C6;" class="square"></i>
             <span class="label">已完成 </span>
@@ -81,37 +78,65 @@
             <span class="label">完成率 </span>
           </div>
         </div>
-        <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" mode="M"/>
+        <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" mode="M" />
 
       </div>
     </div>
 
   </div>
-  <TabBar :activeIndex="0"/>
+  <TabBar :activeIndex="0" />
 
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import TabBar from "@/components/TabBar.vue";
-import {ref} from 'vue';
-import {HomeApi} from '../api/HomeApi.js';
+import { ref } from 'vue';
+import { HomeApi } from '../api/HomeApi.js';
 import c_1 from '../static/home/card_1.png';
 import c_2 from '../static/home/card_2.png';
 import c_3 from '../static/home/card_3.png';
-import MapChart from './chart';
+import MapChart from './chart.vue';
+import BannerBg from '@/static/home/banner-bg.png'
+import Nav1 from '@/static/home/nav-1.png'
+import Nav2 from '@/static/home/nav-2.png'
+import Nav3 from '@/static/home/nav-3.png'
+import Nav4 from '@/static/home/nav-4.png'
 
 const cardInfo = [
-  {name: '执行维修', icon: c_1, code: 'repair'},
-  {name: '执行点检', icon: c_2, code: 'inspection'},
-  {name: '执行保养', icon: c_3, code: 'maintenance'},
+  { name: '执行维修', icon: c_1, code: 'repair' },
+  { name: '执行点检', icon: c_2, code: 'inspection' },
+  { name: '执行保养', icon: c_3, code: 'maintenance' },
 ]
 
 const completeInfo = [
-  {name: '任务总数', code: 'total'},
-  {name: '已执行', code: 'completed',},
-  {name: '完成率', code: 'completionRate', transform: (val) => (val ? parseFloat(val, 1).toFixed(1) : 0) + '%'},
-  {name: '我执行', code: 'mine'},
-  {name: '占比', code: 'mineRate', transform: (val) => (val ? parseFloat(val, 1).toFixed(1) : 0) + '%'},
+  { name: '任务总数', code: 'total' },
+  { name: '已执行', code: 'completed', },
+  { name: '完成率', code: 'completionRate', transform: (val) => (val ? parseFloat(val).toFixed(1) : 0) + '%' },
+  { name: '我执行', code: 'mine' },
+  { name: '占比', code: 'mineRate', transform: (val) => (val ? parseFloat(val).toFixed(1) : 0) + '%' },
+]
+
+const navList = [
+  {
+    name: '保养任务',
+    path: '',
+    icon: Nav1
+  },
+  {
+    name: '点检任务',
+    path: '',
+    icon: Nav2
+  },
+  {
+    name: '维修任务',
+    path: '',
+    icon: Nav3
+  },
+  {
+    name: '盘点任务',
+    path: '',
+    icon: Nav4
+  },
 ]
 
 const mineInfo = ref({})
@@ -119,6 +144,11 @@ const maintenanceInfo = ref([])
 const inspectionInfo = ref([])
 const mtIndex = ref(0)
 const inspectIndex = ref(0)
+
+function handleJump(item: typeof navList[number]) {
+  console.log(item);
+  
+}
 
 const init = () => {
   HomeApi.mine({}).then(res => {
@@ -136,9 +166,32 @@ const init = () => {
 init()
 </script>
 <style lang='scss' scoped>
+.module-title {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  padding-left: 8px;
+
+  &::before {
+    content: '';
+    width: 3px;
+    height: 11px;
+    background-color: #004098;
+    border-radius: 2px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+}
+
+.module-wrapper {
+  background-image: linear-gradient(to bottom, #E9F6FF, #FFFFFF 160px);
+  box-shadow: 0px -2px 0px 0px #fff;
+}
+
 .home-body {
-  background: linear-gradient(180deg, #EBF1FA 0%, #F5F7FA 41.72%, #fff 100%);
-  background: #F5F7FA;
   padding: 32rpx;
   display: flex;
   flex-direction: column;
@@ -206,24 +259,23 @@ init()
   display: flex;
   align-items: center;
   gap: 16rpx;
-  font-size: 32rpx;
-  font-weight: bold;
+  // font-size: 32rpx;
+  // font-weight: bold;
 
 }
 
 .map-card {
-  background-color: #fff;
   padding: 32rpx;
   border-radius: 12rpx;
   margin: 32rpx 0;
 
   .card-title {
-    font-size: 26rpx;
+    font-size: 24rpx;
     font-weight: bold;
     position: relative;
-    text-indent: 24rpx;
+    // text-indent: 24rpx;
     border-radius: 10rpx;
-    background: linear-gradient(73deg, rgba(1, 64, 153, .1) 11.94%, #fff 88.06%);
+    // background: linear-gradient(73deg, rgba(1, 64, 153, .1) 11.94%, #fff 88.06%);
     display: inline-flex;
 
     .dot {
@@ -243,30 +295,37 @@ init()
   .mid-item {
     flex: 1;
     text-align: center;
+
+    .value {
+      font-weight: bold;
+      color: #333333;
+      font-size: 40rpx;
+      margin-bottom: 16rpx;
+    }
+    .label {
+      color: #6A777F;
+      font-size: 24rpx;
+    }
   }
 
   .mid-item:not(:last-child) {
     position: relative;
 
-    &::before {
-      content: '';
-      position: absolute;
-      display: block;
-      height: 64rpx;
-      width: 1px;
-      right: 0;
-      top: 10rpx;
-      background-color: rgba(240, 240, 240, 1);
-    }
+    // &::before {
+    //   content: '';
+    //   position: absolute;
+    //   display: block;
+    //   height: 64rpx;
+    //   width: 1px;
+    //   right: 0;
+    //   top: 10rpx;
+    //   background-color: rgba(240, 240, 240, 1);
+    // }
 
 
   }
 
-  .value {
-    font-weight: bold;
-    font-size: 36rpx;
-    margin-top: 10rpx;
-  }
+
 }
 
 .map-head {
@@ -280,6 +339,7 @@ init()
     align-items: center;
 
     .label {
+      color: #999999;
       &:not(:last-of-type) {
         margin-right: 20rpx;
       }

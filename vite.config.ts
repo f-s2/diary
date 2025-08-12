@@ -1,11 +1,13 @@
-import uni from '@dcloudio/vite-plugin-uni'
+import uni from "@dcloudio/vite-plugin-uni";
 // import basicSsl from '@vitejs/plugin-basic-ssl'
-import { defineConfig, loadEnv } from 'vite'
-import { netConfig } from './src/config/net.config'
+import { defineConfig, loadEnv } from "vite";
+import { netConfig } from "./src/config/net.config";
+import path from "path";
 
-export default defineConfig(async ({mode}) => {
+const resolve = (dir) => path.resolve(__dirname, dir);
 
-  const unocss = (await import('unocss/vite')).default
+export default defineConfig(async ({ mode }) => {
+  const unocss = (await import("unocss/vite")).default;
 
   return defineConfig({
     base: loadEnv(mode, process.cwd()).VITE_APP_BASE,
@@ -14,22 +16,26 @@ export default defineConfig(async ({mode}) => {
       uni(),
       // basicSsl()
     ],
+    resolve: {
+      alias: {
+        "@": resolve("src"),
+      },
+      extensions: ['.js', '.vue', '.json', '.jsx', '.ts', '.tsx'],
+    },
     server: {
       // https: true,
       proxy: {
         [netConfig.baseName]: {
           target: netConfig.baseURL,
           ws: false,
-          changeOrigin: true
+          changeOrigin: true,
         },
-       '/preview': {
+        "/preview": {
           target: netConfig.baseURL,
           ws: false,
-          changeOrigin: true
+          changeOrigin: true,
         },
-
-      }
-    }
-  })
-
-})
+      },
+    },
+  });
+});

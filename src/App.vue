@@ -17,7 +17,7 @@ onLaunch(()=>{
 
 page,
 uni-page-wrapper {
-  background-color: #f7f8fa;
+  background-image: linear-gradient(to bottom, #9ADAFF , #ECFFF9 120px, #F1F9FF 200px);
 }
 
 
