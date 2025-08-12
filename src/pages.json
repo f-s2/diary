@@ -131,6 +131,15 @@
           "titleNView": false
         }
       }
+    },
+    {
+      "path": "pages_mine/password/index",
+      "style": {
+        "navigationBarTitleText": "修改密码",
+         "h5": {
+          "titleNView": false
+        }
+      }
     }
   ],
   "tabBar": {

@@ -68,7 +68,15 @@ export class UserApi {
             method: 'post',
             data: params
         })
-  }
+    }
+
+    static updatePassword(data) {
+         return request({
+            url: `${prefix}/update-password`,
+            method: 'post',
+            data
+        })
+    }
 
 }
 
@@ -91,3 +99,15 @@ export function getLocation(data) {
 
 }
 
+const passwordPrefix = `/userservice/system/password-policy`
+export class PasswordApi {
+    static queryByUser(id) {
+        return request({
+            url: `${passwordPrefix}/query-by-userid`,
+            method: 'post',
+            data: {
+                id
+            }
+        })
+    }
+}

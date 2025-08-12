@@ -39,7 +39,6 @@ instance.interceptors.response.use(
             return res
         } else if (invalidCode.includes(res.code)) {
 
-
             uni.setStorageSync('token', '')
             uni.setStorageSync("id", '');
             uni.showToast({
@@ -57,7 +56,7 @@ instance.interceptors.response.use(
             })
 
         }
-        return res;
+        return Promise.reject(res);
     },
     (error) => {
 

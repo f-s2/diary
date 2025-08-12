@@ -75,7 +75,7 @@ const navList = [
   {
     name: '修改密码',
     icon: UpdatePassword,
-    path: ''
+    path: '/pages_mine/password/index'
   },
 ]
 

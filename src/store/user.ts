@@ -15,6 +15,7 @@ export interface UserInfo {
     weworkNumber: string
     dingtalkNumber: string
     feishuNumber: string
+    id: string
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -27,8 +28,12 @@ export const useUserStore = defineStore('user', () => {
     }
     const unFinishCount = ref(0)
 
-    const getUserInfo = async () => {
+    const getUserInfo = async (refresh=false) => {
         try {
+            if(!refresh && userInfo.value.id) {
+                return userInfo.value
+            }
+            
             const res = await UserApi.getUserInfo({})
             userInfo.value = res.data
         } catch (error) {
@@ -38,13 +43,27 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    const logout = () => {
+        UserApi.loginOut().then((res) => {
+          const { authorities, userType } = userInfo.value
+          setUserInfo({ authorities, userType });
+          uni.setStorageSync('token', '')
+          const pages = getCurrentPages()
+          const from = '/' + pages[pages.length - 1].route
+          uni.reLaunch({
+            url: `/pages/login/index?from=${from}`
+          })
+        });
+    }
+
     return {
         userInfo,
         setUserInfo,
         getUserInfo,
         isLoginOut,
         unFinishCount,
-        urlPrefix
+        urlPrefix,
+        logout
     }
 
 

@@ -81,7 +81,7 @@ async function save() {
 <template>
     <div class="page-wrapper">
         <CustomHeaderNav></CustomHeaderNav>
-        <div class="px-4">
+        <div class="px-4 mt-22px">
             <div class=" text-16px font-500 mb-3">基础信息</div>
             <uv-loading-icon v-if="loading"></uv-loading-icon>
 
