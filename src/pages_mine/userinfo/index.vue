@@ -40,7 +40,7 @@ const sexList = [
     },
     {
         label: '女',
-        name: 0
+        name: 2
     },
 ]
 
@@ -49,7 +49,7 @@ const loading = ref(false)
 async function init() {
     try {
         loading.value = true
-        const data = await userStore.getUserInfo()
+        const data = await userStore.getUserInfo(true)
 
         formData.value = data
     } catch (error) {
@@ -69,8 +69,8 @@ async function save() {
 
         uni.showToast({
             title: '操作成功',
-
         })
+        init()
     } catch (error) {
         console.log(error);
 

@@ -16,6 +16,7 @@ export interface UserInfo {
     dingtalkNumber: string
     feishuNumber: string
     id: string
+    policyPO: PasswordStrategy.BasicInfo
 }
 
 export const useUserStore = defineStore('user', () => {

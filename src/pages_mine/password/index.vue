@@ -58,9 +58,9 @@ async function init() {
         }
 
         const user = await userStore.getUserInfo()
-        const { data } = await PasswordApi.queryByUser(user.id)
+        // const { data } = await PasswordApi.queryByUser(user.id)
 
-        tips.value = getPasswordDesc(data)
+        tips.value = getPasswordDesc(user.policyPO)
 
     } catch (error) {
         console.log(error);
