@@ -27,9 +27,9 @@ $uv-bg-color: #f3f4f6;
 $uv-disabled-color: #c8c9cc;
 
 
-$uni-primary: #003A8B;
-$uni-color-primary: #003A8B;
-$uv-primary: #003A8B;
+$uni-primary: var(--primary-color);
+$uni-color-primary: var(--primary-color);
+$uv-primary: var(--primary-color);
 $uv-primary-dark: #398ade;
 $uv-primary-disabled: #9acafc;
 $uv-primary-light: #ecf5ff;

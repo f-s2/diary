@@ -10,6 +10,7 @@ import {
 } from "vue";
 import App from "./App.vue";
 import 'uno.css'
+import '@/styles/vars.css'
 
 
 export function createApp() {

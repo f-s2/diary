@@ -54,19 +54,21 @@
       }
     },
     {
-      "path": "pages_work/inventory/index",
+      "path": "pages_work/stocktaking/index",
       "style": {
-        "navigationBarTitleText": "任务详情"
+        "navigationBarTitleText": "任务详情",
+        "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages_work/inventory/handle",
+      "path": "pages_work/stocktaking/handle",
       "style": {
-        "navigationBarTitleText": "处理任务"
+        "navigationBarTitleText": "处理任务",
+        "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages_work/inventory/done",
+      "path": "pages_work/stocktaking/done",
       "style": {
         "navigationBarTitleText": "盘点记录"
       }

@@ -73,7 +73,7 @@ const jump = (item) => {
   } else if (type === 1) {
     page = 'inspection'
   } else if (type === 2) {
-    page = 'inventory'
+    page = 'stocktaking'
   } else {
     page = 'repair'
     const {id, fillStatus, repairStatus} = item

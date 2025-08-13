@@ -128,6 +128,26 @@ export class InspectionkApi {
         })
     }
 }
+
+const stocktakingPrefix = `${prefix}/stocktaking`
+export class StocktakingApi{
+    static detail(id) {
+        return request({
+            url: `${stocktakingPrefix}/record/${id}`,
+            method: 'get',
+        })
+    }
+
+    static unfinishedManifestList(data) {
+        return request({
+            url: `${stocktakingPrefix}/unfinished-manifest-list`,
+            method: 'post',
+            data
+        })
+    } 
+
+}
+
 export class InventoryApi {
     static detailPage(data) {
         return request({
