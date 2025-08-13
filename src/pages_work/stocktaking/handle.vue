@@ -119,7 +119,7 @@ async function save() {
             </ModuleWrapper>
         </div>
         <template #footer>
-            <div class="mx-auto w-[calc(100%-32px)] py-3">
+            <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="list.length">
                 <uv-button type="primary" @click="save" :loading="loadingSave">保存</uv-button>
             </div>
         </template>

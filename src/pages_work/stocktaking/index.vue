@@ -90,7 +90,7 @@ function jump(areaId) {
             </ModuleWrapper>
         </div>
         <template #footer>
-            <div class="mx-auto w-[calc(100%-32px)] py-3">
+            <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="detail?.status !== StocktakingStatusEnum.Completed">
                 <uv-button type="primary"
                     v-if="detail?.areaInfoList.every(v => v.completionProgress === 1)">完成</uv-button>
                 <uv-button type="primary" v-else>扫码</uv-button>

@@ -66,7 +66,7 @@ async function save() {
 
 <template>
     <PageContainer :loading="loading">
-        <div class="px-4 space-y-3">
+        <div class="px-4 space-y-3 pb-4">
             <div class=" font-500">已盘清单</div>
             <ModuleWrapper v-for="item, index in list">
                 <div class=" font-500 pb-4 mb-4 border-b-(1px dashed #ccc)">
