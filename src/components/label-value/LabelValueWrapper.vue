@@ -1,6 +1,6 @@
 <script lang="ts">
 
-export interface LabelValueItem { label: string, value?: any, customRender?: () => VNode }
+export interface LabelValueItem { label: string, value?: any, customRender?: (value?: any) => VNode | string }
 
 </script>
 
@@ -18,7 +18,7 @@ defineProps<{
         <div class=" flex text-14px" v-for="item in list">
             <div class=" text-#666666">{{ item.label }}：</div>
             <div class=" font-500" v-if="!item.customRender">{{ item.value || '-' }}</div>
-            <component :is="item.customRender()" v-else></component>
+            <component :is="item.customRender(item.value)" v-else></component>
         </div>
     </div>
 </template>

@@ -145,9 +145,23 @@ export class StocktakingApi{
             data
         })
     } 
+    static finishedManifestList(data) {
+        return request({
+            url: `${stocktakingPrefix}/finished-manifest-list`,
+            method: 'post',
+            data
+        })
+    } 
     static save(data) {
         return request({
             url: `${stocktakingPrefix}/save`,
+            method: 'post',
+            data
+        })
+    } 
+    static update(data) {
+        return request({
+            url: `${stocktakingPrefix}/update`,
             method: 'post',
             data
         })

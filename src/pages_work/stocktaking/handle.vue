@@ -8,8 +8,9 @@ import PageContainer from '@/components/PageContainer.vue';
 import ArrowPng from '@/static/stocktaking/arrow.png'
 import SitePng from '@/static/stocktaking/site.png'
 import { onLoad } from '@dcloudio/uni-app';
-import { ref } from 'vue';
+import { h, ref } from 'vue';
 import UpdateTaskModal from './components/UpdateTaskModal.vue';
+import { joinUrlWithQuery } from '@/utils';
 
 const queryData = ref()
 
@@ -46,7 +47,7 @@ const loadingSave = ref(false)
 async function save() {
     try {
         loadingSave.value = true
-        await StocktakingApi.save({...queryData.value, productRelList: list.value})
+        await StocktakingApi.save({ ...queryData.value, productRelList: list.value })
         uni.showToast({
             title: '操作成功'
         })
@@ -54,9 +55,9 @@ async function save() {
         init(queryData.value)
     } catch (error) {
         console.log(error);
-        
+
     } finally {
-        loadingSave.value =false
+        loadingSave.value = false
     }
 }
 
@@ -67,9 +68,11 @@ async function save() {
         <div class="px-4 space-y-3">
             <ModuleWrapper title="盘点执行">
                 <template #header-right>
-                    <div class=" f-c-c gap-7px bg-primary color-white text-xs font-500 px-2 py-6px rounded-2px">已盘清单
-                        <img class=" h-2" :src="ArrowPng" alt="">
-                    </div>
+                    <navigator :url="joinUrlWithQuery('/pages_work/stocktaking/done', queryData)" open-type="navigate" hover-class="navigator-hover">
+                        <div class=" f-c-c gap-7px bg-primary color-white text-xs font-500 px-2 py-6px rounded-2px">已盘清单
+                            <img class=" h-2" :src="ArrowPng" alt="">
+                        </div>
+                    </navigator>
                 </template>
                 <div class=" flex">
                     <img class=" w-6 mr-6px" :src="SitePng" alt="">
@@ -79,7 +82,7 @@ async function save() {
                 </div>
             </ModuleWrapper>
 
-            <ModuleWrapper v-for="item,index in list">
+            <ModuleWrapper v-for="item, index in list">
                 <div class=" font-500 pb-4 mb-4 border-b-(1px dashed #ccc)">
                     <div class=" mb-10px">{{ item.productName }}</div>
                     <div>结存数量：{{ item.balanceQuantity }}</div>
@@ -96,7 +99,10 @@ async function save() {
                     },
                     {
                         label: '差异数量',
-                        value: item.differenceQuantity
+                        value: item.differenceQuantity,
+                        customRender(value) {
+                            return h('span', {style:{color: '#FF0000'}}, value || '-')
+                        }
                     },
                     {
                         label: '盘点数量',
@@ -108,7 +114,8 @@ async function save() {
                     },
                 ]"></LabelValueWrapper>
 
-                <uv-button class="mt-5" type="primary" :customStyle="{height: '80rpx', fontSize: '28rpx'}"  plain @click="UpdateTaskModalRef.open(item, index)">修改</uv-button>
+                <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
+                    @click="UpdateTaskModalRef.open(item, index)">修改</uv-button>
             </ModuleWrapper>
         </div>
         <template #footer>
@@ -116,7 +123,7 @@ async function save() {
                 <uv-button type="primary" @click="save" :loading="loadingSave">保存</uv-button>
             </div>
         </template>
-      <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">
-      </UpdateTaskModal>
+        <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">
+        </UpdateTaskModal>
     </PageContainer>
 </template>

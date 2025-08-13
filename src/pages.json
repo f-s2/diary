@@ -70,7 +70,8 @@
     {
       "path": "pages_work/stocktaking/done",
       "style": {
-        "navigationBarTitleText": "盘点记录"
+        "navigationBarTitleText": "已盘清单",
+        "navigationStyle": "custom"
       }
     },
     {
