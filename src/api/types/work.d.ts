@@ -9,6 +9,7 @@ declare namespace Stocktaking {
     completionProgress: number;
     areaInfoList: AreaInfo[];
     productRelList: ProductRelItem[]
+    areaName: string
   }
 
   interface AreaInfo {

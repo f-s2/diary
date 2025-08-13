@@ -3,7 +3,7 @@ import { UserApi } from '@/api/UserApi'
 import { onLaunch } from '@dcloudio/uni-app'
 import { useUserStore } from '@/store/user'
 const userStore = useUserStore()
-onLaunch(()=>{
+onLaunch(() => {
   UserApi.getPrefix().then(res => {
     userStore.urlPrefix = res.data
   })
@@ -16,21 +16,22 @@ onLaunch(()=>{
 
 page,
 uni-page-wrapper {
-  background-image: linear-gradient(to bottom, #9ADAFF , #ECFFF9 120px, #F1F9FF 200px);
+  background-image: linear-gradient(to bottom, #9ADAFF, #ECFFF9 120px, #F1F9FF 200px);
   color: #333;
 }
 
 .uni-toast {
-   .uni-toast__icon {
-      margin: 20px auto;
-    }
+  .uni-toast__icon {
+    margin: 20px auto;
+  }
 }
 
 
 .page-body {
   padding: 36rpx 32rpx 60rpx;
 }
-.custom-nav-page{
+
+.custom-nav-page {
   padding-top: 44px;
 }
 
@@ -88,10 +89,17 @@ button[type="primary"][plain] {
   color: $uv-primary;
 }
 
-#app .uv-button--primary {
-  font-size: 18px;
-  border-radius: 6px;
-  height: 48px;
+#app {
+  .uv-button--primary {
+    font-size: 18px;
+    border-radius: 6px;
+    height: 48px;
+  }
+
+  .uv-button--disabled {
+    background-color: #BBBBBB;
+    border-color: #BBBBBB;
+  }
 }
 
 .uv-button--plain {
@@ -118,13 +126,14 @@ button[type="primary"][plain] {
   padding-bottom: 32px;
 }
 
-.uv-popup__content.bottom{
+.uv-popup__content.bottom {
   max-height: 70vh;
   min-height: 50vh;
   display: flex !important;
   padding: 20px;
   flex-direction: column;
-  .content{
+
+  .content {
     flex: 1;
     overflow-y: auto;
     height: initial;

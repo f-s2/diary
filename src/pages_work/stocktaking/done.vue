@@ -11,6 +11,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import { ref, h } from 'vue';
 import UpdateTaskModal from './components/UpdateTaskModal.vue';
 import { joinUrlWithQuery } from '@/utils';
+import { StocktakingTypeEnum } from '@/enums/work';
 
 const queryData = ref()
 
@@ -22,7 +23,7 @@ onLoad((query) => {
 const UpdateTaskModalRef = ref()
 
 const list = ref<Stocktaking.ProductRelItem[]>([])
-const site = ref('')
+const detail = ref<Stocktaking.Detail>()
 const loading = ref(false)
 
 async function init(data) {
@@ -31,7 +32,7 @@ async function init(data) {
         const res = await StocktakingApi.finishedManifestList(data)
 
         list.value = res.data.productRelList
-        site.value = res.data.areaName
+        detail.value = res.data
     } catch (error) {
         console.log(error);
     } finally {
@@ -62,6 +63,49 @@ async function save() {
     }
 }
 
+function getList(item) {
+    return [
+        {
+            label: '规格类型',
+            value: item.productModel
+        },
+        {
+            label: '物料类别',
+            value: item.productTypeName
+        },
+        ...(
+            detail.value?.type === StocktakingTypeEnum.SpareParts ? [
+                {
+                    label: '差异数量',
+                    value: item.differenceQuantity,
+                    customRender(value) {
+                        return h('span', { style: { color: '#FF0000' } }, value || '-')
+                    }
+                },
+                {
+                    label: '盘点数量',
+                    value: item.stocktakingQuantity
+                },
+            ] : [
+                {
+                    label: '盘点状态',
+                    customRender(value) {
+                        return h('span', { style: { color: '#3BB656' } }, '已盘点')
+                    }
+                },
+                {
+                    label: '设备位置',
+                    value: item.areaName
+                },
+            ]
+        ),
+        {
+            label: '备注内容',
+            value: item.remark
+        },
+    ]
+}
+
 </script>
 
 <template>
@@ -70,38 +114,13 @@ async function save() {
             <div class=" font-500">已盘清单</div>
             <ModuleWrapper v-for="item, index in list">
                 <div class=" font-500 pb-4 mb-4 border-b-(1px dashed #ccc)">
-                    <div class=" mb-10px">{{ item.productName }}</div>
-                    <div>结存数量：{{ item.balanceQuantity }}</div>
+                    <div>{{ item.productName }}</div>
+                    <div class="mt-10px" v-if="detail.type === StocktakingTypeEnum.SpareParts">结存数量：{{ item.balanceQuantity }}</div>
                 </div>
 
-                <LabelValueWrapper :list="[
-                    {
-                        label: '规格类型',
-                        value: item.productModel
-                    },
-                    {
-                        label: '物料类别',
-                        value: item.productTypeName
-                    },
-                    {
-                        label: '差异数量',
-                        value: item.differenceQuantity,
-                        customRender(value) {
-                            return h('span', {style:{color: '#FF0000'}}, value || '-')
-                        }
-                    },
-                    {
-                        label: '盘点数量',
-                        value: item.stocktakingQuantity
-                    },
-                    {
-                        label: '备注内容',
-                        value: item.remark
-                    },
-                ]"></LabelValueWrapper>
-
+                <LabelValueWrapper :list="getList(item)"></LabelValueWrapper>
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
-                    @click="UpdateTaskModalRef.open(item, index)">更新</uv-button>
+                    @click="UpdateTaskModalRef.open(item, index)" v-if="detail.type === StocktakingTypeEnum.SpareParts">更新</uv-button>
             </ModuleWrapper>
         </div>
         <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import CustomModal from '@/components/CustomModal.vue';
+import { StocktakingTypeEnum } from '@/enums/work';
 import { ref } from 'vue';
+
+defineProps<{
+    type?: number
+}>()
 
 const emit = defineEmits<{
     confirm: [Stocktaking.ProductRelItem, number]
@@ -23,8 +28,13 @@ const rules: Record<string, FormRule> = {
 
 const currentIndex = ref(-1)
 
-async function open(params, index) {
+async function open(params, index, stocktakingQuantity?: number) {
     formData.value = Object.assign({}, params)
+    
+    if(stocktakingQuantity !== undefined) {
+        formData.value.stocktakingQuantity = stocktakingQuantity
+    }
+
     currentIndex.value = index
     visible.value = true
 }
@@ -34,9 +44,6 @@ const formRef = ref()
 async function confirm() {
     try {
         await formRef.value.validate()
-
-        // formData.value.stocktakingQuantity = +formData.value.stocktakingQuantity 
-
         emit('confirm', formData.value as any, currentIndex.value)
 
         visible.value = false
@@ -55,7 +62,7 @@ defineExpose({
     <CustomModal v-model:open="visible" title="盘点">
         <uv-form class=" my-5" labelWidth="80px" :labelStyle="{ fontSize: '14px', fontWeight: 500 }" :model="formData" ref="formRef"
             :rules="rules">
-            <uv-form-item label="盘点数量:" prop="stocktakingQuantity" required>
+            <uv-form-item label="盘点数量:" prop="stocktakingQuantity" required v-if="type !== StocktakingTypeEnum.Equipment">
                 <uv-input type="number" placeholder="请输入盘点数量" v-model="formData.stocktakingQuantity"></uv-input>
             </uv-form-item>
             <uv-form-item label="备注内容:" prop="remark">

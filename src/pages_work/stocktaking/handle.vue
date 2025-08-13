@@ -11,6 +11,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import { h, ref } from 'vue';
 import UpdateTaskModal from './components/UpdateTaskModal.vue';
 import { joinUrlWithQuery } from '@/utils';
+import { StocktakingTypeEnum } from '@/enums/work';
 
 const queryData = ref()
 
@@ -22,8 +23,9 @@ onLoad((query) => {
 const UpdateTaskModalRef = ref()
 
 const list = ref<Stocktaking.ProductRelItem[]>([])
-const site = ref('')
 const loading = ref(false)
+
+const detail = ref<Stocktaking.Detail>()
 
 async function init(data) {
     try {
@@ -31,7 +33,7 @@ async function init(data) {
         const res = await StocktakingApi.unfinishedManifestList(data)
 
         list.value = res.data.productRelList
-        site.value = res.data.areaName
+        detail.value = res.data
     } catch (error) {
         console.log(error);
     } finally {
@@ -41,6 +43,10 @@ async function init(data) {
 
 function updateInfo(data, index) {
     Object.assign(list.value[index], data)
+
+    if(detail.value.type === StocktakingTypeEnum.Equipment) {
+        save()
+    }
 }
 
 const loadingSave = ref(false)
@@ -61,6 +67,49 @@ async function save() {
     }
 }
 
+function getList(item) {
+    return [
+        {
+            label: '规格类型',
+            value: item.productModel
+        },
+        {
+            label: '物料类别',
+            value: item.productTypeName
+        },
+        ...(
+            detail.value?.type === StocktakingTypeEnum.SpareParts ? [
+                {
+                    label: '差异数量',
+                    value: item.differenceQuantity,
+                    customRender(value) {
+                        return h('span', { style: { color: '#FF0000' } }, value || '-')
+                    }
+                },
+                {
+                    label: '盘点数量',
+                    value: item.stocktakingQuantity
+                },
+            ] : [
+                {
+                    label: '盘点状态',
+                    customRender(value) {
+                        return h('span', { style: { color: '#FF9D00' } }, '未盘点')
+                    }
+                },
+                {
+                    label: '设备位置',
+                    value: detail.value?.areaName
+                },
+            ]
+        ),
+        {
+            label: '备注内容',
+            value: item.remark
+        },
+    ]
+}
+
 </script>
 
 <template>
@@ -68,62 +117,50 @@ async function save() {
         <div class="px-4 space-y-3">
             <ModuleWrapper title="盘点执行">
                 <template #header-right>
-                    <navigator :url="joinUrlWithQuery('/pages_work/stocktaking/done', queryData)" open-type="navigate" hover-class="navigator-hover">
-                        <div class=" f-c-c gap-7px bg-primary color-white text-xs font-500 px-2 py-6px rounded-2px">已盘清单
+                    <navigator :url="joinUrlWithQuery('/pages_work/stocktaking/done', queryData)" open-type="navigate"
+                        hover-class="navigator-hover">
+                        <div class="f-c-c gap-7px bg-primary color-white text-xs font-500 px-2 py-6px rounded-2px">已盘清单
                             <img class=" h-2" :src="ArrowPng" alt="">
                         </div>
                     </navigator>
                 </template>
                 <div class=" flex">
-                    <img class=" w-6 mr-6px" :src="SitePng" alt="">
+                    <div class="flex-shrink-0 w-6 mr-6px">
+                        <img class=" w-full" :src="SitePng" alt=""></img>
+                    </div>
                     <span>
-                        {{ site }}
+                        {{ detail?.areaName }}
                     </span>
                 </div>
             </ModuleWrapper>
 
             <ModuleWrapper v-for="item, index in list">
                 <div class=" font-500 pb-4 mb-4 border-b-(1px dashed #ccc)">
-                    <div class=" mb-10px">{{ item.productName }}</div>
-                    <div>结存数量：{{ item.balanceQuantity }}</div>
+                    <div>{{ item.productName }}</div>
+                    <div class="mt-10px" v-if="detail.type === StocktakingTypeEnum.SpareParts">结存数量：{{
+                        item.balanceQuantity }}</div>
                 </div>
 
-                <LabelValueWrapper :list="[
-                    {
-                        label: '规格类型',
-                        value: item.productModel
-                    },
-                    {
-                        label: '物料类别',
-                        value: item.productTypeName
-                    },
-                    {
-                        label: '差异数量',
-                        value: item.differenceQuantity,
-                        customRender(value) {
-                            return h('span', {style:{color: '#FF0000'}}, value || '-')
-                        }
-                    },
-                    {
-                        label: '盘点数量',
-                        value: item.stocktakingQuantity
-                    },
-                    {
-                        label: '备注内容',
-                        value: item.remark
-                    },
-                ]"></LabelValueWrapper>
+                <LabelValueWrapper :list="getList(item)"></LabelValueWrapper>
 
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
-                    @click="UpdateTaskModalRef.open(item, index)">修改</uv-button>
+                    @click="UpdateTaskModalRef.open(item, index)"
+                    v-if="detail?.type === StocktakingTypeEnum.SpareParts">修改</uv-button>
+                <div class="mt-5 f-c-b gap-3" v-else>
+                    <uv-button class=" !flex-1" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
+                        @click="UpdateTaskModalRef.open(item, index, 0)">盘亏</uv-button>
+                    <uv-button class=" !flex-1" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }"
+                        @click="UpdateTaskModalRef.open(item, index, 1)">确认</uv-button>
+                </div>
             </ModuleWrapper>
         </div>
         <template #footer>
             <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="list.length">
-                <uv-button type="primary" @click="save" :loading="loadingSave">保存</uv-button>
+                <uv-button type="primary" @click="save" :loading="loadingSave" v-if="detail.type === StocktakingTypeEnum.SpareParts">保存</uv-button>
+                <uv-button type="primary" :loading="loadingSave" v-else>扫码</uv-button>
             </div>
         </template>
-        <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">
+        <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo" :type="detail.type">
         </UpdateTaskModal>
     </PageContainer>
 </template>

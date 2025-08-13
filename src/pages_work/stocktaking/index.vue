@@ -6,11 +6,18 @@ import ModuleWrapper from '@/components/ModuleWrapper.vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { computed, ref } from 'vue';
 import CustomTag from './components/CustomTag.vue';
-import { StocktakingStatusEnum } from '@/enums/work';
+import { StocktakingStatusEnum, StocktakingTypeEnum } from '@/enums/work';
 import PageContainer from '@/components/PageContainer.vue';
 
+const currentId = ref('')
+
 onLoad((option) => {
+    currentId.value = option.id
     init(option.id)
+})
+
+onShow(() => {
+    init(currentId.value)
 })
 
 const detail = ref<Stocktaking.Detail>()
@@ -34,18 +41,22 @@ const baseInfo = computed<LabelValueItem[]>(() => [
     },
     {
         label: '盘点进度',
-        value: detail.value?.completionProgress + '%'
+        value: +detail.value?.completionProgress.toFixed(4) * 100 + '%'
     },
 ])
 
+const loading = ref(false)
 async function init(id) {
     try {
+        loading.value = true
         const { data } = await StocktakingApi.detail(id)
 
         detail.value = data
     } catch (error) {
         console.log(error);
 
+    } finally {
+        loading.value = false
     }
 }
 
@@ -65,10 +76,23 @@ function jump(areaId) {
     })
 }
 
+async function finish() {
+    try {
+        await StocktakingApi.finish(detail.value)
+        uni.showToast({
+            title: '操作成功'
+        })
+
+        init(currentId.value)
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
 </script>
 
 <template>
-    <PageContainer>
+    <PageContainer :loading="loading">
         <div class=" px-4 space-y-3 flex-1 overflow-auto">
             <ModuleWrapper title="基础信息">
                 <template #header-right>
@@ -83,7 +107,7 @@ function jump(areaId) {
                         <div class=" flex">
                             <div>{{ index + 1 }}、</div>{{ item.areaName }}
                         </div>
-                        <CustomTag :status="getStatus(item.completionProgress)" :progress="item.completionProgress">
+                        <CustomTag class=" flex-shrink-0" :status="getStatus(item.completionProgress)" :progress="item.completionProgress">
                         </CustomTag>
                     </div>
                 </div>
@@ -91,9 +115,13 @@ function jump(areaId) {
         </div>
         <template #footer>
             <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="detail?.status !== StocktakingStatusEnum.Completed">
-                <uv-button type="primary"
-                    v-if="detail?.areaInfoList.every(v => v.completionProgress === 1)">完成</uv-button>
-                <uv-button type="primary" v-else>扫码</uv-button>
+                <template v-if="detail?.type === StocktakingTypeEnum.SpareParts">
+                    <uv-button type="primary"
+                        v-if="detail?.areaInfoList.every(v => v.completionProgress === 1)" @click="finish">完成</uv-button>
+                    <uv-button type="primary" v-else>扫码</uv-button>
+                </template>
+                <uv-button type="primary" v-else
+                    :disabled="!detail?.areaInfoList.every(v => v.completionProgress === 1)" @click="finish">完成</uv-button>
             </div>
         </template>
     </PageContainer>

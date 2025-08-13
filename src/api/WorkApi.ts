@@ -166,6 +166,13 @@ export class StocktakingApi{
             data
         })
     } 
+    static finish(data) {
+        return request({
+            url: `${stocktakingPrefix}/finish`,
+            method: 'post',
+            data
+        })
+    } 
 
 }
 
