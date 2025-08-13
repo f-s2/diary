@@ -88,11 +88,10 @@ button[type="primary"][plain] {
   color: $uv-primary;
 }
 
-.uv-button--primary {
-  background: linear-gradient(274deg, #117ACD -6%, #117ACD -3%, #0255B5 109%);
-  font-size: 32rpx !important;
-  border-radius: 20rpx !important;
-  height: 96rpx !important;
+#app .uv-button--primary {
+  font-size: 18px;
+  border-radius: 6px;
+  height: 48px;
 }
 
 .uv-button--plain {
@@ -165,6 +164,9 @@ button[type="primary"][plain] {
 }
 
 
+.uv-form-item__body__right {
+  background-color: white;
+}
 
 .input-right {
   .uv-input__content__field-wrapper__field {

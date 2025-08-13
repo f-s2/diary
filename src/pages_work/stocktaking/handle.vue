@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { StocktakingApi } from '@/api/WorkApi';
 import CustomHeaderNav from '@/components/CustomHeaderNav.vue';
+import CustomModal from '@/components/CustomModal.vue';
 import LabelValueWrapper from '@/components/label-value/LabelValueWrapper.vue';
 import ModuleWrapper from '@/components/ModuleWrapper.vue';
 import PageContainer from '@/components/PageContainer.vue';
@@ -8,29 +9,61 @@ import ArrowPng from '@/static/stocktaking/arrow.png'
 import SitePng from '@/static/stocktaking/site.png'
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
+import UpdateTaskModal from './components/UpdateTaskModal.vue';
+
+const queryData = ref()
 
 onLoad((query) => {
+    queryData.value = query
     init(query)
 })
 
+const UpdateTaskModalRef = ref()
+
 const list = ref<Stocktaking.ProductRelItem[]>([])
 const site = ref('')
+const loading = ref(false)
 
 async function init(data) {
     try {
+        loading.value = true
         const res = await StocktakingApi.unfinishedManifestList(data)
 
         list.value = res.data.productRelList
         site.value = res.data.areaName
     } catch (error) {
         console.log(error);
+    } finally {
+        loading.value = false
+    }
+}
+
+function updateInfo(data, index) {
+    Object.assign(list.value[index], data)
+}
+
+const loadingSave = ref(false)
+async function save() {
+    try {
+        loadingSave.value = true
+        await StocktakingApi.save({...queryData.value, productRelList: list.value})
+        uni.showToast({
+            title: '操作成功'
+        })
+
+        init(queryData.value)
+    } catch (error) {
+        console.log(error);
+        
+    } finally {
+        loadingSave.value =false
     }
 }
 
 </script>
 
 <template>
-    <PageContainer>
+    <PageContainer :loading="loading">
         <div class="px-4 space-y-3">
             <ModuleWrapper title="盘点执行">
                 <template #header-right>
@@ -46,7 +79,7 @@ async function init(data) {
                 </div>
             </ModuleWrapper>
 
-            <ModuleWrapper v-for="item in list">
+            <ModuleWrapper v-for="item,index in list">
                 <div class=" font-500 pb-4 mb-4 border-b-(1px dashed #ccc)">
                     <div class=" mb-10px">{{ item.productName }}</div>
                     <div>结存数量：{{ item.balanceQuantity }}</div>
@@ -74,7 +107,16 @@ async function init(data) {
                         value: item.remark
                     },
                 ]"></LabelValueWrapper>
+
+                <uv-button class="mt-5" type="primary" :customStyle="{height: '80rpx', fontSize: '28rpx'}"  plain @click="UpdateTaskModalRef.open(item, index)">修改</uv-button>
             </ModuleWrapper>
         </div>
+        <template #footer>
+            <div class="mx-auto w-[calc(100%-32px)] py-3">
+                <uv-button type="primary" @click="save" :loading="loadingSave">保存</uv-button>
+            </div>
+        </template>
+      <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">
+      </UpdateTaskModal>
     </PageContainer>
 </template>

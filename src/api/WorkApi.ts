@@ -145,6 +145,13 @@ export class StocktakingApi{
             data
         })
     } 
+    static save(data) {
+        return request({
+            url: `${stocktakingPrefix}/save`,
+            method: 'post',
+            data
+        })
+    } 
 
 }
 
