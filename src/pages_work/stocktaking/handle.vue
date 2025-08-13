@@ -3,6 +3,7 @@ import { StocktakingApi } from '@/api/WorkApi';
 import CustomHeaderNav from '@/components/CustomHeaderNav.vue';
 import LabelValueWrapper from '@/components/label-value/LabelValueWrapper.vue';
 import ModuleWrapper from '@/components/ModuleWrapper.vue';
+import PageContainer from '@/components/PageContainer.vue';
 import ArrowPng from '@/static/stocktaking/arrow.png'
 import SitePng from '@/static/stocktaking/site.png'
 import { onLoad } from '@dcloudio/uni-app';
@@ -29,13 +30,13 @@ async function init(data) {
 </script>
 
 <template>
-    <div>
-        <CustomHeaderNav></CustomHeaderNav>
+    <PageContainer>
         <div class="px-4 space-y-3">
             <ModuleWrapper title="盘点执行">
                 <template #header-right>
                     <div class=" f-c-c gap-7px bg-primary color-white text-xs font-500 px-2 py-6px rounded-2px">已盘清单
-                        <img class=" h-2" :src="ArrowPng" alt=""> </div>
+                        <img class=" h-2" :src="ArrowPng" alt="">
+                    </div>
                 </template>
                 <div class=" flex">
                     <img class=" w-6 mr-6px" :src="SitePng" alt="">
@@ -75,5 +76,5 @@ async function init(data) {
                 ]"></LabelValueWrapper>
             </ModuleWrapper>
         </div>
-    </div>
+    </PageContainer>
 </template>
