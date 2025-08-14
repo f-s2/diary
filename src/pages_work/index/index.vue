@@ -12,12 +12,12 @@
          :is-shadow="false">
       <ItemCard :data="item"/>
     </div>
-    <template #bottom>
+    <!-- <template #bottom>
       <div class="bottom" style="height: 80px;">
         <TabBar :activeIndex="1"/>
       </div>
 
-    </template>
+    </template> -->
   </z-paging>
 
 
@@ -26,7 +26,7 @@
 <script setup>
 import {WorkApi} from "@/api/WorkApi";
 import {useUserStore} from "@/store/user";
-import {onShow} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 import TabBar from "../../components/TabBar.vue";
 import FilterHead from "./FilterHead";
@@ -39,7 +39,14 @@ const getCount = () => {
     userStore.unFinishCount = res.data.uncompleted;
   });
 };
-onShow(() => {
+
+onLoad((query) => {
+  if(query.type) {
+    queryParam.value.types = [query.type]
+  }
+})
+
+onShow(() => {  
   reload()
 })
 const queryParam = ref({

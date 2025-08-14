@@ -22,12 +22,12 @@ const tabInfo = [
     icon: 'home',
     path: "/pages_home/index",
   },
-  {
-    name: "任务",
-    icon: 'file-text',
-    path: "/pages_work/index/index",
-    custom: true,
-  },
+  // {
+  //   name: "任务",
+  //   icon: 'file-text',
+  //   path: "/pages_work/index/index",
+  //   custom: true,
+  // },
   {
     name: "我的",
     icon: 'account',

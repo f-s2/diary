@@ -1,8 +1,9 @@
 <template>
   <div>
-    <uv-tabs class="tabs" :list="tabsList" :lineWidth="12" :lineHeight="4"
+    <!-- <uv-tabs class="tabs" :list="tabsList" :lineWidth="12" :lineHeight="4"
       :activeStyle="{ fontWeight: 'bold', color: '#000' }" :inactiveStyle="{ color: '#000' }"
-      v-model:current="currentTab" @change="changeTab" lineColor="#003A8B"></uv-tabs>
+      v-model:current="currentTab" @change="changeTab" lineColor="#003A8B"></uv-tabs> -->
+    <CustomHeaderNav :title="title"></CustomHeaderNav>
     <div class="search">
       <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、所属部门、设备名称、设备编码"
         @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
@@ -45,10 +46,12 @@
 </template>
 
 <script setup>
+import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
+import { findOne } from "@/dict";
 import filter from "@/static/filter.png";
 import dayjs from "dayjs";
 
-import { ref, toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 const props = defineProps({ queryParam: Object });
 const emit = defineEmits(["load"]);
 const { queryParam } = toRefs(props);
@@ -76,6 +79,9 @@ const tabsList = [
   { name: '点检任务', key: 1 },
   { name: '盘点任务', key: 2 },
 ]
+
+const title = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0]).name)
+
 const currentTab = ref(0)
 
 const changeTab = ({ index, key }) => {

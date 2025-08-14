@@ -119,22 +119,22 @@ const completeInfo = [
 const navList = [
   {
     name: '保养任务',
-    path: '',
+    path: '/pages_work/index/index?type=0',
     icon: Nav1
   },
   {
     name: '点检任务',
-    path: '',
+    path: '/pages_work/index/index?type=1',
     icon: Nav2
   },
   {
     name: '维修任务',
-    path: '',
+    path: '/pages_work/index/index?type=3',
     icon: Nav3
   },
   {
     name: '盘点任务',
-    path: '',
+    path: '/pages_work/index/index?type=2',
     icon: Nav4
   },
 ]
@@ -146,7 +146,11 @@ const mtIndex = ref(0)
 const inspectIndex = ref(0)
 
 function handleJump(item: typeof navList[number]) {
-  console.log(item);
+  if(item.path) {
+    uni.navigateTo({
+      url: item.path
+    })
+  }
   
 }
 

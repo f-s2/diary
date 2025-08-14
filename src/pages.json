@@ -165,10 +165,6 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages_work/index/index",
-        "text": "工单"
-      },
-      {
         "pagePath": "pages_mine/mine/index",
         "text": "我的"
       }
