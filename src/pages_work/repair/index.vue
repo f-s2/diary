@@ -93,6 +93,9 @@
               @click="handleFill">记录填写
             </uv-button>
           </template>
+           <uv-button v-else type="primary" disabled>
+            已指派
+          </uv-button>
         </template>
 
       </div>

@@ -8,10 +8,14 @@
 
       <div class="form-card">
 
-        <uv-form-item required class="input-right" @click="multiple=false;modalState.userShow=true" label="报障人"
+        <uv-form-item class="input-right" label="报障人"
                       prop="reportPerson" borderBottom>
-          <span v-if="formData.reportPersonName"> {{ formData.reportPersonName }}</span>
-          <span v-else style="color:#c0c4cc">请选择</span>
+          <uv-input v-model="formData.reportPerson" placeholder="请输入报障人名字" border="none"></uv-input>
+
+        </uv-form-item>
+        <uv-form-item class="input-right" label="联系方式"
+                      prop="phoneNumber" borderBottom>
+          <uv-input v-model="formData.phoneNumber" placeholder="请输入报障人联系方式" border="none"></uv-input>
 
         </uv-form-item>
 
@@ -77,7 +81,6 @@
         <uv-form-item required label="维修时长(小时)" prop="repairDuration" borderBottom>
           <uv-input type="number" inputAlign="right" v-model="formData.repairDuration" placeholder="维修时长"
                     border="none">
-
           </uv-input>
         </uv-form-item>
         <uv-form-item required label="巡检维保时长(小时)" prop="maintenanceDuration" borderBottom>
