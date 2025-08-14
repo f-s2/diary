@@ -5,7 +5,7 @@
       <div class="title">
         密码登录
       </div>
-      <uv-form class="form" ref="formRef" :rules="rules" :model="formData" label-position="top" labelWidth="auto">
+      <uv-form class="form" ref="formRef" :rules="rules" :model="formData" label-position="left" labelWidth="auto">
         <uv-form-item prop="loginAccount" :borderBottom="true">
           <uv-input style="margin: 0 40rpx;" border="none" v-model="formData.loginAccount" placeholder="请输入用户账号" />
         </uv-form-item>

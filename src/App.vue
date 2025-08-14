@@ -100,6 +100,13 @@ button[type="primary"][plain] {
     background-color: #BBBBBB;
     border-color: #BBBBBB;
   }
+
+  // .uv-form-item__body {
+  //   align-items: start;
+  // }
+  // .uv-form-item__body__left__content__label {
+  //   padding-top: 11px;
+  // }
 }
 
 .uv-button--plain {
@@ -158,7 +165,7 @@ button[type="primary"][plain] {
 }
 
 .uv-form-item__body__left__content__required {
-  position: initial !important;
+  // position: initial !important;
 }
 
 

@@ -130,6 +130,7 @@ export default {
     },
     // #endif
     uploadSuccess: {
+      type: Function,
       default: (res) => {
         return {
           success: false,
@@ -754,13 +755,14 @@ export default {
 
 .htz-image-upload-list {
   display: flex;
+  gap: 13rpx;
   flex-wrap: wrap;
 }
 
 .htz-image-upload-Item {
-  width: 160rpx;
-  height: 160rpx;
-  margin: 13rpx;
+  width: 150rpx;
+  height: 150rpx;
+  /* margin: 13rpx; */
   border-radius: 10rpx;
   position: relative;
 }
@@ -799,8 +801,9 @@ export default {
 }
 
 .htz-image-upload-Item-add {
-  font-size: 105rpx;
-  /* line-height: 160rpx; */
+  font-size: 40px;
+  line-height: 160%;
+  font-weight: 200;
   text-align: center;
   border: 1px dashed #d9d9d9;
   color: #d9d9d9;

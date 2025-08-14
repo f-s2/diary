@@ -1,5 +1,5 @@
 <template>
-  <uv-popup class="popup" ref="popup" :safe-area="false" @maskClick="$emit('maskClick')" v-bind="$attrs" @change="handelChange">
+  <uv-popup class="popup" ref="popup" :safe-area="false" @onMaskClick="$emit('maskClick')" v-bind="$attrs" @change="handelChange">
     <div class="pup-head" v-if="head">
       <div class="left" @click="handleBack">
         <uv-icon v-if="back" name="arrow-left" size="16"></uv-icon>
