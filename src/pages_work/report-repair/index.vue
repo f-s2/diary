@@ -37,6 +37,11 @@ const handleView = () => {
     url: `/pages_work/report-repair/device?id=${baseId.value}`
   })
 }
+const handleHistory = () => {
+  uni.navigateTo({
+    url: `/pages_work/report-repair/history?id=${baseId.value}`
+  })
+}
 
 </script>
 
@@ -82,27 +87,34 @@ const handleView = () => {
       <div class=" font-500 mb-3">待完成工单</div>
       <div v-if="workList.length">
         <uv-read-more textIndent="0" ref="readMoreRef" show-height="320px" :toggle="true" closeText="展开更多">
-        <div class="bg-white px-10px pt-10px pb-5 rounded-1 mb-3" v-for="item in workList" :key="item.id" @click="jumpDetail(item)">
-          <div class=" flex f-c-b mb-3">
-            <span class=" font-500">{{ item.factoryModelName }}</span>
-            <div class="px-10px text-xs font-500 relative py-6px rounded-2px overflow-hidden bg-opacity-10" :style="`color:${findOne(item.repairStatus, RepairStatus).color};`">
-              <div class=" absolute w-full h-full left-0 top-0 opacity-10" :style="`background-color:${findOne(item.repairStatus, RepairStatus).color};`"></div>
-              <span class="">·{{ findOne(item.repairStatus, RepairStatus).label }}</span>
+          <div class="bg-white px-10px pt-10px pb-5 rounded-1 mb-3" v-for="item in workList" :key="item.id"
+            @click="jumpDetail(item)">
+            <div class=" flex f-c-b mb-3">
+              <span class=" font-500">{{ item.factoryModelName }}</span>
+              <div class="px-10px text-xs font-500 relative py-6px rounded-2px overflow-hidden bg-opacity-10"
+                :style="`color:${findOne(item.repairStatus, RepairStatus).color};`">
+                <div class=" absolute w-full h-full left-0 top-0 opacity-10"
+                  :style="`background-color:${findOne(item.repairStatus, RepairStatus).color};`"></div>
+                <span class="">·{{ findOne(item.repairStatus, RepairStatus).label }}</span>
+              </div>
             </div>
+            <div class=" f-c-b text-14px mb-2">
+              <span class=" font-500">{{ item.deviceCode }}</span>
+              <span>{{ item.reportTime }}</span>
+            </div>
+            <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.code }})</div>
           </div>
-          <div class=" f-c-b text-14px mb-2">
-            <span class=" font-500">{{ item.deviceCode }}</span>
-            <span>{{ item.reportTime }}</span>
-          </div>
-          <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.code }})</div>
-        </div>
         </uv-read-more>
         <uv-button class=" mt-50px" type="primary" @click="handleOk">设备报修</uv-button>
       </div>
       <uv-empty v-else mode="data"></uv-empty>
     </div>
     <template #footer>
-      <a class=" text-primary text-xs font-500 py-5 text-center" @click="handleView">查看设备信息</a>
+      <div class=" f-c-c gap-18px">
+        <a class=" text-primary text-xs font-500 py-5 text-center" @click="handleView">查看设备信息</a>
+        <div class="h-12px w-px bg-primary"></div>
+        <a class=" text-primary text-xs font-500 py-5 text-center" @click="handleHistory">查看历史工单</a>
+      </div>
     </template>
   </PageContainer>
 </template>

@@ -109,6 +109,13 @@
       }
     },
     {
+      "path": "pages_work/report-repair/history",
+      "style": {
+        "navigationBarTitleText": "历史工单",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages_work/report-repair/done",
       "style": {
         "navigationBarTitleText": "设备报修",
