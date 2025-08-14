@@ -83,6 +83,16 @@ export class MaintenanceApi {
       data,
     });
   }
+  static receive(id) {
+        return request({
+            url: prefix + '/maintenance/receive',
+            method: 'post',
+            params: {},
+            data: {
+                id
+            }
+        })
+    }
 }
 export class InspectionkApi {
   static detail(id) {

@@ -8,7 +8,7 @@
       <status-tag :status="+baseInfo.taskStatus" :needBg="true"/>
     </div>
     <div class="describe-box" style="margin-bottom: 12px">
-      <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in taskConfig" :key="item.name">
+      <div :class="['describe-item']" v-for="item in taskConfig" :key="item.name">
         <div class="describe-label">
           {{ item.name }}
         </div>
@@ -33,13 +33,13 @@
       <div class="info-title">
         设备信息
       </div>
-      <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in deviceConfig" :key="item.name"
+      <div :class="['describe-item',]" v-for="item in deviceConfig" :key="item.name"
            style="border: none;">
         <div class="describe-label">
           {{ item.name }}
         </div>
         <div class="describe-value">
-                        <span v-if="!item.custom">
+                        <span >
                             {{ baseInfo?.[item.code] || "--" }}
                         </span>
         </div>
@@ -49,7 +49,7 @@
       <div class="info-title">
         保养信息
       </div>
-      <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in baseConfig" :key="item.name"
+      <div :class="['describe-item']" v-for="item in baseConfig" :key="item.name"
            style="border: none;">
         <div class="describe-label">
           {{ item.name }}
@@ -101,22 +101,26 @@
     </div>
 
     <div class="bottom-btn" v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1">
-      <uv-button type="primary" @click="handleSave">处理任务</uv-button>
+      <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.maintainUser">领取任务</uv-button>
+      <uv-button type="primary" @click="handleSave" v-if="baseInfo.maintainUser === userStore.userInfo.id">处理任务</uv-button>
     </div>
     <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import ViewItem from './ViewItem.vue';
 
 import {MaintenanceApi} from "@/api/WorkApi";
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 import NavBar from "@/components/NavBar.vue";
+import { useUserStore } from '@/store/user';
+
+const userStore = useUserStore()
 
 const loading = ref(false)
-const baseInfo = ref({})
+const baseInfo = ref<Record<string, any>>({})
 onLoad((data) => {
   const {taskStatus, taskType} = data
   baseInfo.value = {...data, taskStatus: +taskStatus, taskType: +taskType}
@@ -213,6 +217,27 @@ const handleSave = () => {
     url: `/pages_work/maintenance/handle?id=${id}`
   })
 }
+
+const handleReceive = () => {
+  uni.showModal({
+      title: '是否确认领取任务？',
+      async success({confirm}) {
+        if(!confirm) return
+
+        try {
+            await MaintenanceApi.receive(baseInfo.value.id)
+            uni.showToast({
+              title: '领取成功'
+            })
+            getInfo()
+          } catch (error) {
+            console.log(error);
+        }
+      }
+    })
+  
+}
+
 
 </script>
 <style lang='scss' scoped>
