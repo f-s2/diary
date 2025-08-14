@@ -130,7 +130,7 @@ button[type="primary"][plain] {
   left: 16px;
   right: 16px;
   bottom: 0;
-  padding-bottom: 32px;
+  padding-bottom: 16px;
 }
 
 .uv-popup__content.bottom {

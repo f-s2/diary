@@ -198,6 +198,19 @@ export class InventoryApi {
   }
 }
 export class RepairApi {
+
+  static receive(id) {
+        return request({
+            url: prefix + '/repair/receive',
+            method: 'post',
+            params: {},
+            data: {
+                id
+            }
+        })
+    }
+
+
   static detail(id) {
     return request({
       url: prefix + "/repair/" + id,

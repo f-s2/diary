@@ -1,136 +1,102 @@
 <template>
-  <div class="page-body custom-nav-page">
-    <nav-bar />
-    <u-loading v-if="loading"/>
-    <div class="sub-title">
-      基础信息
-      <status-tag :status="+baseInfo.status" :needBg="true"/>
-    </div>
-    <div class="describe-box" style="margin-bottom: 12px">
-      <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in taskConfig" :key="item.name">
-        <div class="describe-label">
-          {{ item.name }}
-        </div>
-        <div class="describe-value">
-                    <span v-if="!item.custom">
-                        {{ baseInfo?.[item.code] || "--" }}
-                    </span>
-          <span v-if="item.code === 'type'">
-                        <status-tag :status="3" :tag="true"/>
-                    </span>
-
-        </div>
-      </div>
-    </div>
-
-
-    <div class="sub-title">
-      设备信息
-    </div>
-    <div class="describe-box">
-
-      <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in deviceConfig" :key="item.name"
-           style="border: none;">
-        <div class="describe-label">
-          {{ item.name }}
-        </div>
-        <div class="describe-value">
-                    <span v-if="!item.custom">
-                        {{ baseInfo?.[item.code] || "--" }}
-                    </span>
-        </div>
-      </div>
-    </div>
-    <div class="sub-title">
-      报修信息
-    </div>
-    <div class="describe-box">
-
-      <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in reportConfig" :key="item.name"
-           style="border: none;">
-        <div class="describe-label">
-          {{ item.name }}
-        </div>
-        <div class="describe-value">
-                    <span v-if="!item.custom">
-                        {{ baseInfo?.[item.code] || "--" }}
-                    </span>
-          <div v-else-if="item.code === 'repairFiles'">
+  <PageContainer :loading="loading">
+    <div class=" px-4 space-y-3 pb-4">
+      <ModuleWrapper title="基础信息">
+        <LabelValueWrapper :list="[
+          {
+            label: '任务编号',
+            value: baseInfo.code
+          },
+          {
+            label: '任务类型',
+            value: baseInfo.type,
+            customRender(value) {
+              return h('span', { style: { color: '#FF9D00' } }, '维修')
+            },
+          },
+          {
+            label: '创建时间',
+            value: baseInfo.reportTime
+          }
+        ]"></LabelValueWrapper>
+      </ModuleWrapper>
+      <ModuleWrapper title="设备信息">
+        <LabelValueWrapper :list="deviceConfig.map(v => ({ label: v.name, value: baseInfo[v.code] }))">
+        </LabelValueWrapper>
+      </ModuleWrapper>
+      <ModuleWrapper title="报修信息">
+        <LabelValueWrapper
+          :list="reportConfig.map(v => ({ label: v.name, value: baseInfo[v.code], notRender: v.code === 'repairFiles' }))">
+          <LabelValueItem label="图片视频">
             <htz-image-upload :add="false" :remove="false" :dataType="1" mediaType="all"
-                              :modelValue="baseInfo.repairFiles"></htz-image-upload>
+              :modelValue="baseInfo.repairFiles"></htz-image-upload>
+          </LabelValueItem>
+        </LabelValueWrapper>
+      </ModuleWrapper>
+      <template v-if="baseInfo.auditStatus !== null">
+        <module-wrapper title="维修信息">
+          <label-value-wrapper
+            :list="repairConfig.map(v => ({ label: v.name, value: baseInfo[v.code], notRender: ['solved', 'assistUserList'].includes(v.code) }))">
+            <label-value-item label="故障是否解决">
+              {{ baseInfo.solved === 1 ? '是' : '否' }}
+            </label-value-item>
+            <label-value-item label="协同人员">
+              {{baseInfo.assistUserList?.map(item => item.username)?.join('、') ?? '-'}}
+            </label-value-item>
+          </label-value-wrapper>
+        </module-wrapper>
+        <module-wrapper title="备件领用">
+          <div class="spare-list">
+            <div class="spare-item" v-for="(item, index) in baseInfo.sparePartsList">
+              <div class="item-top">
+                <span>
+                  名称： {{ item.name ?? item.sparePartsName }}
+                </span>
 
+              </div>
+              <div class="item-value">
+                <uv-row>
+                  <uv-col span="4">
+                    <div class="name">货位</div>
+                    <div class="value">{{ item.allocation ?? '-' }}</div>
+                  </uv-col>
+                  <uv-col span="4">
+                    <div class="name">数量</div>
+                    <div class="value">{{ item.quantity }}</div>
+                  </uv-col>
+                  <uv-col span="4">
+                    <div class="name">使用数量</div>
+                    <div class="value">{{ item.usedQuantity }}</div>
+                  </uv-col>
+                </uv-row>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </module-wrapper>
+      </template>
     </div>
-    <template v-if="baseInfo.auditStatus !== null">
-      <div class="sub-title">
-        维修信息
-      </div>
-      <div class="describe-box">
-
-        <div :class="['describe-item', { wrap: item.wrap }]" v-for="item in repairConfig" :key="item.name"
-             style="border: none;">
-          <div class="describe-label">
-            {{ item.name }}
-          </div>
-          <div class="describe-value">
-                        <span v-if="!item.custom">
-                            {{ baseInfo?.[item.code] || "--" }}
-                        </span>
-            <span v-else-if="item.code === 'solved'">
-                            {{ baseInfo.solved === 1 ? '是' : '否' }}
-                        </span>
-            <span v-else-if="item.code === 'assistUserList'">
-                            {{ baseInfo.assistUserList?.map(item => item.username)?.join('、') ?? '-' }}
-                        </span>
-
-          </div>
-        </div>
-      </div>
-      <div class="sub-title">
-        备件领用
-      </div>
-      <div class="spare-list">
-        <div class="spare-item" v-for="(item, index) in baseInfo.sparePartsList">
-          <div class="item-top">
-                        <span>
-                            名称： {{ item.name ?? item.sparePartsName }}
-                        </span>
-
-          </div>
-          <div class="item-value">
-            <uv-row>
-              <uv-col span="4">
-                <div class="name">货位</div>
-                <div class="value">{{ item.allocation ?? '-' }}</div>
-              </uv-col>
-              <uv-col span="4">
-                <div class="name">数量</div>
-                <div class="value">{{ item.quantity }}</div>
-              </uv-col>
-              <uv-col span="4">
-                <div class="name">使用数量</div>
-                <div class="value">{{ item.usedQuantity }}</div>
-              </uv-col>
-            </uv-row>
-          </div>
-        </div>
+    <template #footer>
+      <div class="bottom-btn px-4 pt-4" v-if="!isView">
+        <uv-button v-if="baseInfo.fillStatus === 0 && (baseInfo.repairStatus === 1 || baseInfo.repairStatus === 5)" type="primary"
+          @click="handleConfirm">
+          确认故障
+        </uv-button>
+        <template v-if="baseInfo.fillStatus === 1">
+          <uv-button v-if="!baseInfo.repairUser" type="primary" @click="handleReceive">
+            领取任务
+          </uv-button>
+          <template v-if="userStore.userInfo.id === baseInfo.repairUser">
+            <uv-button v-if="(baseInfo.repairStatus === 2 || baseInfo.repairStatus === 5)" type="primary"
+              @click="handleComplete">完成维修
+            </uv-button>
+            <uv-button v-if="baseInfo.auditStatus === null && baseInfo.repairStatus !== 4" type="primary"
+              @click="handleFill">记录填写
+            </uv-button>
+          </template>
+        </template>
 
       </div>
     </template>
-
-
-    <div class="bottom-btn" v-if="!isView">
-      <uv-button v-if="baseInfo.fillStatus === 0&&(baseInfo.repairStatus === 1 || baseInfo.repairStatus === 5)" type="primary" @click="handleConfirm">确认故障</uv-button>
-      <uv-button v-if="baseInfo.fillStatus === 1 && (baseInfo.repairStatus === 2||baseInfo.repairStatus === 5)" type="primary"
-                 @click="handleComplete">完成维修
-      </uv-button>
-      <uv-button v-if="baseInfo.fillStatus === 1 && baseInfo.auditStatus === null" type="primary"
-                 @click="handleFill">记录填写
-      </uv-button>
-
-    </div>
     <uv-modal ref="modal" title="请确认是否为故障" @confirm="confirm" :showCancelButton="true">
       <uv-radio-group v-model="modalValue.repairStatus" placement="column" activeColor="#0C6EC6" shape="square">
         <div class="modal-item">
@@ -142,27 +108,30 @@
           <uv-radio :name="2"></uv-radio>
         </div>
         <uv-textarea v-if="modalValue.repairStatus === 4" v-model="modalValue.cancelReason"
-                     placeholder="请输入取消原因"></uv-textarea>
+          placeholder="请输入取消原因"></uv-textarea>
       </uv-radio-group>
-
     </uv-modal>
-  </div>
+  </PageContainer>
 </template>
 
-<script setup>
-import {RepairApi} from "@/api/WorkApi";
+<script lang="ts" setup>
+import { RepairApi } from "@/api/WorkApi";
 import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
-import {useUserStore} from '@/store/user';
-import {onLoad, onShow} from "@dcloudio/uni-app";
-import {ref} from "vue";
+import { useUserStore } from '@/store/user';
+import { onLoad, onShow } from "@dcloudio/uni-app";
+import { h, ref } from "vue";
 import NavBar from "@/components/NavBar.vue";
+import ModuleWrapper from "@/components/ModuleWrapper.vue";
+import LabelValueWrapper from "@/components/label-value/LabelValueWrapper.vue";
+import LabelValueItem from "@/components/label-value/LabelValueItem.vue";
+import PageContainer from "@/components/PageContainer.vue";
 
 const userStore = useUserStore()
 const loading = ref(false)
-const baseInfo = ref({})
+const baseInfo = ref<Record<string, any>>({})
 const isView = ref(false)
 onLoad((data) => {
-  const {view}=data
+  const { view } = data
   isView.value = !!view
   baseInfo.value = data
 
@@ -181,7 +150,7 @@ const deviceConfig = [
   },
 
   {
-    name: '位置',
+    name: '设备位置',
     code: 'factoryModelName'
   },
 
@@ -265,9 +234,9 @@ const repairConfig = [
 
 const getInfo = () => {
   loading.value = true
-  const {id} = baseInfo.value
+  const { id } = baseInfo.value
   RepairApi.detail(id).then(res => {
-    const {repairFiles} = res.data
+    const { repairFiles } = res.data
     baseInfo.value = {
       ...res.data, repairFiles: repairFiles.map(item => {
 
@@ -285,15 +254,16 @@ const getInfo = () => {
 }
 
 const modal = ref()
-const modalValue = ref({repairStatus:4})
+const modalValue = ref<Record<string, any>>({ repairStatus: 4 })
 const handleConfirm = () => {
   modal.value.open()
 }
 const confirm = () => {
-  const {id} = baseInfo.value
+  const { id } = baseInfo.value
   loading.value = true
 
-  RepairApi.preHandle({id, ...modalValue.value}).then(res => {
+  RepairApi.preHandle({ id, ...modalValue.value }).then(res => {
+    //@ts-ignore
     if (res.code === 0) {
       uni.showToast({
         title: '请求成功'
@@ -322,6 +292,27 @@ const handleComplete = () => {
   })
 }
 
+const handleReceive = () => {
+  uni.showModal({
+      title: '是否确认领取任务？',
+      async success({confirm}) {
+        if(!confirm) return
+
+        try {
+            await RepairApi.receive(baseInfo.value.id)
+            uni.showToast({
+              title: '领取成功'
+            })
+            getInfo()
+          } catch (error) {
+            console.log(error);
+        }
+      }
+    })
+  
+}
+
+
 
 </script>
 <style lang='scss' scoped>
@@ -330,6 +321,7 @@ const handleComplete = () => {
 }
 
 .bottom-btn {
+  position: initial;
   display: flex;
 
   .uv-button-wrapper {
@@ -383,7 +375,7 @@ const handleComplete = () => {
   flex-direction: column;
   gap: 8px;
 
-  > div {
+  >div {
     border-radius: 4px;
     background: #FFF;
     display: flex;
