@@ -109,6 +109,17 @@ export class InspectionkApi {
       params: {},
     });
   }
+
+  static receive(id) {
+        return request({
+            url: prefix + '/inspection/receive',
+            method: 'post',
+            params: {},
+            data: {
+                id
+            }
+        })
+    }
   static itemList(data) {
     return request({
       url: prefix + "/inspection-benchmark/item/list",

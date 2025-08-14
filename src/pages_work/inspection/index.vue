@@ -7,7 +7,7 @@
       <status-tag :needBg="true" :status="+baseInfo.taskStatus"/>
     </div>
     <div class="describe-box" style="margin-bottom: 12px">
-      <div v-for="item in taskConfig" :key="item.name" :class="['describe-item', { wrap: item.wrap }]">
+      <div v-for="item in taskConfig" :key="item.name" :class="['describe-item']">
         <div class="describe-label">
           {{ item.name }}
         </div>
@@ -32,13 +32,13 @@
       <div class="info-title">
         设备信息
       </div>
-      <div v-for="item in deviceConfig" :key="item.name" :class="['describe-item', { wrap: item.wrap }]"
+      <div v-for="item in deviceConfig" :key="item.name" :class="['describe-item']"
            style="border: none;">
         <div class="describe-label">
           {{ item.name }}
         </div>
         <div class="describe-value">
-                        <span v-if="!item.custom">
+                        <span>
                             {{ baseInfo?.[item.code] || "--" }}
                         </span>
         </div>
@@ -48,7 +48,7 @@
       <div class="info-title">
         点检信息
       </div>
-      <div v-for="item in baseConfig" :key="item.name" :class="['describe-item', { wrap: item.wrap }]"
+      <div v-for="item in baseConfig" :key="item.name" :class="['describe-item']"
            style="border: none;">
         <div class="describe-label">
           {{ item.name }}
@@ -74,22 +74,26 @@
 
 
     <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1" class="bottom-btn">
-      <uv-button type="primary" @click="handleSave">处理任务</uv-button>
+      <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.inspectUser">领取任务</uv-button>
+      <uv-button type="primary" @click="handleSave" v-if="baseInfo.inspectUser === userStore.userInfo.id">处理任务</uv-button>
     </div>
     <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import ViewItem from './ViewItem.vue';
 
 import {InspectionkApi} from "@/api/WorkApi";
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 import NavBar from "@/components/NavBar.vue";
+import { useUserStore } from '@/store/user';
+
+const userStore = useUserStore()
 
 const loading = ref(false)
-const baseInfo = ref({})
+const baseInfo = ref<Record<string, any>>({})
 onLoad((data) => {
   const {taskStatus, taskType} = data
   baseInfo.value = {...data, taskStatus: +taskStatus, taskType: +taskType}
@@ -188,6 +192,26 @@ const handleSave = () => {
     url: `/pages_work/inspection/handle?id=${id}`
   })
 
+}
+
+const handleReceive = () => {
+  uni.showModal({
+      title: '是否确认领取任务？',
+      async success({confirm}) {
+        if(!confirm) return
+
+        try {
+            await InspectionkApi.receive(baseInfo.value.id)
+            uni.showToast({
+              title: '领取成功'
+            })
+            getInfo()
+          } catch (error) {
+            console.log(error);
+        }
+      }
+    })
+  
 }
 
 </script>
