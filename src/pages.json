@@ -111,7 +111,8 @@
     {
       "path": "pages_work/report-repair/done",
       "style": {
-        "navigationBarTitleText": "报修完成"
+        "navigationBarTitleText": "设备报修",
+         "navigationStyle": "custom"
       }
     }, {
       "path": "pages_work/report-repair/device",
