@@ -96,7 +96,9 @@
     {
       "path": "pages_work/report-repair/index",
       "style": {
-        "navigationBarTitleText": "设备报修"
+        "navigationBarTitleText": "设备报修",
+        "note": "⚠️该路径与扫码报修绑定，禁止修改",
+        "navigationStyle": "custom"
       }
     },
     {

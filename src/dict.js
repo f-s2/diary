@@ -3,7 +3,7 @@ export const findOne = (value, arr) => {
 }
 
 export const RepairStatus = [
-    {label: '维修待确认', value: 1, color: '#f9ae3d'},
-    {label: '维修中', value: 2, color: '#003A8B'},
-    {label: '维修超时', value: 5, color: '#f56c6c'},
+    {label: '维修待确认', value: 1, color: '#FF9D00'},
+    {label: '维修中', value: 2, color: '#004098'},
+    {label: '维修超时', value: 5, color: '#FF2B00'},
 ]

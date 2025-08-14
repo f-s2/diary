@@ -36,3 +36,16 @@ declare namespace Stocktaking {
     goodsAllocation: string;
   }
 }
+
+
+declare namespace ReportRepair {
+  interface Item {
+    factoryModelName: string
+    repairStatus: number
+    deviceCode: string
+    deviceName: string
+    reportTime: string
+    code: string
+    id: string
+  }
+}
