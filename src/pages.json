@@ -1,19 +1,19 @@
 {
   "pages": [
-    {
-      "path": "pages/login/index",
+     {
+      "path": "pages_home/index",
       "style": {
-        "navigationBarTextStyle": "custom",
-        "app-plus": {
+        "navigationBarTitleText": "首页",
+        "h5": {
           "titleNView": false
         }
       }
     },
     {
-      "path": "pages_home/index",
+      "path": "pages/login/index",
       "style": {
-        "navigationBarTitleText": "首页",
-        "h5": {
+        "navigationBarTextStyle": "custom",
+        "app-plus": {
           "titleNView": false
         }
       }
