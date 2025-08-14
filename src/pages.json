@@ -115,7 +115,8 @@
     }, {
       "path": "pages_work/report-repair/device",
       "style": {
-        "navigationBarTitleText": "设备信息"
+        "navigationBarTitleText": "设备信息",
+        "navigationStyle": "custom"
       }
     },
 
