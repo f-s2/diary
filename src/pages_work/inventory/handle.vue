@@ -143,7 +143,7 @@ const handleSave = ({ id, quantity }) => {
 }
 const handleBack = () => {
     uni.reLaunch({
-        url: '/pages_work/index/index'
+        url: '/pages_work/index/index?type=2'
     })
 }
 </script>

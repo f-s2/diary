@@ -100,7 +100,7 @@
 
     </div>
 
-    <div class="bottom-btn" v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1">
+    <div class="bottom-btn" v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1" :key="flag">
       <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.maintainUser">领取任务</uv-button>
       <uv-button type="primary" @click="handleSave" v-if="baseInfo.maintainUser === userStore.userInfo.id">处理任务</uv-button>
     </div>
@@ -218,6 +218,7 @@ const handleSave = () => {
   })
 }
 
+const flag = ref(1)
 const handleReceive = () => {
   uni.showModal({
       title: '是否确认领取任务？',
@@ -229,7 +230,8 @@ const handleReceive = () => {
             uni.showToast({
               title: '领取成功'
             })
-            getInfo()
+            await getInfo()
+            flag.value ++
           } catch (error) {
             console.log(error);
         }

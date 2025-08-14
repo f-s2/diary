@@ -45,7 +45,7 @@
     </div>
 
   </div>
-  <TabBar :activeIndex="2" />
+  <TabBar :activeIndex="1" />
 </template>
 
 <script lang="ts" setup>

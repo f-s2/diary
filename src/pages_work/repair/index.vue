@@ -93,7 +93,7 @@
               @click="handleFill">记录填写
             </uv-button>
           </template>
-           <uv-button v-else type="primary" disabled>
+           <uv-button v-else-if="baseInfo.repairUser" type="primary" disabled>
             已指派
           </uv-button>
         </template>
@@ -177,11 +177,11 @@ const taskConfig = [
 ]
 const reportConfig = [
   {
-    name: '报障人',
+    name: '报修人员',
     code: 'reportPersonName'
   },
   {
-    name: '报障时间',
+    name: '报修时间',
     code: 'reportTime',
   },
   {

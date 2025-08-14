@@ -12,12 +12,12 @@
          :is-shadow="false">
       <ItemCard :data="item"/>
     </div>
-    <!-- <template #bottom>
+    <template #bottom>
       <div class="bottom" style="height: 80px;">
-        <TabBar :activeIndex="1"/>
+        <TabBar/>
       </div>
 
-    </template> -->
+    </template>
   </z-paging>
 
 

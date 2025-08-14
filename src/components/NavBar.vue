@@ -8,7 +8,7 @@ const leftClick=()=>{
 }
 const rightClick=()=>{
   canBack|| uni.switchTab({
-    url:'/pages_work/index/index'
+    url:'/pages_home/index'
   })
 }
 </script>

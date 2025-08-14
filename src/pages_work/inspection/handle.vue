@@ -200,7 +200,7 @@ const handleSave = () => {
             title: '请求成功'
           })
           uni.reLaunch({
-            url: '/pages_work/index/index'
+            url: '/pages_work/index/index?type=1'
           })
         } else {
           uni.showToast({

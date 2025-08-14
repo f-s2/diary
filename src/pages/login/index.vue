@@ -34,7 +34,7 @@ import { ref } from 'vue';
 const userStore = useUserStore();
 let redirectPath
 onLoad(({ from }) => {
-  redirectPath = (from && (!from.startsWith('/pages/login/index'))) ? from : '/pages_work/index/index'
+  redirectPath = (from && (!from.startsWith('/pages/login/index'))) ? from : '/pages_home/index'
 })
 onShow(() => {
   uni.hideTabBar()
