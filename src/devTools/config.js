@@ -1,5 +1,6 @@
+
 let config = {
-  status: true, //调试工具总开关
+  status: import.meta.env.VITE_APP_DEVTOOLS === 'true', //调试工具总开关
   route: "/devTools/page/index", // 调试页面的路由，不建议更改
   bubble: { //调试弹窗气泡设置
     status: true, // 气泡标签是否显示，生产环境建议关闭
