@@ -4,6 +4,7 @@ import { defineConfig, loadEnv } from "vite";
 import { netConfig } from "./src/config/net.config";
 import path from "path";
 import postCssPxToRem from "postcss-pxtorem";
+import uniPolyfill from 'vite-plugin-uni-polyfill'
 
 const resolve = (dir) => path.resolve(__dirname, dir);
 
@@ -27,6 +28,7 @@ export default defineConfig(async ({ mode }) => {
       },
     },
     plugins: [
+      uniPolyfill(),
       unocss(),
       uni(),
       // basicSsl()

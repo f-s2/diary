@@ -73,7 +73,7 @@
     </div>
 
 
-    <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1" class="bottom-btn">
+    <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading" class="bottom-btn">
       <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.inspectUser">领取任务</uv-button>
       <uv-button type="primary" @click="handleSave" v-if="baseInfo.inspectUser === userStore.userInfo.id">处理任务</uv-button>
     </div>

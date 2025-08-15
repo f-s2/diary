@@ -26,6 +26,12 @@
       }
     },
     {
+      "path": "pages_work/index/list",
+      "style": {
+        "navigationBarTitleText": "任务列表"
+      }
+    },
+    {
       "path": "pages_work/maintenance/index",
       "style": {
         "navigationBarTitleText": "任务详情",

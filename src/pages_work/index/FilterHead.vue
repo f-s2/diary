@@ -8,7 +8,7 @@
       <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、所属部门、设备名称、设备编码"
         @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
     </div>
-    <div class="filter-bottom">
+    <div class="filter-bottom" v-if="!hiddenFilter">
       <div class="tag-box">
         <span @click="selectTag(item)" :class="['tag', { active: queryParam.status === item.code }]"
           v-for="item in tagInfo" :key="item.code">
@@ -52,7 +52,7 @@ import filter from "@/static/filter.png";
 import dayjs from "dayjs";
 
 import { computed, ref, toRefs } from "vue";
-const props = defineProps({ queryParam: Object });
+const props = defineProps({ queryParam: Object, hiddenFilter: Boolean });
 const emit = defineEmits(["load"]);
 const { queryParam } = toRefs(props);
 const tagInfo = [

@@ -5146,6 +5146,11 @@ vary@~1.1.2:
   resolved "https://registry.npmmirror.com/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
+vite-plugin-uni-polyfill@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/vite-plugin-uni-polyfill/-/vite-plugin-uni-polyfill-0.1.0.tgz#ec3c8e14293acc4ae86f4348df1e82a21eee8d94"
+  integrity sha512-xCg+w9iqvHRrwEyc3/7LKB4wJz24oEaWarn77tYA+g2eMpe0AVdUxaG4g7ZS3C/Hn7n4zV1ZxyFOQ4zNF5jBAg==
+
 vite@5.2.8:
   version "5.2.8"
   resolved "https://registry.npmmirror.com/vite/-/vite-5.2.8.tgz#a99e09939f1a502992381395ce93efa40a2844aa"
