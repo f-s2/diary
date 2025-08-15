@@ -1,24 +1,11 @@
 
-const baseUrl = 'http://192.168.0.115:8388'
-
-let baseName
-// #ifdef APP
-    baseName= baseUrl + '/kycmms'
-
-// #endif
-
-// #ifdef H5
-    baseName= '/kycmms'
-// #endif
-
-
 export const netConfig = {
 
-    baseName: baseName,
+    baseName: '/kycmms',
     // axios 基础url地址
     // baseURL: 'http://lkm.hrgly.com',
     // baseURL: 'http://192.168.102.233:31342',
-    baseURL: baseUrl,
+    // baseURL: baseUrl,
     // 为开发服务器配置 CORS。默认启用并允许任何源，传递一个 选项对象 来调整行为或设为 false 表示禁用
     cors: true,
     // 根据后端定义配置

@@ -4,8 +4,20 @@ import mpAdapter from "axios-miniprogram-adapter";
 axios.defaults.adapter = mpAdapter;
 const { baseName, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
+const {VITE_APP_BASE_URL} = import.meta.env
+
+let BaseUrl = ''
+
+// #ifdef APP
+BaseUrl = VITE_APP_BASE_URL + baseName
+// #endif
+
+// #ifdef H5
+BaseUrl = baseName
+// #endif
+
 const instance = axios.create({
-    baseURL: baseName,
+    baseURL: BaseUrl,
     timeout: requestTimeout,
     headers: {
         'Content-Type': contentType,

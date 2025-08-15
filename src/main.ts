@@ -16,9 +16,6 @@ import devTools from "./devTools/index.js";
 import devToolsConfig from './devTools/config.js';
 import mpDevBubble from './devTools/core/components/mpDevBubble.vue'
 
-console.log(2121212);
-
-
 export function createApp() {
 	const app = createSSRApp(App);
 	const store = createPinia().use(piniaPluginPersistedstate)

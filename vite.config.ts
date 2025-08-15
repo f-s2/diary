@@ -10,8 +10,10 @@ const resolve = (dir) => path.resolve(__dirname, dir);
 export default defineConfig(async ({ mode }) => {
   const unocss = (await import("unocss/vite")).default;
 
+  const env = loadEnv(mode, process.cwd());
+
   return defineConfig({
-    base: loadEnv(mode, process.cwd()).VITE_APP_BASE,
+    base: env.VITE_APP_BASE,
     css: {
       postcss: {
         plugins: [
@@ -39,12 +41,12 @@ export default defineConfig(async ({ mode }) => {
       // https: true,
       proxy: {
         [netConfig.baseName]: {
-          target: netConfig.baseURL,
+          target: env.VITE_APP_BASE_URL,
           ws: false,
           changeOrigin: true,
         },
         "/preview": {
-          target: netConfig.baseURL,
+          target: env.VITE_APP_BASE_URL,
           ws: false,
           changeOrigin: true,
         },
