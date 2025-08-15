@@ -1,13 +1,30 @@
 <script setup>
 import { UserApi } from '@/api/UserApi'
-import { onLaunch } from '@dcloudio/uni-app'
+import { onLaunch, onError } from '@dcloudio/uni-app'
 import { useUserStore } from '@/store/user'
 const userStore = useUserStore()
 onLaunch(() => {
+
+   try {
+    // 挂载APP启动日志提交
+    uni.$dev.logReport("appOnLaunch>" + JSON.stringify(ctx));
+  } catch (error) {}
+
+
   UserApi.getPrefix().then(res => {
     userStore.urlPrefix = res.data
   })
+
+  
 })
+
+onError((err)=>{
+  try {
+    // 挂载devTools全局报错拦截
+    uni.$dev.errorReport(err, "at App.vue onError", "oe");
+  } catch (error) {}
+})
+
 </script>
 
 <style lang="scss">
@@ -18,6 +35,17 @@ page,
 uni-page-wrapper {
   background-image: linear-gradient(to bottom, #9ADAFF, #ECFFF9 120px, #F1F9FF 200px);
   color: #333;
+}
+
+#app {
+  padding-top: var(--status-bar-height);
+}
+
+image {
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
 }
 
 .uni-toast {

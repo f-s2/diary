@@ -1,8 +1,9 @@
 <template>
   <div v-if="tag">
-    <span :class="`tag_${item.value} tag`" v-for="item in tagInfo" v-show="item.value === status"> <img :src="item.icon"
-        alt=""> {{ item.name
-      }}</span>
+    <span :class="`tag_${item.value} tag`" v-for="item in tagInfo" v-show="item.value === status"> <image class=" w-3" mode="widthFix" :src="item.icon"
+        alt="" /> 
+        <text class=" whitespace-nowrap">{{ item.name}}</text>
+      </span>
 
   </div>
   <div v-else :class="['status', { bg: needBg }]">

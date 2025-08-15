@@ -5,6 +5,6 @@ import Loading from '@/static/loading.gif'
 
 <template>
     <div>
-        <img class=" h-38px mx-auto" :src="Loading" />
+        <image mode="heightFix" class=" h-38px mx-auto" :src="Loading" />
     </div>
 </template>

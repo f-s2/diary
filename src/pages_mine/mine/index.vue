@@ -5,14 +5,14 @@
       :style="`background-image: url(${Banner});`">
       <div class=" bg-linear-to-b from-#FFE4BC to-#FFE1B6 rounded-t-md h-34px px-5px pt-4px">
         <div class=" border-(0.6px solid #9C723C) rounded-t-md border-op-50 border-b-none h-full flex items-center">
-          <img class=" w-22px" :src="Department" alt="">
+          <image mode="widthFix" class=" w-22px" :src="Department" alt="" />
           <div class="ml-2px color-#9C723C text-12px font-500">{{ baseInfo.organizeName }}</div>
         </div>
       </div>
       <div class="w-20px h-10px mx-auto bg-#FFE4BC" style="clip-path: polygon(50% 100%, 0% 0%, 100% 0%);"></div>
       <div class=" mt-10px mb-24px flex items-center gap-14px ml-25px">
         <div class=" w-62px h-62px rounded-full overflow-hidden">
-          <img class=" w-full h-full" :src="Avatar" alt="">
+          <image mode="widthFix" class=" w-full h-full" :src="Avatar" alt="" />
         </div>
         <div>
           <div class=" text-white text-18px font-600">{{ baseInfo.username }}</div>
@@ -29,19 +29,19 @@
     <div class=" px-4 py-5 space-y-24px rounded-4px bg-white">
       <div class=" flex items-center justify-between" v-for="nav in navList" :key="nav.name" @click="handleJump(nav.path)">
         <div class=" flex items-center gap-3">
-          <img class="w-5 h-5" :src="nav.icon" alt="">
+          <image mode="widthFix" class="w-5 h-5" :src="nav.icon" alt="" />
           <span class=" text-14px font-500">{{ nav.name }}</span>
         </div>
-        <img class="w-13px" :src="Arrow" alt="">
+        <image mode="widthFix" class="w-13px" :src="Arrow" alt="" />
       </div>
     </div>
 
     <div class="f-c-b bg-white py-5 px-4 mt-4 rounded-4px" @click="handleLoginOut">
       <div class=" flex items-center gap-3">
-        <img class=" h-5" :src="LogoutPng" alt="">
+        <image mode="widthFix" class=" w-5" :src="LogoutPng" alt="" />
         <span class="text-14px font-500">退出登录</span>
       </div>
-      <img class="w-13px" :src="Arrow" alt="">
+      <image mode="widthFix" class="w-13px" :src="Arrow" alt="" />
     </div>
 
   </div>

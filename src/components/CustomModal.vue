@@ -24,7 +24,7 @@ const visible = computed({
         <div class=" fixed z-100 top-0 left-0 w-full h-full px-5 bg-black bg-opacity-50 f-c-c" v-if="visible" @click="visible=false">
             <div class=" w-full bg-color min-h-120px relative rounded-12px px-18px pt-14px pb-5" @click.stop>
                 <div class=" text-center px-24px">{{ title }}</div>
-                <img class=" absolute top-11px right-18px  w-28px" :src="ClosePng" alt="" @click="visible=false">
+                <image mode="widthFix" class=" absolute top-11px right-18px  w-28px" :src="ClosePng" alt="" @click="visible=false" />
                 <div class="mt-4">
                     <slot></slot>
                 </div>

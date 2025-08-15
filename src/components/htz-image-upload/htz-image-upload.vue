@@ -15,14 +15,14 @@
         <!-- #endif -->
         <!-- #ifdef APP-PLUS -->
         <view class="htz-image-upload-Item-video-fixed" @click="previewVideo(getFileUrl(item))"></view>
-        <image v-if="dataType == 1 && item.cover" class="htz-image-upload-Item-video-app-poster" mode="widthFix"
+        <image mode="widthFix" v-if="dataType == 1 && item.cover" class="htz-image-upload-Item-video-app-poster"
                :src="item.cover"></image>
-        <image v-else class="htz-image-upload-Item-video-app-poster" mode="widthFix" :src="appVideoPoster">
+        <image mode="widthFix" v-else class="htz-image-upload-Item-video-app-poster"  :src="appVideoPoster">
         </image>
         <!-- #endif -->
       </view>
 
-      <image v-else :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></image>
+      <image mode="widthFix" v-else :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></image>
 
       <view class="htz-image-upload-Item-del" v-if="remove" @click="imgDel(index)">×</view>
     </view>

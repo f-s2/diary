@@ -11,7 +11,7 @@
             @query="queryList" default-page-size="5">
             <template #empty>
                 <div class="empty">
-                    <img :src="icon" alt="">
+                    <image mode="widthFix" :src="icon" alt=""/>
                     <b>恭喜完成全部盘点!</b>
                     <uv-button @click="handleBack" class="btn" type="primary">返回任务列表</uv-button>
                 </div>

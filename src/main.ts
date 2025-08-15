@@ -12,6 +12,12 @@ import App from "./App.vue";
 import 'uno.css'
 import '@/styles/vars.css'
 
+import devTools from "./devTools/index.js";
+import devToolsConfig from './devTools/config.js';
+import mpDevBubble from './devTools/core/components/mpDevBubble.vue'
+
+console.log(2121212);
+
 
 export function createApp() {
 	const app = createSSRApp(App);
@@ -22,6 +28,12 @@ export function createApp() {
 	app.component('UEmpty', UEmpty)
 	app.component('UPopup', UPopup)
 	app.component('StatusTag', StatusTag)
+
+	 //挂载Devtools
+	app.use(devTools, devToolsConfig)
+	//注册小程序端专用的拖动浮标组件
+	app.component("mpDevBubble", mpDevBubble)
+	
 	return {
 		app,
 	};

@@ -77,12 +77,12 @@ function copy() {
   <PageContainer>
     <div class=" px-4">
       <div class=" relative h-230px">
-        <img class=" h-full" :src="PeoplePng" alt="">
+        <image mode="widthFix" class=" h-full" :src="PeoplePng" alt=""/>
         <div
           class=" absolute text-xs pl-36px pr-4 pt-5 top-30px left-87px w-256px h-157px bg-contain bg-no-repeat bg-center"
           :style="`background-image: url(${DialogPng});`">
           <div class=" f-c-c text-14px font-600">
-            <img class=" w-4 mr-6px" :src="SuccessPng" alt="">
+            <image mode="widthFix" class=" w-4 mr-6px" :src="SuccessPng" alt=""/>
             <span>报修已完成！</span>
           </div>
           <div class=" mt-9px space-y-5px">

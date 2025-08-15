@@ -4,6 +4,7 @@
       "path": "pages_home/index",
       "style": {
         "navigationBarTitleText": "首页",
+        "navigationStyle": "custom",
         "h5": {
           "titleNView": false
         }
@@ -21,10 +22,7 @@
     {
       "path": "pages_work/index/index",
       "style": {
-        "navigationBarTitleText": "任务列表",
-         "h5": {
-          "titleNView": false
-        }
+        "navigationBarTitleText": "任务列表"
       }
     },
     {
@@ -157,6 +155,30 @@
       }
     }
   ],
+  "subPackages": [
+    {
+      "root": "devTools/page",
+      "name": "devToolsPage",
+      "pages": [
+        {
+          "path": "index",
+          "style": {
+            "navigationStyle": "custom"
+            // #ifdef APP-PLUS
+            ,
+            "softinputMode": "adjustResize",
+            "backgroundColor": "transparent",
+            "animationDuration": 1,
+            "animationType": "none",
+            "popGesture": "none",
+            "bounce": "none",
+            "titleNView": false
+            // #endif
+          }
+        }
+      ]
+    }
+  ],
   "tabBar": {
     "custom": true,
     "list": [
@@ -172,7 +194,8 @@
   },
   "globalStyle": {
     "navigationBarTextStyle": "#fff",
-    "navigationBarBackgroundColor": "#127ED0"
+    "navigationBarBackgroundColor": "#127ED0",
+    "navigationStyle": "custom"
   },
   "lazyCodeLoading": "requiredComponents",
   "easycom": {

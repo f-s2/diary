@@ -10,7 +10,7 @@
     <div class=" flex items-center justify-between">
       <div v-for="nav in navList" :key="nav.name" @click="handleJump(nav)">
         <div class="h-73px">
-          <img class=" h-full" :src="nav.icon" alt="">
+          <image mode="heightFix" class=" h-full" :src="nav.icon" alt=""/>
         </div>
         <div class=" text-#333333 text-center mt-8px text-12px font-500">{{ nav.name }}</div>
       </div>
@@ -101,6 +101,7 @@ import Nav1 from '@/static/home/nav-1.png'
 import Nav2 from '@/static/home/nav-2.png'
 import Nav3 from '@/static/home/nav-3.png'
 import Nav4 from '@/static/home/nav-4.png'
+import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
 
 const cardInfo = [
   { name: '执行维修', icon: c_1, code: 'repair' },

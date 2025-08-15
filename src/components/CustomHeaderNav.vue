@@ -20,11 +20,11 @@ function handleBack() {
 </script>
 
 <template>
-    <div class=" relative h-44px">
+    <div class=" relative h-44px" style="margin-top: var(--status-bar-height)">
         <div class=" absolute top-0 left-0 w-full h-full f-c-c text-20px font-500">{{ title || _title }}</div>
         <div class=" relative z-10">
-            <img class=" w-44px" :src="BackPng" alt="" @click="handleBack"
-                :class="{ 'opacity-0': pages.length <= 1 }">
+            <image mode="widthFix" class=" w-44px" :src="BackPng" alt="" @click="handleBack"
+                :class="{ 'opacity-0': pages.length <= 1 }" />
         </div>
     </div>
 </template>

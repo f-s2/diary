@@ -120,13 +120,13 @@ function getList(item) {
                     <navigator :url="joinUrlWithQuery('/pages_work/stocktaking/done', queryData)" open-type="navigate"
                         hover-class="navigator-hover">
                         <div class="f-c-c gap-7px bg-primary color-white text-xs font-500 px-2 py-6px rounded-2px">已盘清单
-                            <img class=" h-2" :src="ArrowPng" alt="">
+                            <image mode="heightFix" class=" h-2" :src="ArrowPng" alt=""/>
                         </div>
                     </navigator>
                 </template>
                 <div class=" flex">
                     <div class="flex-shrink-0 w-6 mr-6px">
-                        <img class=" w-full" :src="SitePng" alt=""></img>
+                        <image mode="widthFix" class=" w-full" :src="SitePng" alt=""/></img>
                     </div>
                     <span>
                         {{ detail?.areaName }}

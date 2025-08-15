@@ -16,7 +16,7 @@
         </span>
       </div>
       <div class="filter-icon" @click="handleOpen">
-        <img class="icon" :src="filter" alt="" />
+        <image mode="widthFix" class="icon" :src="filter" alt="" />
         筛选
       </div>
     </div>

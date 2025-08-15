@@ -89,7 +89,7 @@ const handleViewFile = (url) => {
         <div class=" space-y-5">
           <div class=" flex gap-2 items-center text-14px" v-for="item in fileData" :key="item.code"  @click="handleViewFile(baseInfo[item.code])">
             <div class=" w-62px h-62px flex-shrink-0">
-              <img class=" w-full" :src="getFileIcon(baseInfo[item.code])" alt="">
+              <image mode="widthFix" class=" w-full" :src="getFileIcon(baseInfo[item.code])" alt=""/>
             </div>
             <div>
               <div class=" font-500">{{ item.name }}</div>

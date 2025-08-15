@@ -1,6 +1,6 @@
 <template>
   <div class="empty">
-    <image class="icon" :src="src" alt="" />
+    <image mode="widthFix" class="icon" :src="src" alt="" />
     <slot> {{ title }} </slot>
   </div>
 </template>
