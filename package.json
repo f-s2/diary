@@ -2,9 +2,10 @@
   "name": "uni-preset-vue",
   "version": "0.0.0",
   "scripts": {
-    "dev": "uni",
+    "dev": "uni --mode development",
     "build": "uni build ",
-    "build:dev": "uni build --mode development",
+    "build:dev": "uni build --mode test",
+    "build:dev:app-android": "uni build -p app-android --mode test",
     "dev:app": "uni -p app",
     "dev:app-android": "uni -p app-android --mode development",
     "dev:app-ios": "uni -p app-ios",
