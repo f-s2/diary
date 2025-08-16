@@ -77,7 +77,7 @@ function copy() {
   <PageContainer>
     <div class=" px-4">
       <div class=" relative h-230px">
-        <image mode="widthFix" class=" h-full" :src="PeoplePng" alt=""/>
+        <image mode="heightFix" class=" h-full" :src="PeoplePng" alt=""/>
         <div
           class=" absolute text-xs pl-36px pr-4 pt-5 top-30px left-87px w-256px h-157px bg-contain bg-no-repeat bg-center"
           :style="`background-image: url(${DialogPng});`">

@@ -104,6 +104,13 @@ const navList = [
     btnText: '前去维修'
 
   },
+  {
+    name: '设备报修',
+    path: '/pages_work/report-repair/index',
+    icon: Nav3,
+    btnText: '前去报修'
+
+  },
   // {
   //   name: '盘点任务',
   //   path: '/pages_work/index/index?type=2',
@@ -115,7 +122,7 @@ function handleJump(item) {
   
   if (item.path) {
     uni.navigateTo({
-      url: item.path
+      url: joinUrlWithQuery(item.path, { id: modalOptions.id }),
     });
   }
 

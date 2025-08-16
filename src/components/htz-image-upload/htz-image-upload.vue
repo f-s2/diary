@@ -130,7 +130,7 @@ export default {
     },
     // #endif
     uploadSuccess: {
-      type: Function,
+      type: [Function, Object],
       default: (res) => {
         return {
           success: false,
@@ -497,9 +497,14 @@ export default {
       let uploadImgs = [];
       tempFilePaths.forEach((item, index) => {
         uploadImgs.push(new Promise((resolve, reject) => {
+          let url = this.action
+          // #ifdef APP
+            url = import.meta.env.VITE_APP_BASE_URL + this.action
+          // #endif
+          
           //console.log(index, item)
           const uploadTask = uni.uploadFile({
-            url: this.action, //仅为示例，非真实的接口地址
+            url: url, //仅为示例，非真实的接口地址
             filePath: item,
             name: this.name,
             fileType: 'image',
