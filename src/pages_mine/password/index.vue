@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { PasswordApi, UserApi } from '@/api/UserApi';
 import CustomHeaderNav from '@/components/CustomHeaderNav.vue';
+import PageContainer from '@/components/PageContainer.vue';
 import { useUserStore, type UserInfo } from '@/store/user';
 import { getPasswordDesc } from '@/utils/password';
 import { reactive, ref } from 'vue';
@@ -95,9 +96,8 @@ async function save() {
 </script>
 
 <template>
-    <div class="page-wrapper">
-        <CustomHeaderNav></CustomHeaderNav>
-        <div class="px-4 mt-22px">
+    <PageContainer>
+        <div class="px-4">
             <div class=" text-16px font-500 mb-3">修改密码</div>
             <uv-loading-icon v-if="loading"></uv-loading-icon>
 
@@ -142,5 +142,5 @@ async function save() {
                 <uv-button class="mt-30px" type="primary" @click="save">保存</uv-button>
             </template>
         </div>
-    </div>
+    </PageContainer>
 </template>

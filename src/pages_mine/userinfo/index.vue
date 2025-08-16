@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { UserApi } from '@/api/UserApi';
 import CustomHeaderNav from '@/components/CustomHeaderNav.vue';
+import PageContainer from '@/components/PageContainer.vue';
 import { useUserStore, type UserInfo } from '@/store/user';
 import { ref } from 'vue';
 
@@ -79,8 +80,7 @@ async function save() {
 </script>
 
 <template>
-    <div class="page-wrapper">
-        <CustomHeaderNav></CustomHeaderNav>
+    <PageContainer>
         <div class="px-4 mt-22px">
             <div class=" text-16px font-500 mb-3">基础信息</div>
             <uv-loading-icon v-if="loading"></uv-loading-icon>
@@ -121,7 +121,7 @@ async function save() {
                 <uv-button class="mt-30px" type="primary" @click="save">保存</uv-button>
             </template>
         </div>
-    </div>
+    </PageContainer>
 </template>
 
 <style lang="scss" scoped>
