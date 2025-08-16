@@ -76,6 +76,26 @@ function jump(areaId) {
     })
 }
 
+function handleScan() {
+    uni.scanCode({
+        scanType: ['qrCode'],
+        success: (res) => {
+            if (res.result) {
+                const data = JSON.parse(res.result);
+                if(data.id && detail.value?.areaInfoList.some(v => v.areaId === data.id)) {
+                    jump(data.id);
+                } else {
+                    uni.showToast({
+                        title: '该二维码与当前任务无关，请确认后再扫码。',
+                        icon: 'none',
+                        duration: 3000
+                    })
+                }
+            }
+        }
+    })
+}
+
 async function finish() {
     try {
         await StocktakingApi.finish(detail.value)
@@ -86,7 +106,7 @@ async function finish() {
         init(currentId.value)
     } catch (error) {
         console.log(error);
-        
+
     }
 }
 </script>
@@ -107,7 +127,8 @@ async function finish() {
                         <div class=" flex">
                             <div>{{ index + 1 }}、</div>{{ item.areaName }}
                         </div>
-                        <CustomTag class=" flex-shrink-0" :status="getStatus(item.completionProgress)" :progress="item.completionProgress">
+                        <CustomTag class=" flex-shrink-0" :status="getStatus(item.completionProgress)"
+                            :progress="item.completionProgress">
                         </CustomTag>
                     </div>
                 </div>
@@ -116,12 +137,15 @@ async function finish() {
         <template #footer>
             <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="detail?.status !== StocktakingStatusEnum.Completed">
                 <template v-if="detail?.type === StocktakingTypeEnum.SpareParts">
-                    <uv-button type="primary"
-                        v-if="detail?.areaInfoList.every(v => v.completionProgress === 1)" @click="finish">完成</uv-button>
-                    <uv-button type="primary" v-else>扫码</uv-button>
+                    <uv-button type="primary" v-if="detail?.areaInfoList.every(v => v.completionProgress === 1)"
+                        @click="finish">完成</uv-button>
+                    <!-- #ifdef APP -->
+                    <uv-button type="primary" @click="handleScan" v-else>扫码</uv-button>
+                    <!-- #endif -->
                 </template>
                 <uv-button type="primary" v-else
-                    :disabled="!detail?.areaInfoList.every(v => v.completionProgress === 1)" @click="finish">完成</uv-button>
+                    :disabled="!detail?.areaInfoList.every(v => v.completionProgress === 1)"
+                    @click="finish">完成</uv-button>
             </div>
         </template>
     </PageContainer>

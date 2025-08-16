@@ -186,7 +186,7 @@ const showTime = () => {
   datePicker.value.open()
 }
 const selectTime = ({value}) => {
-  formData.value.maintainTime = dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+  formData.value.maintainTime = dayjs(value).format('YYYY-MM-DD')
 }
 
 

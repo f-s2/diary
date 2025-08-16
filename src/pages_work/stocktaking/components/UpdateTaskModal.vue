@@ -60,12 +60,13 @@ defineExpose({
 
 <template>
     <CustomModal v-model:open="visible" title="盘点">
+        <div class=" text-14px">盘点状态：{{ formData.stocktakingQuantity === 1 ? '盘点完成' : '盘亏' }}</div>
         <uv-form class=" my-5" labelWidth="80px" :labelStyle="{ fontSize: '14px', fontWeight: 500 }" :model="formData" ref="formRef"
             :rules="rules">
             <uv-form-item label="盘点数量:" prop="stocktakingQuantity" required v-if="type !== StocktakingTypeEnum.Equipment">
                 <uv-input type="number" placeholder="请输入盘点数量" v-model="formData.stocktakingQuantity"></uv-input>
             </uv-form-item>
-            <uv-form-item label="备注内容:" prop="remark">
+            <uv-form-item label="备注内容:" prop="remark" :customStyle="{alignItems: 'flex-start'}">
                 <uv-textarea  placeholder="请输入备注内容" v-model="formData.remark"></uv-textarea>
             </uv-form-item>
         </uv-form>

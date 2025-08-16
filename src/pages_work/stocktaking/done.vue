@@ -122,6 +122,7 @@ function getList(item) {
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
                     @click="UpdateTaskModalRef.open(item, index)" v-if="detail.type === StocktakingTypeEnum.SpareParts">更新</uv-button>
             </ModuleWrapper>
+            <uv-empty mode="data" v-if="!list.length"></uv-empty>
         </div>
         <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">
         </UpdateTaskModal>

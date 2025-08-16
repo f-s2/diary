@@ -20,7 +20,9 @@ const visible = computed({
 </script>
 
 <template>
+    <!-- #ifndef APP -->
     <transition name="fade">
+    <!-- #endif -->
         <div class=" fixed z-100 top-0 left-0 w-full h-full px-5 bg-black bg-opacity-50 f-c-c" v-if="visible"
             @click.self="visible = false">
             <slot name="content">
@@ -34,7 +36,9 @@ const visible = computed({
                 </div>
             </slot>
         </div>
+    <!-- #ifndef APP -->
     </transition>
+    <!-- #endif -->
 </template>
 
 <style scoped>

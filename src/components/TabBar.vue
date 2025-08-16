@@ -132,10 +132,7 @@ function handleScan() {
         let id = undefined
         
         if(isUrl(url)) {
-          id = parseUrlQuery(url).id
-
-          console.log(url, parseUrlQuery(url));
-          
+          id = parseUrlQuery(url).id          
         }
 
         if (id) {
