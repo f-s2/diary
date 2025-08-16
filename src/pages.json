@@ -22,13 +22,15 @@
     {
       "path": "pages_work/index/index",
       "style": {
-        "navigationBarTitleText": "任务列表"
+        "navigationBarTitleText": "任务列表",
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages_work/index/list",
       "style": {
-        "navigationBarTitleText": "任务列表"
+        "navigationBarTitleText": "任务列表",
+        "navigationStyle": "custom"
       }
     },
     {

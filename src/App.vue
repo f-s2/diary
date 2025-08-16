@@ -37,7 +37,8 @@ uni-page-wrapper {
   color: #333;
 }
 
-#app {
+.z-paging-content {
+  // 解决状态栏刘海高度问题
   padding-top: var(--status-bar-height);
 }
 

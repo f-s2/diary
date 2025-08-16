@@ -1,91 +1,94 @@
 <template>
-  <div class="home-body">
-    <div class=" bg-center bg-cover h-106px rounded-t-12px flex items-center justify-around"
-      :style="`background-image: url(${BannerBg})`">
-      <div class=" text-center text-white" v-for="item in cardInfo">
-        <div class=" font-600 text-28px">{{ mineInfo[item.code] }}</div>
-        <div class=" text-14px">{{ item.name }}</div>
-      </div>
-    </div>
-    <div class=" flex items-center justify-between">
-      <div v-for="nav in navList" :key="nav.name" @click="handleJump(nav)">
-        <div class="h-73px">
-          <image mode="heightFix" class=" h-full" :src="nav.icon" alt=""/>
+  <PageContainer hiddenHeader>
+    <div class="home-body">
+      <div class=" bg-center bg-cover h-106px rounded-t-12px flex items-center justify-around"
+        :style="`background-image: url(${BannerBg})`">
+        <div class=" text-center text-white" v-for="item in cardInfo">
+          <div class=" font-600 text-28px">{{ mineInfo[item.code] }}</div>
+          <div class=" text-14px">{{ item.name }}</div>
         </div>
-        <div class=" text-#333333 text-center mt-8px text-12px font-500">{{ nav.name }}</div>
       </div>
-    </div>
-    <div class="map-box">
-      <div class="module-title"> 点检概览</div>
-      <!-- <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
+      <div class=" flex items-center justify-between">
+        <div v-for="nav in navList" :key="nav.name" @click="handleJump(nav)">
+          <div class="h-73px">
+            <image mode="heightFix" class=" h-full" :src="nav.icon" alt="" />
+          </div>
+          <div class=" text-#333333 text-center mt-8px text-12px font-500">{{ nav.name }}</div>
+        </div>
+      </div>
+      <div class="map-box">
+        <div class="module-title"> 点检概览</div>
+        <!-- <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
                @change="(({ index }) => inspectIndex = index)" lineColor="#003A8B"></uv-tabs> -->
-      <div class="map-card module-wrapper">
-        <div class="card-title"> 今日完成情况</div>
-        <div class="mid-items">
-          <div class="mid-item" v-for="item in completeInfo">
-            <div class="value">{{
-              (item.transform ? item.transform(inspectionInfo[inspectIndex]?.[item.code])
-                :
-                inspectionInfo[inspectIndex]?.[item.code]) ?? 0
-            }}
+        <div class="map-card module-wrapper">
+          <div class="card-title"> 今日完成情况</div>
+          <div class="mid-items">
+            <div class="mid-item" v-for="item in completeInfo">
+              <div class="value">{{
+                (item.transform ? item.transform(inspectionInfo[inspectIndex]?.[item.code])
+                  :
+                  inspectionInfo[inspectIndex]?.[item.code]) ?? 0
+                }}
+              </div>
+              <div class="label">{{ item.name }}</div>
             </div>
-            <div class="label">{{ item.name }}</div>
           </div>
-        </div>
-        <div class="map-head">
-          <div class="card-title"> 月度点检曲线</div>
-          <div class="legend">
-            <i style="background: #0B66C6;" class="square"></i>
-            <span class="label">已完成 </span>
-            <i style="background: #14C9C9;" class="square"></i>
-            <span class="label">总数 </span>
-            <i style="background: #14C9C9;" class="line"></i>
-            <span class="label">完成率 </span>
+          <div class="map-head">
+            <div class="card-title"> 月度点检曲线</div>
+            <div class="legend">
+              <i style="background: #0B66C6;" class="square"></i>
+              <span class="label">已完成 </span>
+              <i style="background: #14C9C9;" class="square"></i>
+              <span class="label">总数 </span>
+              <i style="background: #14C9C9;" class="line"></i>
+              <span class="label">完成率 </span>
+            </div>
           </div>
-        </div>
-        <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" mode="D" />
+          <map-chart :data-source="inspectionInfo[inspectIndex]?.historyList" mode="D" />
 
+        </div>
       </div>
-    </div>
-    <div class="map-box">
-      <div class="box-title module-title"> 保养概览</div>
-      <!-- <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
+      <div class="map-box">
+        <div class="box-title module-title"> 保养概览</div>
+        <!-- <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
                :lineWidth="12" :lineHeight="4" :activeStyle="{ fontWeight: 'bold', color: '#000' }"
                :inactiveStyle="{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: 'bold' }"
                @change="(({ index }) => mtIndex = index)" lineColor="#003A8B"></uv-tabs> -->
-      <div class="map-card module-wrapper">
-        <div class="card-title">今日完成情况</div>
-        <div class="mid-items">
-          <div class="mid-item" v-for="item in completeInfo">
-            <div class="value">{{
-              (item.transform ? item.transform(maintenanceInfo[mtIndex]?.[item.code]) :
-                maintenanceInfo[mtIndex]?.[item.code]) ?? 0
-            }}
+        <div class="map-card module-wrapper">
+          <div class="card-title">今日完成情况</div>
+          <div class="mid-items">
+            <div class="mid-item" v-for="item in completeInfo">
+              <div class="value">{{
+                (item.transform ? item.transform(maintenanceInfo[mtIndex]?.[item.code]) :
+                  maintenanceInfo[mtIndex]?.[item.code]) ?? 0
+                }}
+              </div>
+              <div class="label">{{ item.name }}</div>
             </div>
-            <div class="label">{{ item.name }}</div>
           </div>
-        </div>
-        <div class="map-head">
-          <div class="card-title"> 年度保养曲线</div>
-          <div class="legend">
-            <i style="background: #0B66C6;" class="square"></i>
-            <span class="label">已完成 </span>
-            <i style="background: #14C9C9;" class="square"></i>
-            <span class="label">总数 </span>
-            <i style="background: #14C9C9;" class="line"></i>
-            <span class="label">完成率 </span>
+          <div class="map-head">
+            <div class="card-title"> 年度保养曲线</div>
+            <div class="legend">
+              <i style="background: #0B66C6;" class="square"></i>
+              <span class="label">已完成 </span>
+              <i style="background: #14C9C9;" class="square"></i>
+              <span class="label">总数 </span>
+              <i style="background: #14C9C9;" class="line"></i>
+              <span class="label">完成率 </span>
+            </div>
           </div>
-        </div>
-        <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" mode="M" />
+          <map-chart :data-source="maintenanceInfo[mtIndex]?.historyList" mode="M" />
 
+        </div>
       </div>
+
     </div>
-
-  </div>
-  <TabBar :activeIndex="0" />
-
+    <template #footer>
+      <TabBar :activeIndex="0" />
+    </template>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -102,6 +105,8 @@ import Nav2 from '@/static/home/nav-2.png'
 import Nav3 from '@/static/home/nav-3.png'
 import Nav4 from '@/static/home/nav-4.png'
 import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
+import { onShow } from "@dcloudio/uni-app";
+import PageContainer from "@/components/PageContainer.vue";
 
 const cardInfo = [
   { name: '执行维修', icon: c_1, code: 'repair' },
@@ -147,12 +152,12 @@ const mtIndex = ref(0)
 const inspectIndex = ref(0)
 
 function handleJump(item: typeof navList[number]) {
-  if(item.path) {
+  if (item.path) {
     uni.navigateTo({
       url: item.path
     })
   }
-  
+
 }
 
 const init = () => {
@@ -167,8 +172,9 @@ const init = () => {
   })
 }
 
-
-init()
+onShow(() => {
+  init()
+})
 </script>
 <style lang='scss' scoped>
 .module-title {
@@ -198,6 +204,7 @@ init()
 
 .home-body {
   padding: 32rpx;
+  padding-top: 0px;
   display: flex;
   flex-direction: column;
   gap: 48rpx;
@@ -307,6 +314,7 @@ init()
       font-size: 40rpx;
       margin-bottom: 16rpx;
     }
+
     .label {
       color: #6A777F;
       font-size: 24rpx;
@@ -345,6 +353,7 @@ init()
 
     .label {
       color: #999999;
+
       &:not(:last-of-type) {
         margin-right: 20rpx;
       }

@@ -4,13 +4,16 @@ import Loading from './Loading.vue';
 
 defineProps<{
     loading?: boolean
+    hiddenHeader?: boolean
 }>()
 
 </script>
 
 <template>
-    <div class=" w-full h-100vh flex flex-col">
-        <CustomHeaderNav></CustomHeaderNav>
+    <div class=" w-full h-100vh flex flex-col" style="padding-top: var(--status-bar-height);">
+        <slot name="header">
+            <CustomHeaderNav v-if="!hiddenHeader"></CustomHeaderNav>
+        </slot>
         <Loading v-if="loading"></Loading>
         <template v-else>
             <div class=" h-0 pt-5 flex-1 overflow-auto">
