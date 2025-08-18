@@ -88,6 +88,11 @@
             <uv-input placeholder="请输入保修人员联系电话" type="number" v-model="formData.phoneNumber"></uv-input>
 
           </uv-form-item>
+           <uv-form-item label="紧急程度：" prop="urgency">
+          <uv-radio-group v-model="formData.urgency" shape="solved" activeColor="#0C6EC6" style="flex: none;">
+            <uv-radio :name="item.value" :label="item.label" style="margin-right: 10px;" v-for="item in RepairUrgencyLevelOptions"></uv-radio>
+          </uv-radio-group>
+        </uv-form-item>
           <uv-form-item label="故障描述：" :customStyle="{ alignItems: 'start' }" prop="malfunctionDescription"
             labelPosition="left">
             <uv-textarea v-model="formData.malfunctionDescription" placeholder="请输入故障描述"></uv-textarea>
@@ -121,6 +126,7 @@ import PageContainer from "@/components/PageContainer.vue";
 import ModuleWrapper from "@/components/ModuleWrapper.vue";
 import SelectDevice from '@/pages_work/report-repair/components/SelectDevice.vue'
 import SelectPosition from '@/pages_work/report-repair/components/SelectPosition.vue'
+import { RepairUrgencyLevelOptions } from "@/enums/work";
 
 uni.hideTabBar()
 
@@ -136,6 +142,7 @@ interface FormStatus {
   factoryModelId: string
   model: string
   id: string
+  urgency: string
 }
 
 const userStore = useUserStore()

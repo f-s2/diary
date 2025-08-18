@@ -27,6 +27,9 @@
       <ModuleWrapper title="报修信息">
         <LabelValueWrapper
           :list="reportConfig.map(v => ({ label: v.name, value: baseInfo[v.code], notRender: v.code === 'repairFiles' }))">
+          <LabelValueItem label="紧急程度">
+            {{ findOne(baseInfo.urgency, RepairUrgencyLevelOptions)?.label ?? '-' }}
+          </LabelValueItem>
           <LabelValueItem label="图片视频">
             <htz-image-upload :add="false" :remove="false" :dataType="1" mediaType="all"
               :modelValue="baseInfo.repairFiles"></htz-image-upload>
@@ -128,6 +131,8 @@ import ModuleWrapper from "@/components/ModuleWrapper.vue";
 import LabelValueWrapper from "@/components/label-value/LabelValueWrapper.vue";
 import LabelValueItem from "@/components/label-value/LabelValueItem.vue";
 import PageContainer from "@/components/PageContainer.vue";
+import { findOne } from "@/dict";
+import { RepairUrgencyLevelOptions } from "@/enums/work";
 
 const userStore = useUserStore()
 const loading = ref(false)

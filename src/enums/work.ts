@@ -28,3 +28,20 @@ export enum StocktakingTypeEnum {
   /** 备件盘点 */
   SpareParts,
 }
+
+
+export enum RepairUrgencyLevelEnum {
+    Urgent=0,
+    NotUrgent=1,
+}
+
+export const RepairUrgencyLevelOptions = [
+    {
+        label: '紧急',
+        value: RepairUrgencyLevelEnum.Urgent
+    },
+    {
+        label: '不紧急',
+        value: RepairUrgencyLevelEnum.NotUrgent
+    }
+]
