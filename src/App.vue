@@ -15,7 +15,7 @@ onLaunch(() => {
     userStore.urlPrefix = res.data
   })
 
-  
+  userStore.getUserInfo(true)
 })
 
 onError((err)=>{
