@@ -1,8 +1,7 @@
 <template>
 
-  <div class="page-body custom-nav-page" >
-    <nav-bar />
-    <u-loading v-if="loading"/>
+  <PageContainer :loading="loading">
+    <div class="px-4" >
     <div class="sub-title">
       基础信息
       <status-tag :status="+baseInfo.taskStatus" :needBg="true"/>
@@ -100,12 +99,16 @@
 
     </div>
 
-    <div class="bottom-btn" v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading" :key="flag">
+    
+    <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
+  </div>
+  <template #footer>
+    <div class="p-4" v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading" :key="flag">
       <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.maintainUser">领取任务</uv-button>
       <uv-button type="primary" @click="handleSave" v-if="baseInfo.maintainUser === userStore.userInfo.id">处理任务</uv-button>
     </div>
-    <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
-  </div>
+  </template>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -116,6 +119,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 import NavBar from "@/components/NavBar.vue";
 import { useUserStore } from '@/store/user';
+import PageContainer from '@/components/PageContainer.vue';
 
 const userStore = useUserStore()
 

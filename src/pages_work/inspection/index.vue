@@ -1,6 +1,6 @@
 <template>
-  <div class="page-body custom-nav-page">
-    <nav-bar />
+ <PageContainer>
+   <div class=" px-4">
     <u-loading v-if="loading"/>
     <div class="sub-title">
       基础信息
@@ -71,14 +71,16 @@
       </div>
 
     </div>
-
-
-    <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading" class="bottom-btn">
+    
+    <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
+  </div>
+  <template #footer>
+    <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading" class="p-4">
       <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.inspectUser">领取任务</uv-button>
       <uv-button type="primary" @click="handleSave" v-if="baseInfo.inspectUser === userStore.userInfo.id">处理任务</uv-button>
     </div>
-    <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
-  </div>
+  </template>
+ </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -89,6 +91,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import {ref} from "vue";
 import NavBar from "@/components/NavBar.vue";
 import { useUserStore } from '@/store/user';
+import PageContainer from '@/components/PageContainer.vue';
 
 const userStore = useUserStore()
 

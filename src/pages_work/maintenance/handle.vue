@@ -1,8 +1,6 @@
 <template>
-  <div class="page-body">
-    <div class="title">
-      填写保养记录
-    </div>
+  <PageContainer title="填写保养记录">
+    <div class="px-4">
     <div class="sub-title">
       保养记录
     </div>
@@ -48,7 +46,7 @@
                     </span>
           <span v-else style="color:#c0c4cc">请选择</span>
         </uv-form-item>
-        <uv-form-item label="完成时间" prop="maintainTime" borderBottom @click="showTime">
+        <uv-form-item label="完成时间" prop="maintainTime" required borderBottom @click="showTime">
           <uv-input v-model="formData.maintainTime" disabled disabledColor="#ffffff" placeholder="完成时间"
                     border="none">
           </uv-input>
@@ -112,7 +110,7 @@
 
       </div>
     </uv-form>
-    <div class="bottom-btn">
+    <div class="py-4">
       <uv-button type="primary" @click="handleSave">提交</uv-button>
     </div>
     <select-users :disabledIds="disabledIds" :multiple="multiple" v-model:show="modalState.userShow"
@@ -121,6 +119,7 @@
     <FillItem v-model:show="modalState.show" :data="formData.itemList" @ok="(list) => formData.itemList = list"/>
     <selectSpare :query="{deviceId:formData.deviceId}" v-model:show="modalState.spareShow" :data="formData.sparePartsList" @ok="handleAddOk"/>
   </div>
+  </PageContainer>
 </template>
 
 <script setup>
@@ -131,6 +130,7 @@ import {computed, reactive, ref} from "vue";
 import FillItem from './FillItem.vue';
 import SelectSpare from './SelectSpare.vue';
 import dayjs from "dayjs";
+import PageContainer from "@/components/PageContainer.vue";
 
 const formData = ref({})
 const disabledIds = ref([])
@@ -140,11 +140,17 @@ onLoad(({id}) => {
 onShow(() => {
   getInfo()
 })
+
+const formRef = ref()
 const rules = computed(() => {
   return {
     maintainHour: {
       required: true,
       message: '请输入'
+    },
+    maintainTime: {
+      required: true,
+      message: '请选择'
     }
   }
 })
@@ -238,7 +244,10 @@ const handleChange = (val, item) => {
     item.usedQuantity = +val
   }
 }
-const handleSave = () => {
+const handleSave = async () => {
+try {
+  await formRef.value.validate()
+
   const {itemList, sparePartsList} = formData.value
   if (itemList.some(item => !Number.isInteger(item.checked))) {
     uni.showToast({
@@ -279,6 +288,10 @@ const handleSave = () => {
       })
     }
   })
+} catch (error) {
+  console.log(error);
+  
+}
 
 
 }
