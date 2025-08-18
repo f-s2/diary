@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onLoad } from "@dcloudio/uni-app";
+import { onLoad, onShow } from "@dcloudio/uni-app";
 import { ref } from 'vue'
 import { WorkApi } from "@/api/WorkApi";
 import { findOne, RepairStatus } from "@/dict";
@@ -11,8 +11,15 @@ const workList = ref<ReportRepair.Item[]>([])
 const loading = ref(false)
 onLoad(({ id }) => {
   baseId.value = id
+})
+
+onShow(() => {
+  getData()
+})
+
+function getData() {
   loading.value = true
-  WorkApi.getUncompletedWork({ deviceId: id, overtime: 1 })
+  WorkApi.getUncompletedWork({ deviceId: baseId.value, overtime: 1 })
     .then(res => {
       workList.value = res.data.map(item => ({ ...item, statusInfo: findOne(item.repairStatus, RepairStatus) })) ?? []
 
@@ -20,7 +27,8 @@ onLoad(({ id }) => {
       readMoreRef.value?.init()
       loading.value = false
     })
-})
+}
+
 const handleOk = () => {
   uni.navigateTo({
     url: `/pages_work/report-repair/handle?id=${baseId.value}`
