@@ -10,6 +10,7 @@ declare namespace Stocktaking {
     areaInfoList: AreaInfo[];
     productRelList: ProductRelItem[]
     areaName: string
+    stocktakingUser: string
   }
 
   interface AreaInfo {

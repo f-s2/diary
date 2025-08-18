@@ -8,12 +8,15 @@ import PageContainer from '@/components/PageContainer.vue';
 import ArrowPng from '@/static/stocktaking/arrow.png'
 import SitePng from '@/static/stocktaking/site.png'
 import { onLoad } from '@dcloudio/uni-app';
-import { h, ref } from 'vue';
+import { computed, h, ref } from 'vue';
 import UpdateTaskModal from './components/UpdateTaskModal.vue';
 import { isUrl, joinUrlWithQuery, parseUrlQuery } from '@/utils';
-import { StocktakingTypeEnum } from '@/enums/work';
+import { StocktakingStatusEnum, StocktakingTypeEnum } from '@/enums/work';
+import { useUserStore } from '@/store/user';
 
 const queryData = ref()
+
+const userStore = useUserStore()
 
 onLoad((query) => {
     queryData.value = query
@@ -26,6 +29,10 @@ const list = ref<Stocktaking.ProductRelItem[]>([])
 const loading = ref(false)
 
 const detail = ref<Stocktaking.Detail>()
+
+const isCurrentUser = computed(() => detail.value.stocktakingUser === userStore.userInfo.id)
+
+const isCompleted = computed(() => detail.value.status === StocktakingStatusEnum.Completed)
 
 async function init(data) {
     try {
@@ -171,6 +178,7 @@ function handleScan() {
 
                 <LabelValueWrapper :list="getList(item)"></LabelValueWrapper>
 
+               <template v-if="isCurrentUser && !isCompleted">
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
                     @click="UpdateTaskModalRef.open(item, index)"
                     v-if="detail?.type === StocktakingTypeEnum.SpareParts">修改</uv-button>
@@ -180,11 +188,12 @@ function handleScan() {
                     <uv-button class=" !flex-1" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }"
                         @click="UpdateTaskModalRef.open(item, index, 1)">确认</uv-button>
                 </div>
+               </template>
             </ModuleWrapper>
             <uv-empty mode="data" v-if="!list.length"></uv-empty>
         </div>
         <template #footer>
-            <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="list.length">
+            <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="list.length && isCurrentUser && !isCompleted">
                 <uv-button type="primary" @click="save" :loading="loadingSave"
                     v-if="detail.type === StocktakingTypeEnum.SpareParts">保存</uv-button>
                 <!-- #ifdef APP -->

@@ -8,8 +8,11 @@ import { computed, ref } from 'vue';
 import CustomTag from './components/CustomTag.vue';
 import { StocktakingStatusEnum, StocktakingTypeEnum } from '@/enums/work';
 import PageContainer from '@/components/PageContainer.vue';
+import { useUserStore } from '@/store/user';
 
 const currentId = ref('')
+
+const userStore = useUserStore()
 
 onLoad((option) => {
     currentId.value = option.id
@@ -21,6 +24,8 @@ onShow(() => {
 })
 
 const detail = ref<Stocktaking.Detail>()
+
+const isCurrentUser = computed(() => detail.value.stocktakingUser === userStore.userInfo.id)
 
 const baseInfo = computed<LabelValueItem[]>(() => [
     {
@@ -82,7 +87,7 @@ function handleScan() {
         success: (res) => {
             if (res.result) {
                 const data = JSON.parse(res.result);
-                if(data.id && detail.value?.areaInfoList.some(v => v.areaId === data.id)) {
+                if (data.id && detail.value?.areaInfoList.some(v => v.areaId === data.id)) {
                     jump(data.id);
                 } else {
                     uni.showToast({
@@ -135,7 +140,8 @@ async function finish() {
             </ModuleWrapper>
         </div>
         <template #footer>
-            <div class="mx-auto w-[calc(100%-32px)] py-3" v-if="detail?.status !== StocktakingStatusEnum.Completed">
+            <div class="mx-auto w-[calc(100%-32px)] py-3"
+                v-if="detail?.status !== StocktakingStatusEnum.Completed && isCurrentUser">
                 <template v-if="detail?.type === StocktakingTypeEnum.SpareParts">
                     <uv-button type="primary" v-if="detail?.areaInfoList.every(v => v.completionProgress === 1)"
                         @click="finish">完成</uv-button>

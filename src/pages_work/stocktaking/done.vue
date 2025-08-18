@@ -8,12 +8,15 @@ import PageContainer from '@/components/PageContainer.vue';
 import ArrowPng from '@/static/stocktaking/arrow.png'
 import SitePng from '@/static/stocktaking/site.png'
 import { onLoad } from '@dcloudio/uni-app';
-import { ref, h } from 'vue';
+import { ref, h, computed } from 'vue';
 import UpdateTaskModal from './components/UpdateTaskModal.vue';
 import { joinUrlWithQuery } from '@/utils';
-import { StocktakingTypeEnum } from '@/enums/work';
+import { StocktakingStatusEnum, StocktakingTypeEnum } from '@/enums/work';
+import { useUserStore } from '@/store/user';
 
 const queryData = ref()
+
+const userStore = useUserStore()
 
 onLoad((query) => {
     queryData.value = query
@@ -25,6 +28,9 @@ const UpdateTaskModalRef = ref()
 const list = ref<Stocktaking.ProductRelItem[]>([])
 const detail = ref<Stocktaking.Detail>()
 const loading = ref(false)
+
+const isCurrentUser = computed(() => detail.value.stocktakingUser === userStore.userInfo.id)
+const isCompleted = computed(() => detail.value.status === StocktakingStatusEnum.Completed)
 
 async function init(data) {
     try {
@@ -120,7 +126,7 @@ function getList(item) {
 
                 <LabelValueWrapper :list="getList(item)"></LabelValueWrapper>
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
-                    @click="UpdateTaskModalRef.open(item, index)" v-if="detail.type === StocktakingTypeEnum.SpareParts">更新</uv-button>
+                    @click="UpdateTaskModalRef.open(item, index)" v-if="detail.type === StocktakingTypeEnum.SpareParts && isCurrentUser && !isCompleted">更新</uv-button>
             </ModuleWrapper>
             <uv-empty mode="data" v-if="!list.length"></uv-empty>
         </div>
