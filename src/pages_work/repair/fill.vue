@@ -68,7 +68,7 @@
 
 
         </uv-form-item>
-        <uv-form-item class="input-right" required label="完成时间" borderBottom @click="showTime">
+        <uv-form-item class="input-right" prop="finishTime" required label="完成时间" borderBottom @click="showTime">
           <uv-input v-model="formData.finishTime" disabled disabledColor="#ffffff" placeholder="完成时间"
                     border="none">
           </uv-input>
@@ -227,7 +227,19 @@ const rules = {
   repairDescription: {
     required: true,
     message: '请输入'
-  }
+  },
+  repairDuration: {
+    required: true,
+    message: '请输入'
+  },
+  maintenanceDuration: {
+    required: true,
+    message: '请输入'
+  },
+  solved: {
+    required: true,
+    message: '请选择'
+  },
 
 
 }

@@ -5,7 +5,7 @@
       v-model:current="currentTab" @change="changeTab" lineColor="#003A8B"></uv-tabs> -->
     <CustomHeaderNav :title="title"></CustomHeaderNav>
     <div class="search">
-      <uv-search bgColor="#fff" v-model="queryParam.searchContent" placeholder="任务编码、所属部门、设备名称、设备编码"
+      <uv-search bgColor="#fff" v-model="queryParam.searchContent" :placeholder="placeholder"
         @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
     </div>
     <div class="filter-bottom" v-if="!hiddenFilter">
@@ -74,13 +74,14 @@ const tagInfo = [
   },
 ];
 const tabsList = [
-  { name: '维修任务', key: 3 },
-  { name: '保养任务', key: 0 },
-  { name: '点检任务', key: 1 },
-  { name: '盘点任务', key: 2 },
+  { name: '维修任务', key: 3, placeholder: '任务编码、所属部门、设备名称、设备编码' },
+  { name: '保养任务', key: 0, placeholder: '任务编码、所属部门、设备名称、设备编码' },
+  { name: '点检任务', key: 1, placeholder: '任务编码、所属部门、设备名称、设备编码' },
+  { name: '盘点任务', key: 2, placeholder: '任务编码、任务名称' },
 ]
 
 const title = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0]).name)
+const placeholder = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0]).placeholder)
 
 const currentTab = ref(0)
 

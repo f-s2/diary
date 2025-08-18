@@ -107,10 +107,10 @@ const handleHistory = () => {
             </div>
           </div>
           <div class=" f-c-b text-14px mb-2">
-            <span class=" font-500">{{ item.deviceCode }}</span>
+            <span class=" font-500">{{ item.code }}</span>
             <span>{{ item.reportTime }}</span>
           </div>
-          <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.code }})</div>
+          <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.deviceCode }})</div>
         </div>
       </uv-read-more>
       <uv-button class=" mt-50px" type="primary" @click="handleOk">设备报修</uv-button>

@@ -44,17 +44,25 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    const logout = () => {
-        UserApi.loginOut().then((res) => {
-          const { authorities, userType } = userInfo.value
-          setUserInfo({ authorities, userType });
-          uni.setStorageSync('token', '')
-          const pages = getCurrentPages()
-          const from = '/' + pages[pages.length - 1].route
-          uni.reLaunch({
-            url: `/pages/login/index?from=${from}`
-          })
-        });
+    const logout = async (needApi=true) => {
+        try {
+            if(needApi) {
+                await UserApi.loginOut()
+            }
+
+            const { authorities, userType } = userInfo.value
+            setUserInfo({ authorities, userType });
+
+            uni.setStorageSync('token', '')
+            const pages = getCurrentPages()
+            const from = '/' + pages[pages.length - 1].route
+            uni.reLaunch({
+                url: `/pages/login/index?from=${from}`
+            })
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 
     return {

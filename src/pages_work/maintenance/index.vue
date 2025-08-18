@@ -207,7 +207,7 @@ const getInfo = () => {
   loading.value = true
   const {id} = baseInfo.value
   MaintenanceApi.detail(id).then(res => {
-    baseInfo.value = {...res.data, ...baseInfo.value}
+    baseInfo.value = {...baseInfo.value, ...res.data}
   }).finally(() => {
     loading.value = false
   })

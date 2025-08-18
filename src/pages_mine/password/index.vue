@@ -86,7 +86,7 @@ async function save() {
             title: '修改成功'
         })
 
-        userStore.logout()
+        userStore.logout(false)
 
     } catch (error) {
         console.log(error);
