@@ -4,7 +4,7 @@
       <div class=" mb-16px font-500 text-20px">我的</div>
       <div class="px-6px pt-6px h-183px rounded-4px overflow-hidden bg-cover bg-center mb-4"
         :style="`background-image: url(${Banner});`">
-        <div class=" bg-linear-to-b from-#FFE4BC to-#FFE1B6 rounded-t-md h-34px px-5px pt-4px">
+        <div class=" bg-gradient-to-b from-#FFE4BC to-#FFE1B6 rounded-t-md h-34px px-5px pt-4px">
           <div class=" border-(0.6px solid #9C723C) rounded-t-md border-op-50 border-b-none h-full flex items-center">
             <image mode="widthFix" class=" w-22px" :src="Department" alt="" />
             <div class="ml-2px color-#9C723C text-12px font-500">{{ baseInfo.organizeName }}</div>

@@ -8,7 +8,7 @@ import {
 
   transformerDirectives,
   transformerVariantGroup,
-  presetWind4
+  presetWind3
 
 } from 'unocss'
 
@@ -49,7 +49,7 @@ const config: UserConfig = defineConfig({
     ],
   ],
   presets: [
-    presetWind4(),
+    presetWind3(),
     presetUni({
       uno: {
         dark: darkMode,
