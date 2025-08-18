@@ -1,21 +1,29 @@
 <script setup>
 import { UserApi } from '@/api/UserApi'
-import { onLaunch, onError } from '@dcloudio/uni-app'
+import { onLaunch, onError, onShow } from '@dcloudio/uni-app'
 import { useUserStore } from '@/store/user'
 const userStore = useUserStore()
-onLaunch(() => {
 
+function initOptions() {
+  
+  if(!userStore.urlPrefix) {
+    UserApi.getPrefix().then(res => {
+      userStore.urlPrefix = res.data
+    })
+  }
+
+  userStore.getUserInfo(true)
+}
+
+onLaunch(() => {
    try {
     // 挂载APP启动日志提交
     uni.$dev.logReport("appOnLaunch>" + JSON.stringify(ctx));
   } catch (error) {}
+})
 
-
-  UserApi.getPrefix().then(res => {
-    userStore.urlPrefix = res.data
-  })
-
-  userStore.getUserInfo(true)
+onShow(() => {
+  initOptions()
 })
 
 onError((err)=>{
