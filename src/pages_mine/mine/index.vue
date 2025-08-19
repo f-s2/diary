@@ -13,7 +13,7 @@
         <div class="w-20px h-10px mx-auto bg-#FFE4BC" style="clip-path: polygon(50% 100%, 0% 0%, 100% 0%);"></div>
         <div class=" mt-10px mb-24px flex items-center gap-14px ml-25px">
           <div class=" w-62px h-62px rounded-full overflow-hidden">
-            <image mode="widthFix" class=" w-full h-full" :src="Avatar" alt="" />
+            <image mode="widthFix" class=" w-full h-full" :src="baseInfo.sex === 1 ? Avatar : GirlPng" alt="" />
           </div>
           <div>
             <div class=" text-white text-18px font-600">{{ baseInfo.username }}</div>
@@ -63,6 +63,7 @@ import { computed } from "vue";
 import Banner from '@/static/mine/mine-banner.png'
 import Department from '@/static/mine/department.png'
 import Avatar from '@/static/mine/avatar.png'
+import GirlPng from '@/static/mine/girl.jpg'
 import UpdateInfo from '@/static/mine/update-info.png'
 import UpdatePassword from '@/static/mine/update-password.png'
 import Arrow from '@/static/mine/arrow.png'
