@@ -75,8 +75,8 @@ const tagInfo = [
 ];
 const tabsList = [
   { name: '维修任务', key: 3, placeholder: '任务编码、所属部门、设备名称、设备编码' },
-  { name: '保养任务', key: 0, placeholder: '任务编码、所属部门、设备名称、设备编码' },
-  { name: '点检任务', key: 1, placeholder: '任务编码、所属部门、设备名称、设备编码' },
+  { name: '保养任务', key: 0, placeholder: '任务编码、所属部门、设备位置、位置编码' },
+  { name: '点检任务', key: 1, placeholder: '任务编码、所属部门、设备位置、位置编码' },
   { name: '盘点任务', key: 2, placeholder: '任务编码、任务名称' },
 ]
 

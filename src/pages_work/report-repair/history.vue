@@ -67,10 +67,10 @@ const queryList = (pageNo, pageSiz) => {
                         <span class=" font-500">{{ item.factoryModelName }}</span>
                     </div>
                     <div class=" f-c-b text-14px mb-2">
-                        <span class=" font-500">{{ item.deviceCode }}</span>
+                        <span class=" font-500">{{ item.code }}</span>
                         <span>{{ item.reportTime }}</span>
                     </div>
-                    <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.code }})</div>
+                    <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.deviceCode }})</div>
                 </div>
 
 

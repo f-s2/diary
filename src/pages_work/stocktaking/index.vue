@@ -16,7 +16,6 @@ const userStore = useUserStore()
 
 onLoad((option) => {
     currentId.value = option.id
-    init(option.id)
 })
 
 onShow(() => {
