@@ -23,10 +23,10 @@ const visible = computed({
     <!-- #ifndef APP -->
     <transition name="fade">
     <!-- #endif -->
-        <div class=" fixed z-100 top-0 left-0 w-full h-full px-5 bg-black bg-opacity-50 f-c-c" v-if="visible"
+        <div class=" fixed z-100 top-0 left-0 w-full h-full bg-black bg-opacity-50 f-c-c" v-if="visible"
             @click.self="visible = false">
             <slot name="content">
-                <div class=" w-full bg-color min-h-120px relative rounded-12px px-18px pt-14px pb-5">
+                <div class=" w-[calc(100vw-40px)] box-border overflow-hidden mx-auto bg-color min-h-120px relative rounded-12px px-18px pt-14px pb-5">
                     <div class=" text-center px-24px">{{ title }}</div>
                     <image mode="widthFix" class=" absolute top-11px right-18px  w-28px" :src="ClosePng" alt=""
                         @click="visible = false" />
