@@ -32,9 +32,9 @@ import { onLoad, onShow } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 
 const userStore = useUserStore();
-let redirectPath
+let redirectPath='/pages_home/index'
 onLoad(({ from }) => {
-  redirectPath = (from && (!from.startsWith('/pages/login/index'))) ? from : '/pages_home/index'
+  // redirectPath = (from && (!from.startsWith('/pages/login/index'))) ? from : '/pages_home/index'
 })
 onShow(() => {
   uni.hideTabBar()
