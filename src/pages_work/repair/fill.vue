@@ -1,9 +1,6 @@
 <template>
-  <div class="page-body">
-    <u-loading v-if="loading"/>
-    <div class="sub-title">
-      报修信息
-    </div>
+  <PageContainer title="报修信息" :loading="loading">
+    <div class="px-4">
     <uv-form labelPosition="left" :model="formData" :rules="rules" ref="formRef" labelWidth="auto">
 
       <div class="form-card">
@@ -150,14 +147,17 @@
 
     <uv-action-sheet ref="actionSheet" :actions="actionList" @select="handleSelect">
     </uv-action-sheet>
-    <div class="bottom-btn">
-      <uv-button type="primary" @click="handleSave(0)">保存</uv-button>
-      <uv-button type="primary" @click="handleSave(1)">提交</uv-button>
-    </div>
     <select-spare v-model:show="modalState.spareShow" :query="{deviceId:formData.deviceId}" :data="baseInfo.assistUserList" @ok="handleAddOk"/>
     <select-users :multiple="multiple" v-model:show="modalState.userShow" @ok="handleUserOk"/>
 
   </div>
+  <template #footer>
+    <div class=" flex gap-4 p-4">
+      <uv-button class=" !flex-1" type="primary" @click="handleSave(0)">保存</uv-button>
+      <uv-button class=" !flex-1" type="primary" @click="handleSave(1)">提交</uv-button>
+    </div>
+    </template>
+  </PageContainer>
 </template>
 
 <script setup>
@@ -173,6 +173,7 @@ import SelectSpare from '../maintenance/SelectSpare.vue';
 import SelectUsers from './SelectUsers.vue'
 
 import {reactive, ref} from "vue";
+import PageContainer from '@/components/PageContainer.vue';
 
 const userStore = useUserStore()
 const loading = ref(false)
