@@ -128,6 +128,9 @@ button[type="primary"][plain] {
 
 #app {
   box-sizing: border-box;
+   *, *::before, *::after {
+      box-sizing: border-box;
+   }
   .uv-button--primary {
     font-size: 18px;
     border-radius: 6px;

@@ -229,7 +229,7 @@ const handleSave = async () => {
               title: '报修成功'
             })
             uni.redirectTo({
-              url: `/pages_work/report-repair/done?id=${baseId.value}&code=${res.data}`
+              url: `/pages_work/report-repair/done?id=${formData.value.deviceId}&code=${res.data}`
             })
 
           }
@@ -252,8 +252,8 @@ const modalState = reactive({
 })
 const deviceColumns = ref([])
 const handleDeviceConfirm = (item) => {
-  const { name, code, id, model } = item
-  formData.value = { ...formData.value, model, id, name, code }
+  const { name, code, id: deviceId, model,  } = item
+  formData.value = { ...formData.value, model, deviceId, name, code }
 }
 const handleDevicePositionConfirm = (item) => {
   const { key: factoryModelId, label: factoryModelName } = item
