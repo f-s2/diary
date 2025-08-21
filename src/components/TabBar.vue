@@ -46,6 +46,7 @@ import Nav1 from '@/static/home/nav-1.png'
 import Nav2 from '@/static/home/nav-2.png'
 import Nav3 from '@/static/home/nav-3.png'
 import Nav4 from '@/static/home/nav-4.png'
+import RepairReport from '@/static/home/repair-report.png'
 import ArrowPng from '@/static/arrow.png'
 import { isUrl, joinUrlWithQuery, parseUrlQuery } from "@/utils";
 
@@ -91,6 +92,12 @@ const navList = [
     btnText: '前去保养'
   },
   {
+    name: '报修任务',
+    path: '/pages_work/report-repair/index',
+    icon: RepairReport,
+    btnText: '前去报修'
+  },
+  {
     name: '点检任务',
     path: '/pages_work/index/list?type=1',
     icon: Nav2,
@@ -102,13 +109,6 @@ const navList = [
     path: '/pages_work/index/list?type=3',
     icon: Nav3,
     btnText: '前去维修'
-
-  },
-  {
-    name: '设备报修',
-    path: '/pages_work/report-repair/index',
-    icon: Nav3,
-    btnText: '前去报修'
 
   },
   // {
