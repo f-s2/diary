@@ -42,7 +42,7 @@ const getCount = () => {
 
 const queryList = (pageNo, pageSiz) => {
     getCount()
-    WorkApi.list({ types: [3], status: 2, currentPage: pageNo, pageSize: pageSiz })
+    WorkApi.list({ types: [3], status: 2, currentPage: pageNo, pageSize: pageSiz, deviceId: baseId.value })
         .then((res) => {
             paging.value.complete(res.data?.records)
         })
