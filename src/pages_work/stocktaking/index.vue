@@ -45,7 +45,7 @@ const baseInfo = computed<LabelValueItem[]>(() => [
     },
     {
         label: '盘点进度',
-        value: +detail.value?.completionProgress.toFixed(4) * 100 + '%'
+        value: +(detail.value?.completionProgress * 100 ).toFixed(2)+ '%'
     },
 ])
 
