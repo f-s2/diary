@@ -1,7 +1,7 @@
 <template>
-  <div class="login-box">
+    <div class="w-full overflow-hidden h-100vh">
     <div class="login-header">
-      <img src="@/static/login-bg.png" class="mx-auto w-full " alt="" />
+      <image mode="widthFix" src="@/static/login-bg.png" class="mx-auto w-full " alt="" />
     </div>
     <div class="login-form">
       <div class="title font-bold">
@@ -63,6 +63,7 @@ import { useUserStore } from "@/store/user";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { ref, watchEffect } from "vue";
 import { useStorage } from "@vueuse/core";
+import PageContainer from "@/components/PageContainer.vue";
 
 const userStore = useUserStore();
 let redirectPath='/pages_home/index'
@@ -158,7 +159,7 @@ init();
 .login-form {
   display: block;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   padding: 48rpx;
   box-sizing: border-box;
   border-radius: 20rpx;
