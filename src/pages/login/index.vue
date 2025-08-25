@@ -1,125 +1,198 @@
 <template>
   <div class="login-box">
+    <div class="login-header">
+      <img src="@/static/login-bg.png" class="mx-auto w-full " alt="" />
+    </div>
     <div class="login-form">
-
-      <div class="title">
-        密码登录
+      <div class="title font-bold">
+        您好，欢迎使用 
+        <!-- 龙延智能生产管理系统 -->
       </div>
-      <uv-form class="form" ref="formRef" :rules="rules" :model="formData" label-position="left" labelWidth="auto">
-        <uv-form-item prop="loginAccount" :borderBottom="true">
-          <uv-input style="margin: 0 40rpx;" border="none" v-model="formData.loginAccount" placeholder="请输入用户账号" />
+      <uv-form
+        class="form"
+        ref="formRef"
+        :rules="rules"
+        :model="formData"
+        label-position="left"
+        labelWidth="auto"
+      >
+        <uv-form-item prop="loginAccount" >
+          <uv-input
+            prefixIcon="account"
+            border="none"
+            prefixIconStyle="font-size: 48rpx;color:rgba(167, 174, 197, 1)"
+            font-size="32rpx"
+            v-model="formData.loginAccount"
+            placeholder="请输入用户账号"
+          />
         </uv-form-item>
         <uv-form-item prop="password" key="password">
-          <uv-input style="margin:0   40rpx;" clearable border="none" :password="hidePassword"
-            v-model="formData.password" placeholder="请输入密码">
-            <template #suffix>
-              <uv-icon @click="hidePassword = !hidePassword" :name="hidePassword ? 'eye' : 'eye-off-outline'"></uv-icon>
-            </template>
+          <uv-input
+            prefixIcon="lock"
+            clearable
+           prefixIconStyle="font-size: 48rpx;color:rgba(167, 174, 197, 1)"
+            border="none"
+              font-size="32rpx"
+            :password="true"
+            v-model="formData.password"
+            placeholder="请输入密码"
+          >
 
           </uv-input>
         </uv-form-item>
       </uv-form>
-      <uv-button class="btn" type="primary" @click="save">登录</uv-button>
+      
+      <!-- 记住密码选项 -->
+      <!-- <div class="remember-password">
+        	<uv-checkbox-group v-model="checkboxValue">
+           <uv-checkbox :name="true" shape="circle" size="18">
+             <text class="remember-text">记住密码</text>
+          </uv-checkbox>
+          </uv-checkbox-group>
 
+      </div> -->
+      
+      <uv-button class="btn" type="primary" @click="save">登录</uv-button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { UserApi } from '@/api/UserApi';
+import { UserApi } from "@/api/UserApi";
 import { useUserStore } from "@/store/user";
-import { onLoad, onShow } from '@dcloudio/uni-app';
-import { ref } from 'vue';
+import { onLoad, onShow } from "@dcloudio/uni-app";
+import { ref, watchEffect } from "vue";
+import { useStorage } from "@vueuse/core";
 
 const userStore = useUserStore();
 let redirectPath='/pages_home/index'
 onLoad(({ from }) => {
-  // redirectPath = (from && (!from.startsWith('/pages/login/index'))) ? from : '/pages_home/index'
-})
+  // redirectPath = from && !from.startsWith("/pages/login/index") ? from : "/pages_home/index";
+});
 onShow(() => {
-  uni.hideTabBar()
-})
+  uni.hideTabBar();
+});
 
-const formData = ref({ loginAccount: undefined, password: undefined })
-const hidePassword = ref(true)
+// 使用 useStorage 持久化存储登录信息
+const savedLoginInfo = useStorage('loginInfo', { loginAccount: '', password: '', rememberPassword: false });
+
+
+
+const formData = ref({ 
+  loginAccount: savedLoginInfo.value.rememberPassword ? savedLoginInfo.value.loginAccount : undefined, 
+  password: savedLoginInfo.value.rememberPassword ? savedLoginInfo.value.password : undefined 
+});
+const hidePassword = ref(true);
+const rememberPassword = ref(savedLoginInfo.value.rememberPassword);
+const checkboxValue=ref(savedLoginInfo.value.rememberPassword? [true]:[])
+watchEffect(()=>{
+  rememberPassword.value= !!checkboxValue.value[0]
+})
 const rules = {
   loginAccount: {
     required: true,
-    message: '请输入用户名'
+    message: "请输入用户名",
   },
   password: {
     required: true,
-    message: '请输入密码'
+    message: "请输入密码",
   },
-}
-const formRef = ref()
+};
+const formRef = ref();
 
 const save = () => {
   formRef.value.validate().then(() => {
-    UserApi.login(formData.value).then(res => {
+    UserApi.login(formData.value).then((res) => {
       if (res.code === 0) {
         uni.showToast({
-          title: '请求成功'
-        })
-        const { token, id } = res.data
-        uni.setStorageSync('token', token)
-        uni.setStorageSync('id', id)
-        userStore.userInfo = res.data
+          title: "请求成功",
+        });
+        
+        // 根据记住密码选项保存或清除登录信息
+        if (rememberPassword.value) {
+          savedLoginInfo.value = {
+            loginAccount: formData.value.loginAccount,
+            password: formData.value.password,
+            rememberPassword: true
+          };
+        } else {
+          savedLoginInfo.value = {
+            loginAccount: '',
+            password: '',
+            rememberPassword: false
+          };
+        }
+        
+        const { token, id } = res.data;
+        uni.setStorageSync("token", token);
+        uni.setStorageSync("id", id);
+        userStore.userInfo = res.data;
         uni.reLaunch({
-          url: redirectPath
-        })
+          url: redirectPath,
+        });
       }
-    })
-  })
-}
+    });
+  });
+};
 
 const init = () => {
-  const token = uni.getStorageSync('token')
-  token && UserApi.getUserInfo().then(res => {
-    if (res.code === 0) {
-      userStore.userInfo = res.data
-      uni.reLaunch({
-        url: redirectPath
-      })
-    }
-
-
-  })
-}
-init()
+  const token = uni.getStorageSync("token");
+  token &&
+    UserApi.getUserInfo().then((res) => {
+      if (res.code === 0) {
+        userStore.userInfo = res.data;
+        uni.reLaunch({
+          url: redirectPath,
+        });
+      }
+    });
+};
+init();
 </script>
 
 <style lang="scss" scoped>
+
+.login-header{
+  background: linear-gradient(to bottom, rgba(241, 249, 255, 1), #fff);
+}
 .login-form {
   display: block;
   width: 100%;
-  background-color: #F6F7F9;
   height: 100vh;
-
+  padding: 48rpx;
+  box-sizing: border-box;
+  border-radius: 20rpx;
+  background: #fff;
   .title {
     color: #000;
-    font-size: 48rpx;
-    font-weight: bold;
-    padding: 20% 0;
-    text-align: center;
+    font-size: 40rpx;
   }
 
   .btn {
-    margin: 20rpx 100rpx;
+    margin: auto;
   }
 }
 
 .form {
-  margin: auto;
-
+  margin: 48rpx auto ;
+  .uv-input {
+    border-radius: 4px;
+    background: rgba(244, 247, 255, 1);
+   
+    padding: 24rpx !important
+  }
+ 
 }
 
-.uv-form-item {
-  background-color: #fff;
-}
-
-.uv-form {
-  border-radius: 10px;
-  overflow: hidden;
+.remember-password {
+  margin-bottom: 32rpx;
+  display: flex;
+  align-items: center;
+  
+  .remember-text {
+    font-size: 28rpx;
+    color: #666;
+    margin-left: 16rpx;
+  }
 }
 </style>
