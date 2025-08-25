@@ -14,14 +14,14 @@ const loading = ref(false)
 onLoad(({ id }) => {
     baseId.value = id
     loading.value = true
-    WorkApi.getUncompletedWork({ deviceId: id, overtime: 1 })
-        .then(res => {
-            workList.value = res.data.map(item => ({ ...item, statusInfo: findOne(item.repairStatus, RepairStatus) })) ?? []
+    // WorkApi.getUncompletedWork({ deviceId: id, overtime: 1 })
+    //     .then(res => {
+    //         workList.value = res.data.map(item => ({ ...item, statusInfo: findOne(item.repairStatus, RepairStatus) })) ?? []
 
-        }).finally(() => {
-            readMoreRef.value?.init()
-            loading.value = false
-        })
+    //     }).finally(() => {
+    //         readMoreRef.value?.init()
+    //         loading.value = false
+    //     })
 })
 
 const jumpDetail = (item) => {
@@ -41,7 +41,7 @@ const getCount = () => {
 };
 
 const queryList = (pageNo, pageSiz) => {
-    getCount()
+    // getCount()
     WorkApi.list({ types: [3], status: 2, currentPage: pageNo, pageSize: pageSiz, deviceId: baseId.value })
         .then((res) => {
             paging.value.complete(res.data?.records)
@@ -60,7 +60,7 @@ const queryList = (pageNo, pageSiz) => {
         </template>
         <div class=" px-4">
             <div class=" font-500 mb-3">历史工单</div>
-            <div v-if="workList.length">
+            <div>
                 <div class="bg-white px-10px pt-10px pb-5 rounded-1 mb-3" v-for="item in workList" :key="item.id"
                     @click="jumpDetail(item)">
                     <div class=" flex f-c-b mb-3">
@@ -72,10 +72,7 @@ const queryList = (pageNo, pageSiz) => {
                     </div>
                     <div class=" text-14px font-500">{{ item.deviceName }}：({{ item.deviceCode }})</div>
                 </div>
-
-
             </div>
-            <uv-empty v-else mode="data"></uv-empty>
         </div>
     </z-paging>
 </template>

@@ -4,6 +4,8 @@ import mpAdapter from "axios-miniprogram-adapter";
 axios.defaults.adapter = mpAdapter;
 const { baseName, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
+const NotCheckLoginPages = ['pages_work/report-repair/index', 'pages_work/report-repair/handle', 'pages_work/report-repair/done', 'pages_work/report-repair/device', 'pages_work/report-repair/history']
+
 const {VITE_APP_BASE_URL} = import.meta.env
 
 let BaseUrl = ''
@@ -45,11 +47,15 @@ instance.interceptors.response.use(
     (response) => {
         const res = response.data;
 
+        const pageRoute = getCurrentPages().slice(-1)[0].route        
+
         // 请求出错处理
         // -1 超时、token过期或者没有获得授权
         if (successCode.includes(res.code)) {
             return res
-        } else if (invalidCode.includes(res.code)) {
+        } 
+        
+        if (invalidCode.includes(res.code) && !NotCheckLoginPages.some(v => pageRoute.startsWith(v))) {
 
             uni.setStorageSync('token', '')
             uni.setStorageSync("id", '');
@@ -61,7 +67,8 @@ instance.interceptors.response.use(
             uni.reLaunch({
                 url: '/pages/login/index?from=' + from
             })
-        } else {
+        } else if(!invalidCode.includes(res.code)) {
+            
             uni.showToast({
                 icon: 'none',
                 title: res.message
