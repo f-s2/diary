@@ -20,7 +20,7 @@ const tagWidth = 58
         <template v-if="status === StocktakingStatusEnum.InProgress">
             <div class=" absolute f-c-c top-0 right-0 h-full bg-#BBBBBB"
                 :style="`width: ${tagWidth * (1 - progress)}px;`"></div>
-            <span class=" relative z-10">{{ +progress.toFixed(3) * 100 + '%' }}</span>
+            <span class=" relative z-10">{{ +(progress * 100).toFixed(2)  + '%' }}</span>
         </template>
         <span class=" relative z-10" v-else>·{{ findOne(status, StocktakingStatusOptions)?.label }}</span>
     </div>
