@@ -48,14 +48,17 @@ instance.interceptors.response.use(
         const res = response.data;
 
         const pageRoute = getCurrentPages().slice(-1)[0].route        
-
+                
         // 请求出错处理
         // -1 超时、token过期或者没有获得授权
         if (successCode.includes(res.code)) {
             return res
         } 
         
-        if (invalidCode.includes(res.code) && !NotCheckLoginPages.some(v => pageRoute.startsWith(v))) {
+        if (invalidCode.includes(res.code)) {
+            if(NotCheckLoginPages.includes(pageRoute)) {
+                return Promise.reject(res)
+            }
 
             uni.setStorageSync('token', '')
             uni.setStorageSync("id", '');
@@ -67,7 +70,7 @@ instance.interceptors.response.use(
             uni.reLaunch({
                 url: '/pages/login/index?from=' + from
             })
-        } else if(!invalidCode.includes(res.code)) {
+        } else {
             
             uni.showToast({
                 icon: 'none',
