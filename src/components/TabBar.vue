@@ -3,7 +3,12 @@
     <div :class="['tab-item', { active: activeIndex === index }]" v-for="(item, index) in tabInfo" :key="item.name"
       @click="jump(item)">
 
-      <uv-icon :size="24" :name="activeIndex === index ? item.icon + '-fill' : item.icon"></uv-icon>
+      <!-- <uv-icon :size="24" :name="activeIndex === index ? item.icon + '-fill' : item.icon"></uv-icon> -->
+       <image
+        class=" h-24px"
+        :src="activeIndex === index ? item.activeIcon : item.icon"
+        mode="heightFix"
+       />
       <div class="label text-10px">{{ item.name }}</div>
       <!-- <uv-badge class="dot" v-if="item.custom" :value="+userStore.unFinishCount || ''" type="error" :max="99" /> -->
     </div>
@@ -47,6 +52,10 @@ import Nav2 from '@/static/home/nav-2.png'
 import Nav3 from '@/static/home/nav-3.png'
 import Nav4 from '@/static/home/nav-4.png'
 import RepairReport from '@/static/home/repair-report.png'
+import ActiveAccount from '@/static/active-account.png'
+import Account from '@/static/account.png'
+import Home from '@/static/home.png'
+import ActiveHome from '@/static/active-home.png'
 import ArrowPng from '@/static/arrow.png'
 import { isUrl, joinUrlWithQuery, parseUrlQuery } from "@/utils";
 
@@ -56,7 +65,8 @@ defineProps({ activeIndex: Number });
 const tabInfo = [
   {
     name: "首页",
-    icon: 'home',
+    icon: Home,
+    activeIcon: ActiveHome,
     path: "/pages_home/index",
   },
   // {
@@ -67,7 +77,8 @@ const tabInfo = [
   // },
   {
     name: "我的",
-    icon: 'account',
+    icon: Account,
+    activeIcon: ActiveAccount,
     path: "/pages_mine/mine/index",
   },
 ];
@@ -178,7 +189,7 @@ function handleScan() {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 20rpx 0;
+  padding: 13px 0;
   background-color: #fff;
 }
 
@@ -193,6 +204,7 @@ function handleScan() {
 
   &.active {
     color: $uv-primary;
+    font-weight: 600;
 
     :deep(.uvicon) {
       color: $uv-primary !important;

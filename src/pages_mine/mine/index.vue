@@ -31,7 +31,7 @@
         <div class=" flex items-center justify-between" v-for="nav in navList" :key="nav.name"
           @click="handleJump(nav.path)">
           <div class=" flex items-center gap-3">
-            <image mode="widthFix" class="w-5 h-5" :src="nav.icon" alt="" />
+            <image mode="widthFix" class="w-22px h-22px" :src="nav.icon" alt="" />
             <span class=" text-14px font-500">{{ nav.name }}</span>
           </div>
           <image mode="widthFix" class="w-13px" :src="Arrow" alt="" />
@@ -40,7 +40,7 @@
 
       <div class="f-c-b bg-white py-5 px-4 mt-4 rounded-4px" @click="handleLoginOut">
         <div class=" flex items-center gap-3">
-          <image mode="widthFix" class=" w-5" :src="LogoutPng" alt="" />
+          <image mode="widthFix" class=" w-22px" :src="LogoutPng" alt="" />
           <span class="text-14px font-500">退出登录</span>
         </div>
         <image mode="widthFix" class="w-13px" :src="Arrow" alt="" />
