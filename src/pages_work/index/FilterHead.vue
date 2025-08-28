@@ -5,7 +5,7 @@
       v-model:current="currentTab" @change="changeTab" lineColor="#003A8B"></uv-tabs> -->
     <CustomHeaderNav :title="title"></CustomHeaderNav>
     <div class="search">
-      <uv-search bgColor="#fff" v-model="queryParam.searchContent" :placeholder="placeholder"
+      <uv-search bgColor="#fff" height="42px" shape="square" :inputStyle="{fontSize: '12px'}" placeholderColor="#9CA5B0" v-model="queryParam.searchContent" :placeholder="placeholder"
         @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
     </div>
     <div class="filter-bottom" v-if="!hiddenFilter">
@@ -20,11 +20,11 @@
         筛选
       </div>
     </div>
-    <u-popup ref="popupRef" v-model:show="show" mode="bottom" title="任务筛选" :round="10">
+    <u-popup ref="popupRef" v-model:show="show" closeable mode="bottom" title="任务筛选" :round="10">
       <div class="popup">
 
         <div class="sub-label">创建时间端 :</div>
-        <div class="time-picker">
+        <div class="time-picker" :class="{'color-#999': !temQueryParam.date}">
           <span @click="openTime('createTimeStart')">{{ temQueryParam.createTimeStart ?? '开始时间' }} </span>
           至
           <span @click="openTime('createTimeEnd')">{{ temQueryParam.createTimeEnd ?? '结束时间' }}</span>
@@ -50,12 +50,17 @@ import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
 import { findOne } from "@/dict";
 import filter from "@/static/filter.png";
 import dayjs from "dayjs";
+import BackPng from '@/static/back.png'
 
 import { computed, ref, toRefs } from "vue";
 const props = defineProps({ queryParam: Object, hiddenFilter: Boolean });
 const emit = defineEmits(["load"]);
 const { queryParam } = toRefs(props);
 const tagInfo = [
+  {
+    name: "全部",
+    code: null,
+  },
   {
     name: "待完成",
     code: 0,
@@ -67,10 +72,6 @@ const tagInfo = [
   {
     name: "已完成",
     code: 2,
-  },
-  {
-    name: "全部",
-    code: null,
   },
 ];
 const tabsList = [
@@ -95,6 +96,8 @@ const selectTag = ({ code }) => {
   queryParam.value.status = code;
   emit("load");
 };
+
+selectTag({code: null})
 
 const show = ref(false);
 const confirm = ({ value }) => {
@@ -149,39 +152,46 @@ const openTime = (mode) => {
 }
 
 .search {
-  margin: 20rpx 40rpx;
+  margin: 24rpx 16px;
 }
 
 .filter-bottom {
   display: flex;
   align-items: center;
-  margin: 10px;
+  margin: 12px 16px;
   margin-bottom: 0;
 
   .tag-box {
     flex: 1;
+    display: flex;
+    gap: 6px;
   }
 
   .filter-icon {
     display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: 8px;
+    background-color: white;
+    border-radius: 4px;
     line-height: 20px;
-    font-size: 14px;
-    color: rgba($color: #000000, $alpha: 0.9);
+    font-size: 13px;
+    color: #999999
   }
 
   .icon {
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
+    margin-right: 2px;
   }
 
   .tag {
-    font-size: 20rpx;
+    font-size: 28rpx;
     display: inline-block;
-    padding: 14rpx;
+    padding: 8px 12px;
     background: #fff;
-    color: #5F6877;
-    border-radius: 16rpx;
-    margin-right: 20rpx;
+    color: #999999;
+    border-radius: 4px;
     border: 1px solid transparent;
 
     &.active {
@@ -192,9 +202,9 @@ const openTime = (mode) => {
 }
 
 .sub-label {
-  font-size: 14px;
-  color: #000;
-  font-weight: bold;
+  font-size: 16px;
+  color: #333333;
+  // font-weight: bold;
   margin: 12px 0 16px;
 }
 
@@ -227,7 +237,8 @@ const openTime = (mode) => {
   gap: 8px;
 
   .uv-button-wrapper {
-    flex: 1
+    flex: 1;
+    height: 42px;
   }
 
 
@@ -242,9 +253,9 @@ const openTime = (mode) => {
 
   span {
     flex: 1;
-    text-align: center;
+    // text-align: center;
     background-color: #f7f8fa;
-    padding: 10px 0;
+    padding: 10px;
     border-radius: 4px;
     font-size: 14px;
   }

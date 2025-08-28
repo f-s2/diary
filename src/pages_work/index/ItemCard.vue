@@ -2,7 +2,7 @@
   <div class="work-item">
     <template v-if="data.type !== 3">
 
-      <div class="item-head">
+      <!-- <div class="item-head">
         <div class="item-title ellipsis">
           {{ data.description }}
         </div>
@@ -15,11 +15,19 @@
                     {{ data.code }}
                 </span>
         <span>{{ data.createTime }} </span>
+      </div> -->
+      <div class=" f-c-b mb-3">
+        <text>{{ data.description ?? '-' }}</text>
+        <custom-tag :status="data.status"/>
+      </div>
+      <div class=" f-c-b text-14px">
+        <text>{{ data.code }}</text>
+        <text>{{  data.createTime }}</text>
       </div>
     </template>
    
     <template v-else>
-      <div class="item-head">
+      <!-- <div class="item-head">
         <div class="item-title ellipsis">
           {{ data.factoryModelName ?? '-' }}
         </div>
@@ -33,6 +41,18 @@
                 </span>
         <span>{{ data?.deviceName }}({{ data.deviceCode }})</span>
         <span>{{ data.reportTime }} </span>
+      </div> -->
+
+      <div class=" f-c-b mb-3">
+        <text>{{ data.factoryModelName ?? '-' }}</text>
+        <custom-tag :status="data.status"/>
+      </div>
+      <div class=" f-c-b text-14px mb-2">
+        <text>{{ data.code }}</text>
+        <text>{{  data.reportTime }}</text>
+      </div>
+      <div class=" text-14px">
+        {{ data?.deviceName }}: ({{ data.deviceCode }})
       </div>
     </template>
 
@@ -40,6 +60,8 @@
 </template>
 
 <script setup>
+import CustomTag from '@/components/CustomTag.vue';
+
 defineProps({data: Object})
 </script>
 <style lang='scss' scoped>
