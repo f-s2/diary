@@ -5,6 +5,8 @@ import PageContainer from '@/components/PageContainer.vue';
 import { useUserStore, type UserInfo } from '@/store/user';
 import { getPasswordDesc } from '@/utils/password';
 import { reactive, ref } from 'vue';
+import EyePng from '@/static/mine/eye.png'
+import EyeOffPng from '@/static/mine/eye-off.png'
 
 interface FormState {
     oldPassword: string
@@ -113,8 +115,12 @@ async function save() {
                             <uv-input placeholder="请输入旧密码" v-model="formData.oldPassword"
                                 :password="passwordStatus.oldPassword">
                                 <template #suffix>
-                                    <uv-icon @click="passwordStatus.oldPassword = !passwordStatus.oldPassword"
-                                        :name="!passwordStatus.oldPassword ? 'eye' : 'eye-off-outline'"></uv-icon>
+                                    <image
+                                        @click="passwordStatus.oldPassword = !passwordStatus.oldPassword"
+                                        class=" w-22px"
+                                        :src="!passwordStatus.oldPassword ? EyePng : EyeOffPng"
+                                        mode="widthFix"
+                                    />
                                 </template>
                             </uv-input>
                         </uv-form-item>
@@ -122,8 +128,12 @@ async function save() {
                             <uv-input placeholder="请输入新密码" v-model="formData.newPassword"
                                 :password="passwordStatus.newPassword">
                                 <template #suffix>
-                                    <uv-icon @click="passwordStatus.newPassword = !passwordStatus.newPassword"
-                                        :name="!passwordStatus.newPassword ? 'eye' : 'eye-off-outline'"></uv-icon>
+                                     <image
+                                        @click="passwordStatus.newPassword = !passwordStatus.newPassword"
+                                        class=" w-22px"
+                                        :src="!passwordStatus.newPassword ? EyePng : EyeOffPng"
+                                        mode="widthFix"
+                                    />
                                 </template>
 
                             </uv-input>
@@ -132,8 +142,12 @@ async function save() {
                             <uv-input placeholder="请确认密码" v-model="formData.confirmPassword"
                                 :password="passwordStatus.confirmPassword">
                                 <template #suffix>
-                                    <uv-icon @click="passwordStatus.confirmPassword = !passwordStatus.confirmPassword"
-                                        :name="!passwordStatus.confirmPassword ? 'eye' : 'eye-off-outline'"></uv-icon>
+                                    <image
+                                        @click="passwordStatus.confirmPassword = !passwordStatus.confirmPassword"
+                                        class=" w-22px"
+                                        :src="!passwordStatus.confirmPassword ? EyePng : EyeOffPng"
+                                        mode="widthFix"
+                                    />
                                 </template>
                             </uv-input>
                         </uv-form-item>

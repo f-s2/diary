@@ -155,6 +155,10 @@ button[type="primary"][plain] {
     border-color: #BBBBBB;
   }
 
+  .uv-form-item__body__left__content__required {
+    line-height: 1.5rem;
+  }
+
   // .uv-form-item__body {
   //   align-items: start;
   // }
