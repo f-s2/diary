@@ -22,6 +22,8 @@ export default {
 
             opts: {
                 color: ["#0B66C6", "rgba(20, 201, 201, 0.5)", "#14C9C9",],
+                fontColor: '#999999',
+                fontSize: 10,
                 padding: [15, 10, 0, 5],
                 enableScroll: false,
                 dataLabel: false,
@@ -30,20 +32,23 @@ export default {
                 },
                 xAxis: {
                     disableGrid: true,
-                    labelCount: 8
+                    labelCount: 8,
+                    fontColor: '#999999',
+                    fontSize: 10,
                 },
                 yAxis: {
                     data: [
                         {
                             position: "left",
                             title: '数量',
-                            axisLine: false
+                            axisLine: false,
+                            titleOffsetY: -4,
                         },
                         {
                             position: "right",
-                            title: '完成率(%)',
-                            axisLine: false
-
+                            title: '完成率%',
+                            axisLine: false,
+                            titleOffsetY: -4,
                         },
 
                     ]

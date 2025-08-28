@@ -154,7 +154,16 @@ button[type="primary"][plain] {
   background: #fff;
 }
 
-
+.uv-tabs__wrapper__nav {
+  .uv-tabs__wrapper__nav__item__text {
+    background-color: white;
+    padding: 7px 12px;
+    border-radius: 3px;
+     span {
+      font-size: 13px;
+     }
+  }
+}
 
 
 
