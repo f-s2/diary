@@ -20,7 +20,7 @@ export default defineConfig(async ({ mode }) => {
         plugins: [
           postCssPxToRem({
             rootValue: 16,
-            propList: ["*"], // 需要转换的属性，这里选择全部都进行转换
+            propList: ["*", '!line-height'], // 需要转换的属性，这里选择全部都进行转换
             selectorBlackList: ["norem", "ignore"], // 过滤掉norem-开头的class，不进行rem转换
             mediaQuery: false, // 允许在媒体查询中转换 px
           }),

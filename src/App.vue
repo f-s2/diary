@@ -49,7 +49,7 @@ uni-page-wrapper {
     rgba(240, 248, 255, 0.5) 250px,
     rgba(241, 249, 255, 0.5) 300px,
     rgba(234, 244, 254, 0.5) 332px,
-    #F1F9FF 332px,
+    #F1F9FF 400px,
     #F1F9FF 100%
   );
 }
@@ -157,8 +157,8 @@ button[type="primary"][plain] {
 
   .uv-form-item__body__left__content__required {
     // position: initial !important;
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 14px;
+    line-height: 22px;
   }
 
   // .uv-form-item__body {
@@ -167,22 +167,22 @@ button[type="primary"][plain] {
   // .uv-form-item__body__left__content__label {
   //   padding-top: 11px;
   // }
+
+  .uv-tabs__wrapper__nav {
+    .uv-tabs__wrapper__nav__item__text {
+      background-color: white;
+      padding: 7px 12px;
+      border-radius: 3px;
+      font-size: 13px;
+      span {
+        font-size: 13px;
+      }
+    }
+  }
 }
 
 .uv-button--plain {
   background: #fff;
-}
-
-.uv-tabs__wrapper__nav {
-  .uv-tabs__wrapper__nav__item__text {
-    background-color: white;
-    padding: 7px 12px;
-    border-radius: 3px;
-
-    span {
-      font-size: 13px;
-    }
-  }
 }
 
 
