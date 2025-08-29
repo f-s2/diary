@@ -5,8 +5,8 @@ import { useUserStore } from '@/store/user'
 const userStore = useUserStore()
 
 function initOptions() {
-  
-  if(!userStore.urlPrefix) {
+
+  if (!userStore.urlPrefix) {
     UserApi.getPrefix().then(res => {
       userStore.urlPrefix = res.data
     })
@@ -16,21 +16,21 @@ function initOptions() {
 }
 
 onLaunch(() => {
-   try {
+  try {
     // 挂载APP启动日志提交
     uni.$dev.logReport("appOnLaunch>" + JSON.stringify(ctx));
-  } catch (error) {}
+  } catch (error) { }
 })
 
 onShow(() => {
   initOptions()
 })
 
-onError((err)=>{
+onError((err) => {
   try {
     // 挂载devTools全局报错拦截
     uni.$dev.errorReport(err, "at App.vue onError", "oe");
-  } catch (error) {}
+  } catch (error) { }
 })
 
 </script>
@@ -41,8 +41,17 @@ onError((err)=>{
 
 page,
 uni-page-wrapper {
-  background-image: linear-gradient(to bottom, #9ADAFF, #ECFFF9 120px, #F1F9FF 200px);
   color: #333;
+  background-image: linear-gradient(
+    177deg,
+    rgba(154, 218, 255, 0.5) 0px,
+    rgba(236, 255, 249, 0.5) 138px,
+    rgba(240, 248, 255, 0.5) 250px,
+    rgba(241, 249, 255, 0.5) 300px,
+    rgba(234, 244, 254, 0.5) 332px,
+    #F1F9FF 332px,
+    #F1F9FF 100%
+  );
 }
 
 .z-paging-content {
@@ -128,9 +137,13 @@ button[type="primary"][plain] {
 
 #app {
   box-sizing: border-box;
-   *, *::before, *::after {
-      box-sizing: border-box;
-   }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   .uv-button--primary {
     font-size: 18px;
     border-radius: 6px;
@@ -145,6 +158,7 @@ button[type="primary"][plain] {
   .uv-form-item__body__left__content__required {
     // position: initial !important;
     font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   // .uv-form-item__body {
@@ -159,7 +173,17 @@ button[type="primary"][plain] {
   background: #fff;
 }
 
+.uv-tabs__wrapper__nav {
+  .uv-tabs__wrapper__nav__item__text {
+    background-color: white;
+    padding: 7px 12px;
+    border-radius: 3px;
 
+    span {
+      font-size: 13px;
+    }
+  }
+}
 
 
 
@@ -181,7 +205,7 @@ button[type="primary"][plain] {
 
 .uv-popup__content.bottom {
   max-height: 70vh;
-  min-height: 50vh;
+  min-height: 10vh;
   display: flex !important;
   padding: 20px;
   flex-direction: column;
