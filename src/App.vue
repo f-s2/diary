@@ -142,6 +142,11 @@ button[type="primary"][plain] {
     border-color: #BBBBBB;
   }
 
+  .uv-form-item__body__left__content__required {
+    // position: initial !important;
+    font-size: 1rem;
+  }
+
   // .uv-form-item__body {
   //   align-items: start;
   // }
@@ -203,10 +208,6 @@ button[type="primary"][plain] {
     color: rgba(0, 0, 0, 0.50);
   }
 
-}
-
-.uv-form-item__body__left__content__required {
-  // position: initial !important;
 }
 
 
