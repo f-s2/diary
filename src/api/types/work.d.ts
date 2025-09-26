@@ -35,6 +35,7 @@ declare namespace Stocktaking {
     remark: string;
     warehouse: string;
     goodsAllocation: string;
+    pictureUrls: string[]
   }
 }
 

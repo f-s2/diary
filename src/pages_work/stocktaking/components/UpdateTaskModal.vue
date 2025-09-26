@@ -2,6 +2,9 @@
 import CustomModal from '@/components/CustomModal.vue';
 import { StocktakingTypeEnum } from '@/enums/work';
 import { ref } from 'vue';
+import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
+import { netConfig } from '@/config/net.config';
+import { useUserStore } from '@/store/user';
 
 defineProps<{
     type?: number
@@ -10,6 +13,8 @@ defineProps<{
 const emit = defineEmits<{
     confirm: [Stocktaking.ProductRelItem, number]
 }>()
+
+const userStore = useUserStore()
 
 const visible = ref(false)
 
@@ -35,6 +40,10 @@ async function open(params, index, stocktakingQuantity?: number) {
         formData.value.stocktakingQuantity = stocktakingQuantity
     }
 
+    if(!formData.value.pictureUrls) {
+        formData.value.pictureUrls = []
+    }
+
     currentIndex.value = index
     visible.value = true
 }
@@ -50,6 +59,22 @@ async function confirm() {
     } catch (error) {
         console.log(error);
         
+    }
+}
+
+const uploadSuccess = (res) => {
+    const _res = JSON.parse(res.data);
+    if (_res.code == 0) {
+        return {
+            success: true,
+            url: userStore.userInfo.urlPrefix + _res.data.name,
+            name: _res.data.name
+        }
+    } else {
+        return {
+            success: false,
+            url: ''
+        }
     }
 }
 
@@ -69,6 +94,10 @@ defineExpose({
             <uv-form-item label="备注内容:" prop="remark" :customStyle="{alignItems: 'flex-start'}">
                 <uv-textarea  placeholder="请输入备注内容" v-model="formData.remark"></uv-textarea>
             </uv-form-item>
+            <uv-form-item label="图片:" class="image-form-item" prop="pictureUrls" :customStyle="{alignItems: 'flex-start', backgroundColor: 'transparent'}">
+                 <htz-image-upload :dataType="0" :max="9" mediaType="image" v-model="formData.pictureUrls" :uploadSuccess="uploadSuccess"
+                    :action="netConfig.baseName + '/business/picture/upload'"></htz-image-upload>
+            </uv-form-item>
         </uv-form>
 
         <div class=" flex gap-12px w-full">
@@ -79,3 +108,9 @@ defineExpose({
         </div>
     </CustomModal>
 </template>
+
+<style scoped>
+.image-form-item :deep(.uv-form-item__body__right) {
+    background-color: transparent;
+}
+</style>

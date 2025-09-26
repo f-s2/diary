@@ -13,6 +13,8 @@ import UpdateTaskModal from './components/UpdateTaskModal.vue';
 import { joinUrlWithQuery } from '@/utils';
 import { StocktakingStatusEnum, StocktakingTypeEnum } from '@/enums/work';
 import { useUserStore } from '@/store/user';
+import LabelValueItem from '@/components/label-value/LabelValueItem.vue';
+import htzImageUpload from '@/components/htz-image-upload/htz-image-upload.vue';
 
 const queryData = ref()
 
@@ -124,7 +126,12 @@ function getList(item) {
                     <div class="mt-10px" v-if="detail.type === StocktakingTypeEnum.SpareParts">结存数量：{{ item.balanceQuantity }}</div>
                 </div>
 
-                <LabelValueWrapper :list="getList(item)"></LabelValueWrapper>
+                <LabelValueWrapper :list="getList(item)">
+                    <LabelValueItem label="图片">
+                         <htz-image-upload :add="false" :remove="false" :dataType="0" mediaType="image"
+                            :modelValue="item.pictureUrls"></htz-image-upload>
+                    </LabelValueItem>
+                </LabelValueWrapper>
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
                     @click="UpdateTaskModalRef.open(item, index)" v-if="detail.type === StocktakingTypeEnum.SpareParts && isCurrentUser && !isCompleted">更新</uv-button>
             </ModuleWrapper>

@@ -26,7 +26,7 @@
 
       <view class="htz-image-upload-Item-del" v-if="remove" @click="imgDel(index)">×</view>
     </view>
-    <view class="htz-image-upload-Item htz-image-upload-Item-add" v-if="uploadLists.length < max && add"
+    <view class="htz-image-upload-Item htz-image-upload-Item-add bg-white" v-if="uploadLists.length < max && add"
           @click="chooseFile">
       +
     </view>
