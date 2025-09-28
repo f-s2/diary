@@ -8,12 +8,16 @@
       <uv-search bgColor="#fff" height="42px" shape="square" :inputStyle="{fontSize: '12px'}" placeholderColor="#9CA5B0" v-model="queryParam.searchContent" :placeholder="placeholder"
         @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
     </div>
-    <div class="filter-bottom" v-if="!hiddenFilter">
-      <div class="tag-box">
+    <div class="filter-bottom flex gap-16px" v-if="!hiddenFilter">
+      <!-- <div class="tag-box">
         <span @click="selectTag(item)" :class="['tag', { active: queryParam.status === item.code }]"
           v-for="item in tagInfo" :key="item.code">
           {{ item.name }}
         </span>
+      </div> -->
+      <div class="flex-1 w-0">
+        <uv-tabs :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
+               @change="selectTag" ></uv-tabs>
       </div>
       <div class="filter-icon" @click="handleOpen">
         <image mode="widthFix" class="icon" :src="filter" alt="" />
@@ -45,7 +49,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
 import { findOne } from "@/dict";
 import filter from "@/static/filter.png";
@@ -53,14 +57,27 @@ import dayjs from "dayjs";
 import BackPng from '@/static/back.png'
 
 import { computed, ref, toRefs } from "vue";
+
 const props = defineProps({ queryParam: Object, hiddenFilter: Boolean });
 const emit = defineEmits(["load"]);
 const { queryParam } = toRefs(props);
-const tagInfo = [
+const tagInfo = computed(() => [
   {
     name: "全部",
     code: null,
   },
+  ...(
+    +props.queryParam.types[0] === 3 ? [
+      {
+        name: '我的',
+        code: 4
+      },
+      {
+        name: '待领取',
+        code: 5
+      },
+    ] : []
+  ),
   {
     name: "待完成",
     code: 0,
@@ -72,8 +89,8 @@ const tagInfo = [
   {
     name: "已完成",
     code: 2,
-  },
-];
+  }
+])
 const tabsList = [
   { name: '维修任务', key: 3, placeholder: '任务编码、所属部门、设备名称、设备编码' },
   { name: '保养任务', key: 0, placeholder: '任务编码、所属部门、设备位置、位置编码' },
@@ -81,8 +98,8 @@ const tabsList = [
   { name: '盘点任务', key: 2, placeholder: '任务编码、任务名称' },
 ]
 
-const title = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0]).name)
-const placeholder = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0]).placeholder)
+const title = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0])?.name)
+const placeholder = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0])?.placeholder)
 
 const currentTab = ref(0)
 
@@ -92,8 +109,8 @@ const changeTab = ({ index, key }) => {
   emit("load");
 
 }
-const selectTag = ({ code }) => {
-  queryParam.value.status = code;
+const selectTag = (data) => {  
+  queryParam.value.status = data.key;
   emit("load");
 };
 
@@ -117,7 +134,7 @@ const confirm = ({ value }) => {
   }
 
 }
-const temQueryParam = ref({});
+const temQueryParam = ref<Record<string, any>>({});
 const handleOpen = () => {
   temQueryParam.value = JSON.parse(JSON.stringify(queryParam.value));
   show.value = true;
@@ -145,11 +162,6 @@ const openTime = (mode) => {
 </script>
 
 <style lang="scss" scoped>
-.tabs {
-  background: #FFFFFF;
-
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-}
 
 .search {
   margin: 24rpx 16px;
