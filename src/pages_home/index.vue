@@ -31,7 +31,7 @@
               mode="widthFix"
             />
             <div class=" absolute top-100px left-1/2 -translate-x-1/2 text-center" :style="{color: item.color}">
-              <div class="text-22px font-700">{{ item.totalCompleted }} <text class="text-18px font-600">单</text></div>
+              <div class="text-22px font-700">{{ item.totalCompleted }}<text class="text-18px font-600">单</text></div>
               <div class="text-12px font-600">{{ item.userName }}</div>
             </div>
           </div>
