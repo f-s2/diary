@@ -11,4 +11,12 @@ export class TaskApi {
         });
 
     }
+
+    static rankingList() {
+        return request({
+            url: prefix + "/task/rankingList",
+            method: "post",
+            data: {}
+        });
+    }
 }

@@ -16,6 +16,27 @@
           <div class=" text-#333333 text-center mt-8px text-12px font-500">{{ nav.name }}</div>
         </div>
       </div>
+      <div>
+        <div class="module-title">抢单排名</div>
+        <div class="module-wrapper flex items-end justify-center pb-24px pt-26px"> 
+          <div class=" w-100px relative -mr-1px" v-for="item in rankListOptions">
+            <image
+              class=" w-full"
+              :src="item.rankImage"
+              mode="widthFix"
+            />
+            <image
+              class=" absolute w-48px top-2px left-1/2 -translate-x-[56%]"
+              :src="+item.sex === 1 ? AvatarMan : AvatarWoMan"
+              mode="widthFix"
+            />
+            <div class=" absolute top-100px left-1/2 -translate-x-1/2 text-center" :style="{color: item.color}">
+              <div class="text-22px font-700">{{ item.totalCompleted }} <text class="text-18px font-600">单</text></div>
+              <div class="text-12px font-600">{{ item.userName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="map-box">
         <div class="module-title"> 点检概览</div>
         <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
@@ -89,7 +110,7 @@
 
 <script lang="ts" setup>
 import TabBar from "@/components/TabBar.vue";
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { HomeApi } from '../api/HomeApi.js';
 import c_1 from '../static/home/card_1.png';
 import c_2 from '../static/home/card_2.png';
@@ -100,9 +121,15 @@ import Nav1 from '@/static/home/nav-1.png'
 import Nav2 from '@/static/home/nav-2.png'
 import Nav3 from '@/static/home/nav-3.png'
 import Nav4 from '@/static/home/nav-4.png'
+import Rank1 from '@/static/home/rank-1.png'
+import Rank2 from '@/static/home/rank-2.png'
+import Rank3 from '@/static/home/rank-3.png'
+import AvatarMan from '@/static/home/avatar-man.png'
+import AvatarWoMan from '@/static/home/avatar-woman.png'
 import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
 import { onShow } from "@dcloudio/uni-app";
 import PageContainer from "@/components/PageContainer.vue";
+import { TaskApi } from "@/api/TaskApi";
 
 const cardInfo = [
   { name: '执行维修', icon: c_1, code: 'repair' },
@@ -144,6 +171,34 @@ const navList = [
 const mineInfo = ref({})
 const maintenanceInfo = ref([])
 const inspectionInfo = ref([])
+const rankingListData = ref<{
+  sex: 1 | 2
+  totalCompleted: number
+  userName: string
+}[]>([])
+
+const rankListOptions = computed<(typeof rankingListData.value[number] & {
+  rankImage: string
+  color: string
+
+})[]>(() => rankingListData.value.length ? [
+  {
+    ...rankingListData.value[1],
+    rankImage: Rank2,
+    color: '#575D77'
+  },
+  {
+    ...rankingListData.value[0],
+    rankImage: Rank1,
+    color: '#C27224'
+  },
+  {
+    ...rankingListData.value[2],
+    rankImage: Rank3,
+    color: '#B85509'
+  },
+] : [])
+
 const mtIndex = ref(0)
 const inspectIndex = ref(0)
 
@@ -165,6 +220,9 @@ const init = () => {
   })
   HomeApi.inspection({}).then(res => {
     inspectionInfo.value = res.data
+  })
+  TaskApi.rankingList().then((res) => {
+    rankingListData.value = res.data
   })
 }
 
