@@ -133,11 +133,11 @@ function getList(item) {
                     </LabelValueItem>
                 </LabelValueWrapper>
                 <uv-button class="mt-5" type="primary" :customStyle="{ height: '80rpx', fontSize: '28rpx' }" plain
-                    @click="UpdateTaskModalRef.open(item, index)" v-if="detail.type === StocktakingTypeEnum.SpareParts && isCurrentUser && !isCompleted">更新</uv-button>
+                    @click="UpdateTaskModalRef.open(item, index)" v-if="isCurrentUser && !isCompleted">更新</uv-button>
             </ModuleWrapper>
             <uv-empty mode="data" v-if="!list.length"></uv-empty>
         </div>
-        <UpdateTaskModal ref="UpdateTaskModalRef" @confirm="updateInfo">
+        <UpdateTaskModal ref="UpdateTaskModalRef" :type="detail.type" @confirm="updateInfo">
         </UpdateTaskModal>
     </PageContainer>
 </template>
