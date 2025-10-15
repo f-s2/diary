@@ -51,7 +51,7 @@ async function init(data) {
 }
 
 function updateInfo(data, index) {
-    Object.assign(list.value[index], data)
+    Object.assign(list.value[index], data, {differenceQuantity: list.value[index].balanceQuantity - data.stocktakingQuantity})
 
     if (detail.value.type === StocktakingTypeEnum.Equipment) {
         save()
