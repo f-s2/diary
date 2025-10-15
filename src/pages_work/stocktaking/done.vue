@@ -10,7 +10,7 @@ import SitePng from '@/static/stocktaking/site.png'
 import { onLoad } from '@dcloudio/uni-app';
 import { ref, h, computed } from 'vue';
 import UpdateTaskModal from './components/UpdateTaskModal.vue';
-import { joinUrlWithQuery } from '@/utils';
+import { isEmpty, joinUrlWithQuery } from '@/utils';
 import { StocktakingStatusEnum, StocktakingTypeEnum } from '@/enums/work';
 import { useUserStore } from '@/store/user';
 import LabelValueItem from '@/components/label-value/LabelValueItem.vue';
@@ -87,7 +87,7 @@ function getList(item) {
                     label: '差异数量',
                     value: item.differenceQuantity,
                     customRender(value) {
-                        return h('span', { style: { color: '#FF0000' } }, value || '-')
+                        return h('span', { style: { color: '#FF0000' } }, isEmpty(value) ? '-' : value)
                     }
                 },
                 {
