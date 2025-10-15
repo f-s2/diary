@@ -71,3 +71,8 @@ export function parseUrlQuery(url: string): Record<string, string> {
 
   return result;
 }
+
+export function isEmpty(val) {
+    const flag = Symbol('flag')
+    return (val ?? flag) === flag
+}
