@@ -19,4 +19,12 @@ export class TaskApi {
             data: {}
         });
     }
+
+    static statistics(data) {
+        return request({
+            url: prefix + "/task/task-statistics",
+            method: "post",
+            data
+        });
+    }
 }

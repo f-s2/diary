@@ -8,7 +8,14 @@
       <uv-search bgColor="#fff" height="42px" shape="square" :inputStyle="{fontSize: '12px'}" placeholderColor="#9CA5B0" v-model="queryParam.searchContent" :placeholder="placeholder"
         @search="$emit('load')" @clear="$emit('load')" :showAction="false" />
     </div>
-    <div class="filter-bottom flex gap-16px" v-if="!hiddenFilter">
+    <div class=" f-c-c">
+      <div class="f-c-c border-1px border-solid border-primary rounded-4px">
+        <div class="py-6px px-23px text-12px rounded-4px relative" :class="activeTab === item.value ? ' bg-primary color-white' : 'color-#999'" 
+        v-for="item in tabsArr" :key="item.value" @click="changeTab(item.value)">{{ item.name }} 
+        <span v-if="statistics?.[item.key]" class=" absolute top-1px right-13px scale-85 min-w-15px min-h-15px f-c-c bg-#FF0000 text-9px font-500 color-white rounded-full border-(1px solid white)">{{ statistics?.[item.key] > 99 ? '99+' : statistics?.[item.key] }}</span></div>
+      </div>
+    </div>
+    <div class="filter-bottom flex gap-8px" v-if="!hiddenFilter">
       <!-- <div class="tag-box">
         <span @click="selectTag(item)" :class="['tag', { active: queryParam.status === item.code }]"
           v-for="item in tagInfo" :key="item.code">
@@ -25,6 +32,7 @@
       <div class="filter-icon" @click="handleOpen">
         <image mode="widthFix" class="icon" :src="filter" alt="" />
         筛选
+        <image mode="widthFix" class="w-6px ml-3px" :src="angle" alt="" />
       </div>
     </div>
     <u-popup ref="popupRef" v-model:show="show" closeable mode="bottom" title="任务筛选" :round="10">
@@ -56,45 +64,94 @@
 import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
 import { findOne } from "@/dict";
 import filter from "@/static/filter.png";
+import angle from "@/static/angle.png";
 import dayjs from "dayjs";
 import BackPng from '@/static/back.png'
 
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import CustomTabs from "@/components/CustomTabs.vue";
+import { TaskApi } from "@/api/TaskApi";
+import { onShow } from "@dcloudio/uni-app";
 
 const props = defineProps({ queryParam: Object, hiddenFilter: Boolean });
 const emit = defineEmits(["load"]);
 const { queryParam } = toRefs(props);
-const tagInfo = computed(() => [
+
+const activeTab = ref(0)
+
+const tabsArr = [
   {
-    name: "全部",
-    code: null,
-  },
-  ...(
-    +props.queryParam.types[0] === 3 ? [
-      {
-        name: '我的',
-        code: 4
-      },
-      {
-        name: '待领取',
-        code: 5
-      },
-    ] : []
-  ),
-  {
-    name: "待完成",
-    code: 0,
+    name: '全部任务',
+    value: 0,
+    key: 'waitingReceived'
   },
   {
-    name: "已提交",
-    code: 1,
+    name: '我的任务',
+    value: 1,
+    key: 'waitingCompleted'
   },
-  {
-    name: "已完成",
-    code: 2,
-  }
+]
+
+const tagOptions = new Map<() => boolean, {name: string, code: any}[]>([
+  [() => [0,1,3].includes(+props.queryParam.types[0]) && queryParam.value.classification === 0, [
+    {
+      name: '待领取',
+      code: 4
+    },
+    {
+      name: '已超时',
+      code: 5
+    },
+    {
+      name: '待完成',
+      code: 0
+    },
+    {
+      name: '已完成',
+      code: 2
+    },
+  ]],
+  [() => [0,1,3].includes(+props.queryParam.types[0]) && queryParam.value.classification === 1, [
+    {
+      name: '待完成',
+      code: 0
+    },
+    {
+      name: '已超时',
+      code: 5
+    },
+    {
+      name: '待审核',
+      code: 6
+    },
+    {
+      name: '已完成',
+      code: 2
+    },
+  ]],
+  [() => [2].includes(+props.queryParam.types[0]), [
+    {
+      name: '待完成',
+      code: 0
+    },
+    {
+      name: '已完成',
+      code: 2
+    },
+  ]],
 ])
+
+const tagInfo = computed(() => {
+  let target  = [];
+  tagOptions.forEach((val, key) => {
+    if(key()) {
+      console.log(val);
+      
+      target = val
+    }
+  })
+  return target
+})
 const tabsList = [
   { name: '维修任务', key: 3, placeholder: '任务编码、所属部门、设备名称、设备编码' },
   { name: '保养任务', key: 0, placeholder: '任务编码、所属部门、设备位置、位置编码' },
@@ -105,20 +162,35 @@ const tabsList = [
 const title = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0])?.name)
 const placeholder = computed(() => tabsList?.find(v => v.key === +props.queryParam.types[0])?.placeholder)
 
-const currentTab = ref(0)
 
-const changeTab = ({ index, key }) => {
-  currentTab.value = index
-  queryParam.value.types = [key];
-  emit("load");
-
+const changeTab = data => {
+  activeTab.value = data
+  queryParam.value.classification = data
+  emit('load')
 }
+
 const selectTag = (data) => {  
   queryParam.value.status = data.key;
   emit("load");
 };
 
-selectTag({code: null})
+onShow(() => {
+  changeTab(0)
+})
+
+const statistics = ref()
+
+async function getCount() {
+  try {
+    const {data} = await TaskApi.statistics(props.queryParam)
+    statistics.value = data
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+getCount()
 
 const show = ref(false);
 const confirm = ({ value }) => {
@@ -187,7 +259,7 @@ const openTime = (mode) => {
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    padding: 8px;
+    padding: 7px 10px;
     background-color: white;
     border-radius: 4px;
     line-height: 20px;

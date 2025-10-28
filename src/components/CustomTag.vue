@@ -19,14 +19,24 @@ const statusOptions:(TypeOption & { value: number})[] = [
         value: 0
     },
     {
-        text: '已提交',
-        color: '#004098',
-        value: 1
-    },
-    {
         text: '已完成',
         color: '#6CD76B',
         value: 2
+    },
+    {
+        text: '待领取',
+        color: '#2db7f5',
+        value: 4
+    },
+    {
+        text: '维修超时',
+        color: '#FF2B00',
+        value: 5
+    },
+    {
+        text: '待审核',
+        color: '#004098',
+        value: 6
     },
 ]
 

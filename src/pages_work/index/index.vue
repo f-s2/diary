@@ -34,11 +34,11 @@ import ItemCard from './ItemCard.vue';
 
 const userStore = useUserStore();
 
-const getCount = () => {
-  WorkApi.getCount().then((res) => {
-    userStore.unFinishCount = res.data.uncompleted;
-  });
-};
+// const getCount = () => {
+//   WorkApi.getCount().then((res) => {
+//     userStore.unFinishCount = res.data.uncompleted;
+//   });
+// };
 
 onLoad((query) => {
   if(query.type) {
@@ -57,7 +57,7 @@ const queryParam = ref({
 const workList = ref([]);
 
 const queryList = (pageNo, pageSiz) => {
-  getCount()
+  // getCount()
   WorkApi.list({...queryParam.value, currentPage: pageNo, pageSize: pageSiz})
       .then((res) => {
         paging.value.complete(res.data?.records)

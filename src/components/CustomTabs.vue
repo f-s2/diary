@@ -1,9 +1,9 @@
 <template>
 	<div class="relative">
-		<div class="flex gap-14px mb-0 overflow-x-auto" ref="navRef">
+		<div class="flex gap-8px mb-0 overflow-x-auto" ref="navRef">
 			<span
-                class="px-12px py-7px rounded-3px text-13px flex-shrink-0 bg-white"
-                :class="[active === key ? 'color-primary font-500 border-1px border-solid border-primary' : 'color-#666666']"
+                class="px-10px py-7px rounded-3px text-13px flex-shrink-0 bg-white"
+                :class="[active === key ? 'color-primary font-500 border-1px border-solid border-primary' : 'color-#999']"
 				v-for="({ name, key }, i) in list"
 				:key="key"
 				@click="changeSort(key, i)"
@@ -21,6 +21,7 @@ import { nextTick, ref, watch } from 'vue'
 	const props = defineProps<{
 		list: {name: string, key: any}[]
 		value?: string
+        selectDefault?: boolean
 	}>()
 
 	const titles = ref<HTMLElement>()
@@ -48,9 +49,13 @@ import { nextTick, ref, watch } from 'vue'
         }
     })
 
-    watch(() => props.list.length, (nv) => {
-        if(nv) {            
-            !props.value && changeSort(props.list[0].key, 0)
+    watch(() => props.list.reduce((pre, cur) => pre+=`${cur.key}`,''), (nv) => {
+        if(nv) {        
+            if(props.selectDefault) {
+                !props.value && changeSort(props.list[0].key, 0)
+            } else {
+                active.value = undefined
+            }   
         }
     }, {
         immediate: true
