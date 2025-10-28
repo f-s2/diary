@@ -144,9 +144,7 @@ const tagOptions = new Map<() => boolean, {name: string, code: any}[]>([
 const tagInfo = computed(() => {
   let target  = [];
   tagOptions.forEach((val, key) => {
-    if(key()) {
-      console.log(val);
-      
+    if(key()) {      
       target = val
     }
   })

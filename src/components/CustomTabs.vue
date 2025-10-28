@@ -32,14 +32,14 @@ import { nextTick, ref, watch } from 'vue'
 
 	const emit = defineEmits<{
 		(e: 'update:value', value: string): void
-		(e: 'change', option:{value: string, index: number}): void
+		(e: 'change', option:{value: string, index: number, key: string}): void
 	}>()
 
     watch(active, nv => {
         if(nv !== props.value) {
             emit('update:value', nv)
             const index = props.list.findIndex(v => v.key === nv)
-            emit('change', {value: nv, index})
+            emit('change', {value: nv, key:nv, index})
         }
     })
 

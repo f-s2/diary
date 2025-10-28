@@ -23,33 +23,33 @@ const statusOptions:(TypeOption & { value: number})[] = [
         color: '#6CD76B',
         value: 2
     },
-    {
-        text: '待领取',
-        color: '#2db7f5',
-        value: 4
-    },
-    {
-        text: '维修超时',
-        color: '#FF2B00',
-        value: 5
-    },
-    {
-        text: '待审核',
-        color: '#004098',
-        value: 6
-    },
+    // {
+    //     text: '待领取',
+    //     color: '#2db7f5',
+    //     value: 4
+    // },
+    // {
+    //     text: '维修超时',
+    //     color: '#FF2B00',
+    //     value: 5
+    // },
+    // {
+    //     text: '待审核',
+    //     color: '#004098',
+    //     value: 5
+    // },
 ]
 
-const tagOption = computed(() => props.status !== undefined  ? statusOptions.find(v => v.value === props.status)  : props.option)
+const tagOption = computed(() => (props.status !== undefined ? statusOptions.find(v => v.value === props.status)  : props.option))
 
-const textColor = computed(() => tagOption.value.color || '#333333')
+const textColor = computed(() => tagOption.value?.color || '#333333')
 
 
 
 </script>
 
 <template>
-    <div class="relative f-c-c px-10px py-6px rounded-2px overflow-hidden flex-shrink-0" :style="{ color: textColor }">
+    <div class="relative f-c-c px-10px py-6px rounded-2px overflow-hidden flex-shrink-0" :style="{ color: textColor }" v-if="tagOption">
         <div class=" absolute w-full h-full top-0 left-0" :class="{' opacity-10': !tagOption.bgColor}" :style="{backgroundColor: tagOption.bgColor ||  textColor}"></div>
         <span class=" relative z-2 text-12px text-center">·{{ tagOption.text }}</span>
     </div>
