@@ -39,8 +39,8 @@
       </div>
       <div class="map-box">
         <div class="module-title"> 点检概览</div>
-        <uv-tabs class="tabs" :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
-               @change="(({ index }) => inspectIndex = index)" ></uv-tabs>
+        <CustomTabs :list="inspectionInfo?.map(item => ({ name: item.ownOrganizeName, key: item.ownOrganizeName }))"
+               @change="(({ index }) => inspectIndex = index)" ></CustomTabs>
         <div class="map-card module-wrapper">
           <div class="card-title"> 今日完成情况</div>
           <div class="mid-items">
@@ -71,8 +71,8 @@
       </div>
       <div class="map-box">
         <div class="box-title module-title"> 保养概览</div>
-        <uv-tabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.id }))"
-               @change="(({ index }) => mtIndex = index)"></uv-tabs>
+        <CustomTabs class="tabs" :list="maintenanceInfo?.map(item => ({ name: item.ownOrganizeName, key: item.ownOrganizeName }))"
+               @change="(({ index }) => mtIndex = index)"></CustomTabs>
         <div class="map-card module-wrapper">
           <div class="card-title">今日完成情况</div>
           <div class="mid-items">
@@ -130,6 +130,7 @@ import CustomHeaderNav from "@/components/CustomHeaderNav.vue";
 import { onShow } from "@dcloudio/uni-app";
 import PageContainer from "@/components/PageContainer.vue";
 import { TaskApi } from "@/api/TaskApi";
+import CustomTabs from "@/components/CustomTabs.vue";
 
 const cardInfo = [
   { name: '执行维修', icon: c_1, code: 'repair' },

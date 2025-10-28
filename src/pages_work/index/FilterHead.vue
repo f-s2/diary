@@ -16,8 +16,11 @@
         </span>
       </div> -->
       <div class="flex-1 w-0">
-        <uv-tabs :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
-               @change="selectTag" ></uv-tabs>
+        <!-- <uv-tabs :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
+               @change="selectTag" ></uv-tabs> -->
+
+        <CustomTabs :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
+               @change="selectTag"></CustomTabs>
       </div>
       <div class="filter-icon" @click="handleOpen">
         <image mode="widthFix" class="icon" :src="filter" alt="" />
@@ -57,6 +60,7 @@ import dayjs from "dayjs";
 import BackPng from '@/static/back.png'
 
 import { computed, ref, toRefs } from "vue";
+import CustomTabs from "@/components/CustomTabs.vue";
 
 const props = defineProps({ queryParam: Object, hiddenFilter: Boolean });
 const emit = defineEmits(["load"]);
