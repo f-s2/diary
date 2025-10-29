@@ -79,7 +79,7 @@
       </template>
     </div>
     <template #footer>
-      <div class="bottom-btn px-4 pt-4" v-if="!isView">
+      <div class="bottom-btn px-4 pt-4" v-if="!isView && baseInfo.auditStatus !== 0">
         <uv-button v-if="baseInfo.fillStatus === 0 && (baseInfo.repairStatus === 1 || baseInfo.repairStatus === 5)" type="primary"
           @click="handleConfirm">
           确认故障

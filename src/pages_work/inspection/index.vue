@@ -75,7 +75,7 @@
     <ViewItem v-model:show="itemShow" :data="baseInfo.itemList"/>
   </div>
   <template #footer>
-    <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading" class="p-4">
+    <div v-if="baseInfo.taskStatus === 0 && baseInfo.fillStatus !== -1 && !loading && baseInfo.auditStatus !== 0" class="p-4">
       <uv-button type="primary" @click="handleReceive" v-if="!baseInfo.inspectUser">领取任务</uv-button>
       <uv-button type="primary" @click="handleSave" v-if="baseInfo.inspectUser === userStore.userInfo.id">处理任务</uv-button>
     </div>
