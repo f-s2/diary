@@ -164,6 +164,7 @@ const placeholder = computed(() => tabsList?.find(v => v.key === +props.queryPar
 const changeTab = data => {
   activeTab.value = data
   queryParam.value.classification = data
+  queryParam.value.status = undefined
   emit('load')
 }
 
