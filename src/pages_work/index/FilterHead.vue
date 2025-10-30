@@ -26,7 +26,7 @@
         <!-- <uv-tabs :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
                @change="selectTag" ></uv-tabs> -->
 
-        <CustomTabs :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
+        <CustomTabs v-model:value="queryParam.status" :list="tagInfo?.map(item => ({ name: item.name, key: item.code }))"
                @change="selectTag"></CustomTabs>
       </div>
       <div class="filter-icon" @click="handleOpen">
