@@ -1,9 +1,9 @@
 {
   "pages": [
      {
-      "path": "pages_home/index",
+      "path": "pages/dialogue/index",
       "style": {
-        "navigationBarTitleText": "首页",
+        "navigationBarTitleText": "对话页",
         "navigationStyle": "custom",
         "h5": {
           "titleNView": false
@@ -20,148 +20,12 @@
       }
     },
     {
-      "path": "pages_work/index/index",
+      "path": "pages/history/index",
       "style": {
-        "navigationBarTitleText": "任务列表",
+        "navigationBarTitleText": "历史记录",
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages_work/index/list",
-      "style": {
-        "navigationBarTitleText": "任务列表",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/maintenance/index",
-      "style": {
-        "navigationBarTitleText": "任务详情",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/inspection/index",
-      "style": {
-        "navigationBarTitleText": "任务详情",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/maintenance/handle",
-      "style": {
-        "navigationBarTitleText": "处理任务"
-      }
-    },
-    {
-      "path": "pages_work/inspection/handle",
-      "style": {
-        "navigationBarTitleText": "处理任务"
-      }
-    },
-    {
-      "path": "pages_work/stocktaking/index",
-      "style": {
-        "navigationBarTitleText": "任务详情",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/stocktaking/handle",
-      "style": {
-        "navigationBarTitleText": "处理任务",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/stocktaking/done",
-      "style": {
-        "navigationBarTitleText": "已盘清单",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/repair/index",
-      "style": {
-        "navigationBarTitleText": "任务详情",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/repair/complete",
-      "style": {
-        "navigationBarTitleText": "任务详情"
-      }
-    },
-    {
-      "path": "pages_work/repair/fill",
-      "style": {
-        "navigationBarTitleText": "任务详情"
-      }
-    },
-    {
-      "path": "pages_work/report-repair/index",
-      "style": {
-        "navigationBarTitleText": "设备报修",
-        "note": "⚠️该路径与扫码报修绑定，禁止修改",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/report-repair/handle",
-      "style": {
-        "navigationBarTitleText": "设备报修",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/report-repair/history",
-      "style": {
-        "navigationBarTitleText": "历史工单",
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages_work/report-repair/done",
-      "style": {
-        "navigationBarTitleText": "设备报修",
-         "navigationStyle": "custom"
-      }
-    }, {
-      "path": "pages_work/report-repair/device",
-      "style": {
-        "navigationBarTitleText": "设备信息",
-        "navigationStyle": "custom"
-      }
-    },
-
-    {
-      "path": "pages_mine/mine/index",
-      "style": {
-        "navigationBarTitleText": "我的",
-         "h5": {
-          "titleNView": false
-        }
-      }
-    },
-    {
-      "path": "pages_mine/userinfo/index",
-      "style": {
-        "navigationBarTitleText": "基础信息",
-         "h5": {
-          "titleNView": false
-        }
-      }
-    },
-    {
-      "path": "pages_mine/password/index",
-      "style": {
-        "navigationBarTitleText": "修改密码",
-         "h5": {
-          "titleNView": false
-        }
-      }
-    }
   ],
   "subPackages": [
     {
@@ -187,19 +51,6 @@
       ]
     }
   ],
-  "tabBar": {
-    "custom": true,
-    "list": [
-      {
-        "pagePath": "pages_home/index",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages_mine/mine/index",
-        "text": "我的"
-      }
-    ]
-  },
   "globalStyle": {
     "navigationBarTextStyle": "#fff",
     "navigationBarBackgroundColor": "#127ED0",

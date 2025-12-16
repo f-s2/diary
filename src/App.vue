@@ -6,13 +6,13 @@ const userStore = useUserStore()
 
 function initOptions() {
 
-  if (!userStore.urlPrefix) {
-    UserApi.getPrefix().then(res => {
-      userStore.urlPrefix = res.data
-    })
-  }
+  // if (!userStore.urlPrefix) {
+  //   UserApi.getPrefix().then(res => {
+  //     userStore.urlPrefix = res.data
+  //   })
+  // }
 
-  userStore.getUserInfo(true)
+  // userStore.getUserInfo(true)
 }
 
 onLaunch(() => {

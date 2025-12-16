@@ -1,6 +1,3 @@
-import StatusTag from '@/components/StatusTag.vue';
-import UEmpty from '@/components/UEmpty.vue';
-import UPopup from '@/components/UPopup.vue';
 import ULoading from '@/components/zero-loading/index.vue';
 import uvUI from '@climblee/uv-ui';
 import { createPinia } from 'pinia';
@@ -24,9 +21,6 @@ export function createApp() {
 	app.use(store)
 	app.use(uvUI)
 	app.component('ULoading', ULoading)
-	app.component('UEmpty', UEmpty)
-	app.component('UPopup', UPopup)
-	app.component('StatusTag', StatusTag)
 
 	 //挂载Devtools
 	app.use(devTools, devToolsConfig)
