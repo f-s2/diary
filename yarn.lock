@@ -999,6 +999,11 @@
   resolved "https://registry.npmjs.org/@dcloudio/uni-app-vue/-/uni-app-vue-3.0.0-4070520250711001.tgz#81597fe7bfbc4795777709a35ad8b7df320a6d99"
   integrity sha512-/ISF+1xrcvUtcote+LfLyk/pyizTjEY6/3HZgBsOfXchkZBz0fkTWgnj5RHYeqwD7aHLsOJX93eaazNMnzD9Zw==
 
+"@dcloudio/uni-app-x@^0.7.59":
+  version "0.7.85"
+  resolved "https://registry.npmjs.org/@dcloudio/uni-app-x/-/uni-app-x-0.7.85.tgz#e74fc5c76fd488e55ae64f539aaddf93f4dad6ac"
+  integrity sha512-Dkt956TWknd4WOisZo9YqVO7Pt679NjXDLJ6cRTYV6LKack5G5C/RohHFiJvNUaCBXfd7eF4dPCACWq3VUJCog==
+
 "@dcloudio/uni-app@3.0.0-4070520250711001":
   version "3.0.0-4070520250711001"
   resolved "https://registry.npmjs.org/@dcloudio/uni-app/-/uni-app-3.0.0-4070520250711001.tgz#51d92d3b481fcb0fcac1370fce218850efb76ead"
@@ -1384,6 +1389,74 @@
     "@dcloudio/uni-cli-shared" "3.0.0-4070520250711001"
     "@dcloudio/uni-shared" "3.0.0-4070520250711001"
     debug "^4.3.3"
+
+"@dcloudio/uni-uts-v1@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uni-uts-v1/-/uni-uts-v1-3.0.0-4070520250711001.tgz#17b8f1edd7c76785a9b0ca66d8cf4c200d4bbb0d"
+  integrity sha512-wQYCO/UA4WcJ+0UDKF86WjiyXhsiOakTa/XBnkWpIEaXTPTwfnwQfbjDWZi6Hq81oNl0ZtS6jEHvPAIj0Nm5JA==
+  dependencies:
+    "@babel/code-frame" "^7.23.5"
+    "@dcloudio/uni-app-x" "^0.7.59"
+    "@dcloudio/uts" "3.0.0-4070520250711001"
+    "@rollup/pluginutils" "^5.0.5"
+    "@vue/shared" "3.4.21"
+    adm-zip "^0.5.12"
+    android-versions "^1.8.1"
+    colors "^1.4.0"
+    debug "^4.3.3"
+    fast-glob "^3.2.11"
+    find-cache-dir "^3.3.2"
+    fs-extra "^10.0.0"
+    graphlib "^2.1.8"
+    jsonc-parser "^3.2.0"
+    lodash "^4.17.21"
+    md5-file "^5.0.0"
+    object-hash "^3.0.0"
+    semver "^7.5.4"
+    source-map "^0.7.4"
+    source-map-js "^1.0.2"
+
+"@dcloudio/uts-darwin-arm64@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts-darwin-arm64/-/uts-darwin-arm64-3.0.0-4070520250711001.tgz#d5382f835867ee1a34144d64eb349446f59390f2"
+  integrity sha512-dDRVyaxflQDG/7/X4AnWZRH0eiTlWZ3Zyr+ybDxa1AX+UTKXYCEU5J85gLP2DVuNLOopueI+ba2SbyxazMOTQg==
+
+"@dcloudio/uts-darwin-x64@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts-darwin-x64/-/uts-darwin-x64-3.0.0-4070520250711001.tgz#ba8e600936bd978fc13b3e8a2d0cdae1ae7a1bd0"
+  integrity sha512-HK3gd0duu8kE5FZTnhDAE4lYBoOjTz6wKL/2MWH4g1LxMoO7eaIgvvazXJGuv0Ca1M1u1RsCYDg4g5I3WgCY6A==
+
+"@dcloudio/uts-linux-x64-gnu@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts-linux-x64-gnu/-/uts-linux-x64-gnu-3.0.0-4070520250711001.tgz#5e6191b5ca48f0a081be6a760d508620e2fbe78f"
+  integrity sha512-GtJDbMXNyLLHtQlhyrkxRrqlwNBp+Di+Q5WUyr+MPeHyeLphRjWmbreNsgjt1yMJgc5BkJg+5wwTWHj2wf9BWw==
+
+"@dcloudio/uts-linux-x64-musl@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts-linux-x64-musl/-/uts-linux-x64-musl-3.0.0-4070520250711001.tgz#de7dbe9808c4b86bc4f81020cf089ab5af970b93"
+  integrity sha512-5VYrGIOzRd/hmfFlSPagPgqXZuys1raNixNCSDgSUySSap37oQtrjST7WolqxdUVz1YFpmZRwa7BE5CGvEMX/w==
+
+"@dcloudio/uts-win32-ia32-msvc@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts-win32-ia32-msvc/-/uts-win32-ia32-msvc-3.0.0-4070520250711001.tgz#4fbcf3bd21ababf4d24e1207b88d63affe020ecc"
+  integrity sha512-noFe/ii1F+ssDWd7ClsJu/Lw/1B1S3W7b5x2Vq6k6y0/+BOHHjAW8oJfATDxWwnlvlyWmjX+FUAe79K9qxvcFQ==
+
+"@dcloudio/uts-win32-x64-msvc@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts-win32-x64-msvc/-/uts-win32-x64-msvc-3.0.0-4070520250711001.tgz#2825ff2f2beae95da2d897be6ff5be13ffa9c625"
+  integrity sha512-+dWatERo16CifUgcA8g7PXRbC48cfq8c0VMMMNIdtuySOb+2S4Ic/2MgrTLWlYQnRJOrgw4VzVOQeP9HzgjcCg==
+
+"@dcloudio/uts@3.0.0-4070520250711001":
+  version "3.0.0-4070520250711001"
+  resolved "https://registry.npmjs.org/@dcloudio/uts/-/uts-3.0.0-4070520250711001.tgz#f32d39b9c0af467b59e1de73dfdf113a7ad31e1a"
+  integrity sha512-97bCYKK1Jl4riFmqnCcUxAoHmN8ew+N+bYY5H6qSsdklP221y2rG2nRMeuBYi5vfgcz4S/gpAtjOkc0gdRqgTw==
+  optionalDependencies:
+    "@dcloudio/uts-darwin-arm64" "3.0.0-4070520250711001"
+    "@dcloudio/uts-darwin-x64" "3.0.0-4070520250711001"
+    "@dcloudio/uts-linux-x64-gnu" "3.0.0-4070520250711001"
+    "@dcloudio/uts-linux-x64-musl" "3.0.0-4070520250711001"
+    "@dcloudio/uts-win32-ia32-msvc" "3.0.0-4070520250711001"
+    "@dcloudio/uts-win32-x64-msvc" "3.0.0-4070520250711001"
 
 "@dcloudio/vite-plugin-uni@3.0.0-4070520250711001":
   version "3.0.0-4070520250711001"
@@ -3020,6 +3093,13 @@ adm-zip@^0.5.12:
   resolved "https://registry.npmmirror.com/adm-zip/-/adm-zip-0.5.16.tgz#0b5e4c779f07dedea5805cdccb1147071d94a909"
   integrity sha512-TGw5yVi4saajsSEgz25grObGHEUaDrniwvA2qwSC060KfqGPdglhvPMA2lPIoxs3PQIItj2iag35fONcQqgUaQ==
 
+android-versions@^1.8.1:
+  version "1.9.0"
+  resolved "https://registry.npmjs.org/android-versions/-/android-versions-1.9.0.tgz#433d53fc6ed5ba2b8d3c2801cb5da3964013274d"
+  integrity sha512-13O2B6PQMEM4ej9n13ePRQeckrCoKbZrvuzlLvK+9s2QmncpHDbYzZxhgapN32sJNoifN6VAHexLnd/6CYrs7Q==
+  dependencies:
+    semver "^7.5.2"
+
 any-base@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmmirror.com/any-base/-/any-base-1.1.0.tgz"
@@ -3272,10 +3352,20 @@ colorette@^2.0.20:
   resolved "https://registry.npmjs.org/colorette/-/colorette-2.0.20.tgz#9eb793e6833067f7235902fcd3b09917a000a95a"
   integrity sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==
 
+colors@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
+  integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
+
 commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.npmmirror.com/commander/-/commander-2.20.3.tgz"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
+
+commondir@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
+  integrity sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==
 
 compare-versions@^3.6.0:
   version "3.6.0"
@@ -3755,6 +3845,23 @@ finalhandler@1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
+find-cache-dir@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.npmjs.org/find-cache-dir/-/find-cache-dir-3.3.2.tgz#b30c5b6eff0730731aea9bbd9dbecbd80256d64b"
+  integrity sha512-wXZV5emFEjrridIgED11OoUKLxiYjAcqot/NJdAkOhlJ+vGzwhOAfcG5OX1jP+S0PcjEn8bdMJv+g2jwQ3Onig==
+  dependencies:
+    commondir "^1.0.1"
+    make-dir "^3.0.2"
+    pkg-dir "^4.1.0"
+
+find-up@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/find-up/-/find-up-4.1.0.tgz#97afe7d6cdc0bc5928584b7c8d7b16e8a9aa5d19"
+  integrity sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw==
+  dependencies:
+    locate-path "^5.0.0"
+    path-exists "^4.0.0"
+
 follow-redirects@1.5.10:
   version "1.5.10"
   resolved "https://registry.npmmirror.com/follow-redirects/-/follow-redirects-1.5.10.tgz"
@@ -3857,6 +3964,13 @@ graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.11"
   resolved "https://registry.npmmirror.com/graceful-fs/-/graceful-fs-4.2.11.tgz"
   integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
+
+graphlib@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.npmjs.org/graphlib/-/graphlib-2.1.8.tgz#5761d414737870084c92ec7b5dbcb0592c9d35da"
+  integrity sha512-jcLLfkpoVGmH7/InMC/1hIvOPSUh38oJtGhvrOFGzioE1DZ+0YW16RgmOJhHiuWTvGiJQ9Z1Ik43JvkRPRvE+A==
+  dependencies:
+    lodash "^4.17.15"
 
 gzip-size@^6.0.0:
   version "6.0.0"
@@ -4137,6 +4251,13 @@ localstorage-polyfill@^1.0.1:
   resolved "https://registry.npmmirror.com/localstorage-polyfill/-/localstorage-polyfill-1.0.1.tgz"
   integrity sha512-m4iHVZxFH5734oQcPKU08025gIz2+4bjWR9lulP8ZYxEJR0BpA0w32oJmkzh8y3UI9ci7xCBehQDc3oA1X+VHw==
 
+locate-path@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/locate-path/-/locate-path-5.0.0.tgz#1afba396afd676a6d42504d0a67a3a7eb9f62aa0"
+  integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
+  dependencies:
+    p-locate "^4.1.0"
+
 lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.npmmirror.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz"
@@ -4146,6 +4267,11 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.npmmirror.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
+
+lodash@^4.17.15, lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -4160,6 +4286,18 @@ magic-string@^0.30.11, magic-string@^0.30.17, magic-string@^0.30.7:
   integrity sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.0"
+
+make-dir@^3.0.2:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/make-dir/-/make-dir-3.1.0.tgz#415e967046b3a7f1d185277d84aa58203726a13f"
+  integrity sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==
+  dependencies:
+    semver "^6.0.0"
+
+md5-file@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/md5-file/-/md5-file-5.0.0.tgz#e519f631feca9c39e7f9ea1780b63c4745012e20"
+  integrity sha512-xbEFXCYVWrSx/gEKS1VPlg84h/4L20znVIulKw6kMfmBUAZNAnF00eczz9ICMl+/hjQGo5KSXRxbL/47X3rmMw==
 
 mdn-data@2.12.2:
   version "2.12.2"
@@ -4352,6 +4490,11 @@ npm-run-path@^4.0.1:
   dependencies:
     path-key "^3.0.0"
 
+object-hash@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/object-hash/-/object-hash-3.0.0.tgz#73f97f753e7baffc0e2cc9d6e079079744ac82e9"
+  integrity sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==
+
 object-inspect@^1.9.0:
   version "1.12.3"
   resolved "https://registry.npmmirror.com/object-inspect/-/object-inspect-1.12.3.tgz"
@@ -4391,6 +4534,25 @@ os-locale-s-fix@^1.0.8-fix-1:
   integrity sha512-Sv0OvhPiMutICiwORAUefv02DCPb62IelBmo8ZsSrRHyI3FStqIWZvjqDkvtjU+lcujo7UNir+dCwKSqlEQ/5w==
   dependencies:
     lcid "^3.0.0"
+
+p-limit@^2.2.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/p-limit/-/p-limit-2.3.0.tgz#3dd33c647a214fdfffd835933eb086da0dc21db1"
+  integrity sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==
+  dependencies:
+    p-try "^2.0.0"
+
+p-locate@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/p-locate/-/p-locate-4.1.0.tgz#a3428bb7088b3a60292f66919278b7c297ad4f07"
+  integrity sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==
+  dependencies:
+    p-limit "^2.2.0"
+
+p-try@^2.0.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
+  integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
 package-manager-detector@^1.3.0:
   version "1.3.0"
@@ -4442,6 +4604,11 @@ parseurl@~1.3.3:
   version "1.3.3"
   resolved "https://registry.npmmirror.com/parseurl/-/parseurl-1.3.3.tgz"
   integrity sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
+
+path-exists@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz#513bdbe2d3b95d7762e8c1137efa195c6c61b5b3"
+  integrity sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==
 
 path-key@^3.0.0, path-key@^3.1.0:
   version "3.1.1"
@@ -4522,6 +4689,13 @@ pixelmatch@^4.0.2:
   integrity sha512-J8B6xqiO37sU/gkcMglv6h5Jbd9xNER7aHzpfRdNmV4IbQBzBpe4l9XmbG+xPF/znacgu2jfEw+wHffaq/YkXA==
   dependencies:
     pngjs "^3.0.0"
+
+pkg-dir@^4.1.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/pkg-dir/-/pkg-dir-4.2.0.tgz#f099133df7ede422e81d1d8448270eeb3e4261f3"
+  integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
+  dependencies:
+    find-up "^4.0.0"
 
 pkg-types@^1.3.0, pkg-types@^1.3.1:
   version "1.3.1"
@@ -4887,10 +5061,15 @@ scule@^1.3.0:
   resolved "https://registry.npmmirror.com/scule/-/scule-1.3.0.tgz#6efbd22fd0bb801bdcc585c89266a7d2daa8fbd3"
   integrity sha512-6FtHJEvt+pVMIB9IBY+IcCJ6Z5f1iQnytgyfKMhDKgmzYG+TeH/wx1y3l27rshSbLiSanrR9ffZDrEsmjlQF2g==
 
-semver@^6.3.1:
+semver@^6.0.0, semver@^6.3.1:
   version "6.3.1"
   resolved "https://registry.npmmirror.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
+
+semver@^7.5.2, semver@^7.5.4:
+  version "7.7.3"
+  resolved "https://registry.npmjs.org/semver/-/semver-7.7.3.tgz#4b5f4143d007633a8dc671cd0a6ef9147b8bb946"
+  integrity sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==
 
 semver@^7.6.0:
   version "7.7.2"
@@ -4988,6 +5167,11 @@ source-map@0.6.1, source-map@^0.6.0:
   version "0.6.1"
   resolved "https://registry.npmmirror.com/source-map/-/source-map-0.6.1.tgz"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+
+source-map@^0.7.4:
+  version "0.7.6"
+  resolved "https://registry.npmjs.org/source-map/-/source-map-0.7.6.tgz#a3658ab87e5b6429c8a1f3ba0083d4c61ca3ef02"
+  integrity sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==
 
 statuses@2.0.1:
   version "2.0.1"

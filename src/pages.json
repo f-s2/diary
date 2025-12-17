@@ -11,21 +11,12 @@
       }
     },
     {
-      "path": "pages/login/index",
-      "style": {
-        "navigationBarTextStyle": "custom",
-        "app-plus": {
-          "titleNView": false
-        }
-      }
-    },
-    {
       "path": "pages/history/index",
       "style": {
         "navigationBarTitleText": "历史记录",
         "navigationStyle": "custom"
       }
-    },
+    }
   ],
   "subPackages": [
     {
