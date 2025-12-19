@@ -5,6 +5,10 @@
     import QuickIcon4 from '@/static/images/quick-icon-4.png'
     import QuickIcon5 from '@/static/images/quick-icon-5.png'
 
+    const emit = defineEmits<{
+        quickSend: [string],
+    }>()
+
 
     const list:{
         text: string
@@ -33,7 +37,12 @@
         },
         {
             text: '历史记录',
-            icon: QuickIcon5
+            icon: QuickIcon5,
+            onClick() {
+                uni.navigateTo({
+                    url: '/pages/history/index'
+                })
+            }
         },
     ]
 
@@ -46,7 +55,7 @@
             <text class="text-16px font-600">您可以尝试这样问我</text>
         </view>
         <view class="py-32px space-y-23px">
-            <view class="f-c-c gap-10px" v-for="item in list" :key="item.text">
+            <view class="f-c-c gap-10px" v-for="item in list" :key="item.text" @click="item.onClick ? item.onClick() : $emit('quickSend', item.text)">
                 <image class="w-22px" :src="item.icon" mode="widthFix" />
                 <text class="text-14px font-500 flex-1">{{ item.text }}</text>
                 <image class="w-22px" src="@/static/images/arrow-right.png" mode="widthFix" />

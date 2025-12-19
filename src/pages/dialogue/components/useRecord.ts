@@ -1,5 +1,6 @@
 import { nextTick, onUnmounted, ref, type Ref } from "vue";
 
+/** 由于处理语音识别过程中的 dom 相关操作 */
 export default function useRecord(
   target: Ref<HTMLElement | undefined>,
   options: {
@@ -83,9 +84,13 @@ const isAIMessageEnd = ref(true)
 
 
   return {
+    /** 当前是否处于录音状态 */
     isRecording,
+    /** 是否已经取消录音 */
     isCancel,
+    /** 是否为唤醒状态 */
     isRouse,
+    /** AI 的最新消息是否已经发送完毕 */
     isAIMessageEnd,
     initRecord,
     resetRecord: reset,

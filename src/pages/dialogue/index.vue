@@ -18,6 +18,8 @@ const list = ref<{
     voice: any[]
 }[]>([])
 
+const InputComRef = ref<InstanceType<typeof InputCom>>()
+
 const needAutoScroll = ref(true)
 
 const isEnd = ref(false)
@@ -62,20 +64,17 @@ const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum
 const scrollTop = ref<number>()
 let lastScrollHeight = 0
 
-function onScroll(e) {
-    const { scrollTop, scrollHeight, clientHeight } = e.detail
-    lastScrollHeight = scrollHeight
-}
-
-function scrollToBottom() {
+function scrollToBottom() {    
     scrollTop.value = 9999 + lastScrollHeight
+    nextTick(() => {
+        uni.createSelectorQuery().select('#list-content').boundingClientRect(data => {
+            lastScrollHeight = (<any>data)?.height
+        }).exec()
+    })
 }
 
 const startY = ref(0)
 const CANCEL_DISTANCE = 100; // 上滑取消的距离阈值
-
-
-
 
 function onTouchStart(e: TouchEvent) {
     e.preventDefault();
@@ -100,7 +99,13 @@ const controlList = ref<{
     onClick?: (data: typeof list.value[0]) => void
 }[]>([
     {
-        icon: CopyPng
+        icon: CopyPng,
+        onClick(data) {
+            const text = data.data.filter(v => ![WB_Enum.AI_END, WB_Enum.AI_START].includes(v)).join(' ')            
+            uni.setClipboardData({
+                data: text
+            })
+        },
     },
     {
         icon: PraisePng
@@ -116,6 +121,17 @@ const controlList = ref<{
     },
 ])
 
+function jumpPage(path: string) {
+    uni.navigateTo({
+        url: path
+    })
+}
+
+function handleAdd() {
+    InputComRef.value?.iniStatus()
+    list.value = []
+}
+
 </script>
 
 <template>
@@ -123,18 +139,18 @@ const controlList = ref<{
         <template #header>
             <view class="f-c-b gap-12px px-14px">
                 <view class="text-22px font-700">AI助手</view>
-                <view class="flex-1 w-0 text-center line-clamp-1">{{ titleText }}</view>
+                <view class="flex-1 w-0 text-center line-clamp-1 px-20px">{{ titleText }}</view>
                 <view class="f-c-c gap-16px">
-                    <image class="w-18px" src="@/static/images/add.png" mode="widthFix" />
-                    <image class="w-20px" src="@/static/images/more.png" mode="widthFix" />
+                    <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd" />
+                    <image class="w-20px" src="@/static/images/more.png" mode="widthFix" @click="jumpPage('/pages/history/index')" />
                 </view>
             </view>
         </template>
-        <scroll-view class="h-full" scroll-y :scrollTop="scrollTop" scroll-with-animation @scroll="onScroll">
-            <view ref="listContentRef" @touchstart="onTouchStart" @touchmove="onTouchMove">
+        <scroll-view class="h-full" scroll-y :scrollTop="scrollTop">
+            <view id="list-content" @touchstart="onTouchStart" @touchmove="onTouchMove">
                 <view class="px-16px">
                     <TopTip class="mt-24px"></TopTip>
-                    <QuickEntry class="mt-15px"></QuickEntry>
+                    <QuickEntry class="mt-15px" @quick-send="InputComRef?.handleSend"></QuickEntry>
                 </view>
                 <view class="p-16px space-y-16px">
                     <view class="w-full flex gap-10px" v-for="item, index in list">
@@ -145,12 +161,13 @@ const controlList = ref<{
                             :class="item.type === MessageTypeEnum.AI ? ' rounded-tr-10px bg-white flex-1' : 'rounded-tl-10px bg-#4F87FE color-white ml-auto'">
                             <view class="flex items-center gap-6px mb-8px" v-if="index === list.length - 1 && !isEnd && item.type === MessageTypeEnum.AI">
                                 <image class=" w-14px" src="@/static/images/ai-loading.png" mode="widthFix" />
-                                <text class="text-14px font-500 color-#005CC2">分析中...</text>
+                                <text class="text-14px font-500 color-#005CC2 flex-1">分析中...</text>
+                                <image class=" w-16px" src="@/static/images/stop-ai.png" mode="widthFix" @click="InputComRef.handleStopAI" />
                             </view>
-                            <view v-for="text in item.data">{{ text }}</view>
+                            <view v-for="text in item.data">{{ text === WB_Enum.AI_START ? '' : text }}</view>
 
                             <view class="flex gap-10px mt-20px" v-if="(isEnd || index < list.length - 1) && item.type === MessageTypeEnum.AI">
-                                <image v-for="control in controlList" class=" w-22px" :src="control.icon" mode="widthFix"></image>
+                                <image v-for="control in controlList" class=" w-22px" :src="control.icon" mode="widthFix" @click="control?.onClick(item)"></image>
                             </view>
                         </view>
                     </view>
@@ -159,7 +176,7 @@ const controlList = ref<{
         </scroll-view>
 
         <template #footer>
-            <InputCom @send-message="handleSend"></InputCom>
+            <InputCom ref="InputComRef" @send-message="handleSend"></InputCom>
         </template>
     </PageContainer>
 </template>
