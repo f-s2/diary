@@ -44,7 +44,7 @@ export default defineConfig(async ({ mode }) => {
       proxy: {
         [netConfig.baseName]: {
           target: env.VITE_APP_BASE_URL,
-          ws: false,
+          ws: true,
           changeOrigin: true,
         },
         "/preview": {

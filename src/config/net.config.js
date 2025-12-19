@@ -1,7 +1,7 @@
 
 export const netConfig = {
 
-    baseName: '/kycmms',
+    baseName: '/lyvcs',
     // axios 基础url地址
     // baseURL: 'http://lkm.hrgly.com',
     // baseURL: 'http://192.168.102.233:31342',

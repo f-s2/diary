@@ -2,8 +2,8 @@
     "name" : "语音唤醒",
     "appid" : "__UNI__11C7CDA",
     "description" : "",
-    "versionName" : "1.0.3",
-    "versionCode" : 103,
+    "versionName" : "1.0.4",
+    "versionCode" : 104,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {

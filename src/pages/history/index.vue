@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
     
+    const list = ref([])
+
+    function getData() {
+        
+    }
 </script>
 <template>
     <view>
-        history
+        <view></view>
     </view>
 </template>

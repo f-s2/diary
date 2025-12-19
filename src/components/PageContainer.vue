@@ -20,7 +20,7 @@ onLoad(() => {
 </script>
 
 <template>
-    <div class=" w-full overflow-hidden h-full flex flex-col" ref="contentRef" style="padding-top: var(--status-bar-height);"
+    <div class=" w-full overflow-hidden h-100vh flex flex-col" ref="contentRef" style="padding-top: var(--status-bar-height);"
         >
         <slot name="header">
         </slot>
