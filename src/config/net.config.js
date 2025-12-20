@@ -1,14 +1,6 @@
-let baseName = "";
-
-// #ifdef APP
-(baseName = "/lyvcs"),
-  // #endif
-  // #ifdef H5
-  (baseName = "/lyvcs-mobile");
-// #endif
 
 export const netConfig = {
-  baseName,
+  baseName: "/lyvcs",
   // axios 基础url地址
   // baseURL: 'http://lkm.hrgly.com',
   // baseURL: 'http://192.168.102.233:31342',
