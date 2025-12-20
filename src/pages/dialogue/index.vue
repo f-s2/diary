@@ -57,7 +57,9 @@ function handleSend(options: { type: MessageTypeEnum; content: any }) {
             target.data.push(options.content)
         } else {
             target.voice.push(options.content)
+            // #ifdef APP
             pushAudio(options.content)
+            // #endif
         }
 
         list.value.push(target)
@@ -68,7 +70,9 @@ function handleSend(options: { type: MessageTypeEnum; content: any }) {
 
         } else {
             lastData.voice.push(options.content)
+            // #ifdef APP
             pushAudio(options.content)
+            // #endif
         }
     }
 
@@ -228,7 +232,7 @@ async function getData() {
                                 v-if="index === list.length - 1 && !isAIEnd && item.type === MessageTypeEnum.AI && !historyId">
                                 <image class=" w-14px" src="@/static/images/ai-loading.png" mode="widthFix" />
                                 <text class="text-14px font-500 color-#005CC2 flex-1">分析中...</text>
-                                <image class=" w-16px" src="@/static/images/stop-ai.png" mode="widthFix"
+                                <image class=" w-16px cursor-pointer" src="@/static/images/stop-ai.png" mode="widthFix"
                                     @click="handleStopAI" />
                             </view>
                             <view class=" whitespace-pre-wrap" v-for="text in item.data">{{ text === WB_Enum.AI_START ? '' : text }}</view>
@@ -236,7 +240,7 @@ async function getData() {
                             <view class="flex gap-10px mt-20px"
                                 v-if="(isAIEnd || index < list.length - 1 || historyId) && item.type === MessageTypeEnum.AI">
                                 <image v-for="control in controlList" class=" w-22px cursor-pointer" :src="control.icon"
-                                    mode="widthFix" @click="control?.onClick(item)"></image>
+                                    mode="widthFix" @click="() => control?.onClick(item)"></image>
                             </view>
                         </view>
                     </view>

@@ -211,7 +211,7 @@ function handleStopAI() {
 }
 
 const sockets = uni.connectSocket({
-    url: `${import.meta.env.VITE_APP_BASE_URL}${netConfig.baseName}/ws/message`,
+    url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message`,
     success() {
         console.log('WebSocket连接成功');
     },
@@ -286,7 +286,7 @@ defineExpose({
             <view class="flex-1 w-0 p-1px rounded-20px overflow-hidden h-38px"
                 style="background: linear-gradient(126.88deg, #009AFF 0%, #EB5CFF 34.73%, #00FFE3 68.48%, #1100FF 100%);">
                 <view class="bg-white w-full h-full rounded-20px">
-                    <input v-model="inputValue" class="w-full h-full px-12px outline-none text-14px" type="text"
+                    <input v-model="inputValue" class="w-full h-full px-12px outline-none text-14px" type="text" confirm-type="search" @keydown.enter="handleSend()"
                         placeholder="请输入执行指令" v-if="!isVoice" />
                     <view class="f-c-c h-full text-14px font-500">按住 说话</view>
                 </view>

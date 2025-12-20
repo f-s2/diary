@@ -15,6 +15,11 @@ import devToolsConfig from './devTools/config.js';
 import mpDevBubble from './devTools/core/components/mpDevBubble.vue'
 import { UvTabsDefaultConfig } from './config/theme';
 
+// #ifdef H5
+import eruda from 'eruda'
+eruda.init()
+// #endif
+
 export function createApp() {
 	const app = createSSRApp(App);
 	const store = createPinia().use(piniaPluginPersistedstate)
@@ -28,6 +33,8 @@ export function createApp() {
 	app.component("mpDevBubble", mpDevBubble)
 
 	nextTick(() => {
+		
+
 		//@ts-ignore
 	uni.$uv.setConfig({
 		props: {

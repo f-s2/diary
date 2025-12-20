@@ -3597,6 +3597,11 @@ entities@^4.5.0:
   resolved "https://registry.npmmirror.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
   integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
+eruda@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.npmjs.org/eruda/-/eruda-3.4.3.tgz#70cb99022c0f1115160030f3d357d029074051fa"
+  integrity sha512-J2TsF4dXSspOXev5bJ6mljv0dRrxj21wklrDzbvPmYaEmVoC+2psylyRi70nUPFh1mTQfIBsSusUtAMZtUN+/w==
+
 es-module-lexer@^1.2.1:
   version "1.3.0"
   resolved "https://registry.npmmirror.com/es-module-lexer/-/es-module-lexer-1.3.0.tgz"
