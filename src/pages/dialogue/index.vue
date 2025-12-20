@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onReady } from '@dcloudio/uni-app';
-import { computed, nextTick, reactive, ref } from 'vue';
+import { computed, nextTick, reactive, ref, watch, type Ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
 import TopTip from './components/TopTip.vue';
 import QuickEntry from './components/QuickEntry.vue';
@@ -11,6 +11,8 @@ import PhonicsPng from '@/static/images/control/phonics.png'
 import PraisePng from '@/static/images/control/praise.png'
 import SharePng from '@/static/images/control/share.png'
 import TreadPng from '@/static/images/control/tread.png'
+import useAudioList from './useAudio';
+import { isString } from '@/components/da-tree/utils';
 
 const list = ref<{
     type: MessageTypeEnum
@@ -22,16 +24,28 @@ const InputComRef = ref<InstanceType<typeof InputCom>>()
 
 const needAutoScroll = ref(true)
 
-const isEnd = ref(false)
+const isMessageEnd = ref(false)
+
+const { initAudio, pushAudio, isAudioEnd } = useAudioList(isMessageEnd, {})
+
+const isAIEnd = computed(() => isMessageEnd.value && isAudioEnd.value)
 
 function handleSend(options: { type: MessageTypeEnum; content: any }) {
-    if (options.type === MessageTypeEnum.AI && options.content === WB_Enum.AI_END) {
-        needAutoScroll.value && scrollToBottom()
-        return isEnd.value = true
+    const lastData = list.value[list.value.length - 1]
+
+    if (!lastData?.voice.length && options.type === MessageTypeEnum.AI) {
+        initAudio()
     }
 
-    const lastData = list.value[list.value.length - 1]
+    if (options.type === MessageTypeEnum.AI && options.content === WB_Enum.AI_END) {
+        needAutoScroll.value && scrollToBottom()
+        InputComRef.value.setAIStatus(true)
+        isMessageEnd.value = true
+        return
+    }
+
     if (!lastData || lastData.type !== options.type) {
+
         const target = {
             type: options.type,
             data: [],
@@ -42,16 +56,23 @@ function handleSend(options: { type: MessageTypeEnum; content: any }) {
             target.data.push(options.content)
         } else {
             target.voice.push(options.content)
+            pushAudio(options.content)
         }
 
         list.value.push(target)
         needAutoScroll.value = true
     } else {
-        lastData.data.push(options.content)
+        if (typeof options.content === 'string') {
+            lastData.data.push(options.content)
+
+        } else {
+            lastData.voice.push(options.content)
+            pushAudio(options.content)
+        }
     }
 
     if (options.type === MessageTypeEnum.User) {
-        isEnd.value = false
+        isMessageEnd.value = false
     }
 
     setTimeout(() => {
@@ -64,7 +85,7 @@ const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum
 const scrollTop = ref<number>()
 let lastScrollHeight = 0
 
-function scrollToBottom() {    
+function scrollToBottom() {
     scrollTop.value = 9999 + lastScrollHeight
     nextTick(() => {
         uni.createSelectorQuery().select('#list-content').boundingClientRect(data => {
@@ -101,7 +122,7 @@ const controlList = ref<{
     {
         icon: CopyPng,
         onClick(data) {
-            const text = data.data.filter(v => ![WB_Enum.AI_END, WB_Enum.AI_START].includes(v)).join(' ')            
+            const text = data.data.filter(v => ![WB_Enum.AI_END, WB_Enum.AI_START].includes(v)).join(' ')
             uni.setClipboardData({
                 data: text
             })
@@ -132,6 +153,11 @@ function handleAdd() {
     list.value = []
 }
 
+function handleStopAI() {
+    initAudio()
+    InputComRef.value?.handleStopAI()
+}
+
 </script>
 
 <template>
@@ -142,7 +168,8 @@ function handleAdd() {
                 <view class="flex-1 w-0 text-center line-clamp-1 px-20px">{{ titleText }}</view>
                 <view class="f-c-c gap-16px">
                     <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd" />
-                    <image class="w-20px" src="@/static/images/more.png" mode="widthFix" @click="jumpPage('/pages/history/index')" />
+                    <image class="w-20px" src="@/static/images/more.png" mode="widthFix"
+                        @click="jumpPage('/pages/history/index')" />
                 </view>
             </view>
         </template>
@@ -159,15 +186,19 @@ function handleAdd() {
                         </view>
                         <view class="p-16px text-14px rounded-b-10px min-w-50px"
                             :class="item.type === MessageTypeEnum.AI ? ' rounded-tr-10px bg-white flex-1' : 'rounded-tl-10px bg-#4F87FE color-white ml-auto'">
-                            <view class="flex items-center gap-6px mb-8px" v-if="index === list.length - 1 && !isEnd && item.type === MessageTypeEnum.AI">
+                            <view class="flex items-center gap-6px mb-8px"
+                                v-if="index === list.length - 1 && !isAIEnd && item.type === MessageTypeEnum.AI">
                                 <image class=" w-14px" src="@/static/images/ai-loading.png" mode="widthFix" />
                                 <text class="text-14px font-500 color-#005CC2 flex-1">分析中...</text>
-                                <image class=" w-16px" src="@/static/images/stop-ai.png" mode="widthFix" @click="InputComRef.handleStopAI" />
+                                <image class=" w-16px" src="@/static/images/stop-ai.png" mode="widthFix"
+                                    @click="handleStopAI" />
                             </view>
                             <view v-for="text in item.data">{{ text === WB_Enum.AI_START ? '' : text }}</view>
 
-                            <view class="flex gap-10px mt-20px" v-if="(isEnd || index < list.length - 1) && item.type === MessageTypeEnum.AI">
-                                <image v-for="control in controlList" class=" w-22px" :src="control.icon" mode="widthFix" @click="control?.onClick(item)"></image>
+                            <view class="flex gap-10px mt-20px"
+                                v-if="(isAIEnd || index < list.length - 1) && item.type === MessageTypeEnum.AI">
+                                <image v-for="control in controlList" class=" w-22px" :src="control.icon"
+                                    mode="widthFix" @click="control?.onClick(item)"></image>
                             </view>
                         </view>
                     </view>

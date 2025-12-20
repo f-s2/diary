@@ -14,6 +14,7 @@ import useRecord from './useRecord';
 import { onShow } from '@dcloudio/uni-app';
 
 import { netConfig } from '@/config/net.config';
+import { isString } from '@/components/da-tree/utils';
 
 // #ifdef H5
 const FySpeechRecog = null;
@@ -222,8 +223,8 @@ sockets.onOpen = function (event) {
 };
 
 /** 处理接收到的服务器数据，可能也包含小部分自定义数据 */
-function handleMessage(event: { data: any }) {
-    console.log('收到服务器内容：' + event.data);
+function handleMessage(event: { data: any }) {    
+    // console.log('收到服务器内容：' + event.data);
     emit('sendMessage', {
         type: currentMessageType.value,
         content: event.data,
@@ -232,7 +233,7 @@ function handleMessage(event: { data: any }) {
 
     if (currentMessageType.value === MessageTypeEnum.AI && event.data === WB_Enum.AI_END) {
         currentMessageType.value = MessageTypeEnum.User
-        return isAIMessageEnd.value = true
+        return 
     }
 
     // 当前为 user ，说明是语音转文字的响应
@@ -245,6 +246,10 @@ function handleMessage(event: { data: any }) {
             timestamp: Date.now() + 1
         })
     }
+}
+
+function setAIStatus(isEnd: boolean) {
+    isAIMessageEnd.value = isEnd
 }
 
 uni.onSocketMessage(handleMessage);
@@ -265,7 +270,8 @@ function iniStatus() {
 defineExpose({
     handleStopAI,
     handleSend,
-    iniStatus
+    iniStatus,
+    setAIStatus
 })
 </script>
 

@@ -2,8 +2,8 @@
     "name" : "语音唤醒",
     "appid" : "__UNI__11C7CDA",
     "description" : "",
-    "versionName" : "1.0.4",
-    "versionCode" : 104,
+    "versionName" : "1.0.5",
+    "versionCode" : 105,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -43,7 +43,9 @@
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
                     "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>"
                 ],
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
             },
