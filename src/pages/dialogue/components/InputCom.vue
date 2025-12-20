@@ -227,7 +227,7 @@ const sockets = uni.connectSocket({
 sockets.onOpen = function (event) {
     if(props.testId) {
         sockets.send({
-            data: props.testId
+            data: `DIALOGUE_TEST:${props.testId}`
         })
     }
     console.log('WebSocket已连接');
