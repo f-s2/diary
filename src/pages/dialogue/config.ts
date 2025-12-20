@@ -22,6 +22,6 @@ export enum WB_Enum {
 
 /** 当前消息发送的角色 */
 export enum MessageTypeEnum {
-    User,
-    AI
+    User=1,
+    AI=2
 }

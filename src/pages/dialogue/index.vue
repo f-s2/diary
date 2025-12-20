@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onReady } from '@dcloudio/uni-app';
+import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
 import { computed, nextTick, reactive, ref, watch, type Ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
 import TopTip from './components/TopTip.vue';
@@ -13,6 +13,7 @@ import SharePng from '@/static/images/control/share.png'
 import TreadPng from '@/static/images/control/tread.png'
 import useAudioList from './useAudio';
 import { isString } from '@/components/da-tree/utils';
+import { HistoryApi } from '@/api/history';
 
 const list = ref<{
     type: MessageTypeEnum
@@ -77,7 +78,7 @@ function handleSend(options: { type: MessageTypeEnum; content: any }) {
 
     setTimeout(() => {
         needAutoScroll.value && scrollToBottom()
-    }, 600);
+    }, 500);
 }
 
 const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum.User)?.data?.[0])
@@ -98,14 +99,11 @@ const startY = ref(0)
 const CANCEL_DISTANCE = 100; // 上滑取消的距离阈值
 
 function onTouchStart(e: TouchEvent) {
-    e.preventDefault();
     const touch = e.touches[0];
     startY.value = touch.clientY;
 }
 
 function onTouchMove(e: TouchEvent) {
-    e.preventDefault();
-
     const touch = e.touches[0];
     const moveY = touch.clientY;
 
@@ -134,9 +132,9 @@ const controlList = ref<{
     {
         icon: TreadPng
     },
-    {
-        icon: PhonicsPng
-    },
+    // {
+    //     icon: PhonicsPng
+    // },
     {
         icon: SharePng
     },
@@ -151,6 +149,9 @@ function jumpPage(path: string) {
 function handleAdd() {
     InputComRef.value?.iniStatus()
     list.value = []
+    uni.redirectTo({
+        url: '/pages/dialogue/index'
+    })
 }
 
 function handleStopAI() {
@@ -158,10 +159,45 @@ function handleStopAI() {
     InputComRef.value?.handleStopAI()
 }
 
+const historyId = ref('')
+
+onLoad(query => {
+    historyId.value = query?.id
+})
+
+onShow(() => {
+    getData()
+})
+
+const loading = ref(false)
+
+async function getData() {
+    try {
+        if (!historyId.value) return
+        loading.value = true
+
+        const { data } = await HistoryApi.detail(historyId.value)
+        
+        const _data = data as History.MessageItem[]
+
+        list.value = _data.map(v => ({
+            type: v.role as any,
+            data: [v.content],
+            voice: []
+        }))
+        
+    } catch (error) {
+        console.log(error);
+
+    } finally {
+        loading.value = false
+    }
+}
+
 </script>
 
 <template>
-    <PageContainer>
+    <PageContainer :loading="loading">
         <template #header>
             <view class="f-c-b gap-12px px-14px">
                 <view class="text-22px font-700">AI助手</view>
@@ -175,7 +211,7 @@ function handleStopAI() {
         </template>
         <scroll-view class="h-full" scroll-y :scrollTop="scrollTop">
             <view id="list-content" @touchstart="onTouchStart" @touchmove="onTouchMove">
-                <view class="px-16px">
+                <view class="px-16px" v-if="!historyId">
                     <TopTip class="mt-24px"></TopTip>
                     <QuickEntry class="mt-15px" @quick-send="InputComRef?.handleSend"></QuickEntry>
                 </view>
@@ -187,16 +223,16 @@ function handleStopAI() {
                         <view class="p-16px text-14px rounded-b-10px min-w-50px"
                             :class="item.type === MessageTypeEnum.AI ? ' rounded-tr-10px bg-white flex-1' : 'rounded-tl-10px bg-#4F87FE color-white ml-auto'">
                             <view class="flex items-center gap-6px mb-8px"
-                                v-if="index === list.length - 1 && !isAIEnd && item.type === MessageTypeEnum.AI">
+                                v-if="index === list.length - 1 && !isAIEnd && item.type === MessageTypeEnum.AI && !historyId">
                                 <image class=" w-14px" src="@/static/images/ai-loading.png" mode="widthFix" />
                                 <text class="text-14px font-500 color-#005CC2 flex-1">分析中...</text>
                                 <image class=" w-16px" src="@/static/images/stop-ai.png" mode="widthFix"
                                     @click="handleStopAI" />
                             </view>
-                            <view v-for="text in item.data">{{ text === WB_Enum.AI_START ? '' : text }}</view>
+                            <view class=" whitespace-pre-wrap" v-for="text in item.data">{{ text === WB_Enum.AI_START ? '' : text }}</view>
 
                             <view class="flex gap-10px mt-20px"
-                                v-if="(isAIEnd || index < list.length - 1) && item.type === MessageTypeEnum.AI">
+                                v-if="(isAIEnd || index < list.length - 1 || historyId) && item.type === MessageTypeEnum.AI">
                                 <image v-for="control in controlList" class=" w-22px" :src="control.icon"
                                     mode="widthFix" @click="control?.onClick(item)"></image>
                             </view>
@@ -207,7 +243,7 @@ function handleStopAI() {
         </scroll-view>
 
         <template #footer>
-            <InputCom ref="InputComRef" @send-message="handleSend"></InputCom>
+            <InputCom ref="InputComRef" @send-message="handleSend" v-if="!historyId"></InputCom>
         </template>
     </PageContainer>
 </template>

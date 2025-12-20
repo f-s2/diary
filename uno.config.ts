@@ -54,6 +54,7 @@ const config: UserConfig = defineConfig({
       uno: {
         dark: darkMode,
         variablePrefix: 'li-',
+        preflight: true
       },
       attributify: {
         ignoreAttributes: ['block', 'fixed'],

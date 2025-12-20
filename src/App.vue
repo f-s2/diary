@@ -1,18 +1,9 @@
 <script setup>
-import { UserApi } from '@/api/UserApi'
 import { onLaunch, onError, onShow } from '@dcloudio/uni-app'
-import { useUserStore } from '@/store/user'
-const userStore = useUserStore()
 
 function initOptions() {
 
-  // if (!userStore.urlPrefix) {
-  //   UserApi.getPrefix().then(res => {
-  //     userStore.urlPrefix = res.data
-  //   })
-  // }
 
-  // userStore.getUserInfo(true)
 }
 
 onLaunch(() => {

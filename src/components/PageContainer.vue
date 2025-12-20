@@ -25,6 +25,7 @@ onLoad(() => {
         <slot name="header">
         </slot>
         <div class=" h-0 pt-5 flex-1 overflow-auto">
+            <uv-loading-icon mode="circle" text="加载中..." v-if="loading"></uv-loading-icon>
             <slot></slot>
         </div>
         <slot name="footer"></slot>

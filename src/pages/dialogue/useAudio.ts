@@ -1,6 +1,6 @@
 import { computed, ref, type Ref } from "vue";
 
-// #ifdef APP-PLUS
+// #ifdef APP
 function writeMp3(buffer: ArrayBuffer): Promise<string> {
   return new Promise((resolve, reject) => {
     plus.io.requestFileSystem(plus.io.PRIVATE_DOC, (fs) => {

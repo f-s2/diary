@@ -4,7 +4,7 @@
 import { FySpeechRecog, FyPermission } from '@/uni_modules/fy-speech-recog';
 // #endif
 
-import { getCurrentInstance, onMounted, ref } from 'vue';
+import { getCurrentInstance, onMounted, ref, watch } from 'vue';
 import VoicePng from '@/static/images/voice.png';
 import KeyboardPng from '@/static/images/keyboard.png';
 import VoicingGif from '@/static/images/voicing.gif';
@@ -130,6 +130,7 @@ let recogHandle = null;
 
 onMounted(() => {
 
+    // #ifdef APP
     const permis = new FyPermission();
     permis.requestPermission({
         success: function () {
@@ -139,6 +140,7 @@ onMounted(() => {
             handleStartWU()
         }
     })
+    // #endif
 })
 
 
@@ -202,7 +204,7 @@ function handleStop() {
 }
 /** 手动停止 AI 正在进行的流程 */
 function handleStopAI() {
-     sockets.send({
+    sockets.send({
         data: WB_Enum.PAUSE_RESPONSE
     })
     handleMessage({ data: WB_Enum.AI_END })
@@ -223,8 +225,8 @@ sockets.onOpen = function (event) {
 };
 
 /** 处理接收到的服务器数据，可能也包含小部分自定义数据 */
-function handleMessage(event: { data: any }) {    
-    // console.log('收到服务器内容：' + event.data);
+function handleMessage(event: { data: any }) {
+    console.log('收到服务器内容：' + event.data);
     emit('sendMessage', {
         type: currentMessageType.value,
         content: event.data,
@@ -233,7 +235,7 @@ function handleMessage(event: { data: any }) {
 
     if (currentMessageType.value === MessageTypeEnum.AI && event.data === WB_Enum.AI_END) {
         currentMessageType.value = MessageTypeEnum.User
-        return 
+        return
     }
 
     // 当前为 user ，说明是语音转文字的响应
