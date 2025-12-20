@@ -249,7 +249,7 @@ async function getData() {
         </scroll-view>
 
         <template #footer>
-            <InputCom ref="InputComRef" @send-message="handleSend" v-if="!historyId"></InputCom>
+            <InputCom ref="InputComRef" :test-id="testId" @send-message="handleSend" v-if="!historyId"></InputCom>
         </template>
     </PageContainer>
 </template>
