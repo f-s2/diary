@@ -160,9 +160,11 @@ function handleStopAI() {
 }
 
 const historyId = ref('')
+const testId = ref('')
 
 onLoad(query => {
     historyId.value = query?.id
+    testId.value = query?.testId
 })
 
 onShow(() => {
@@ -202,7 +204,7 @@ async function getData() {
             <view class="f-c-b gap-12px px-14px">
                 <view class="text-22px font-700">AI助手</view>
                 <view class="flex-1 w-0 text-center line-clamp-1 px-20px">{{ titleText }}</view>
-                <view class="f-c-c gap-16px">
+                <view class="f-c-c gap-16px" :class="{'invisible': testId}">
                     <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd" />
                     <image class="w-20px" src="@/static/images/more.png" mode="widthFix"
                         @click="jumpPage('/pages/history/index')" />
@@ -213,7 +215,7 @@ async function getData() {
             <view id="list-content" @touchstart="onTouchStart" @touchmove="onTouchMove">
                 <view class="px-16px" v-if="!historyId">
                     <TopTip class="mt-24px"></TopTip>
-                    <QuickEntry class="mt-15px" @quick-send="InputComRef?.handleSend"></QuickEntry>
+                    <QuickEntry v-if="!testId" class="mt-15px" @quick-send="InputComRef?.handleSend"></QuickEntry>
                 </view>
                 <view class="p-16px space-y-16px">
                     <view class="w-full flex gap-10px" v-for="item, index in list">
@@ -233,7 +235,7 @@ async function getData() {
 
                             <view class="flex gap-10px mt-20px"
                                 v-if="(isAIEnd || index < list.length - 1 || historyId) && item.type === MessageTypeEnum.AI">
-                                <image v-for="control in controlList" class=" w-22px" :src="control.icon"
+                                <image v-for="control in controlList" class=" w-22px cursor-pointer" :src="control.icon"
                                     mode="widthFix" @click="control?.onClick(item)"></image>
                             </view>
                         </view>

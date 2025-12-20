@@ -291,7 +291,7 @@ defineExpose({
                     <view class="f-c-c h-full text-14px font-500">按住 说话</view>
                 </view>
             </view>
-            <image class="w-36px" src="@/static/images/send.png" mode="widthFix" @click="handleSend()" />
+            <image class="w-36px cursor-pointer" src="@/static/images/send.png" mode="widthFix" @click="handleSend()" />
         </view>
         <view class="fixed z-20 top-0 left-0 w-full h-full bg-#000000 bg-opacity-45"
             :class="{ 'opacity-0 pointer-events-none': !isRecording }" v-if="isVoice">
