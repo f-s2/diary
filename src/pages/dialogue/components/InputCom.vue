@@ -32,6 +32,8 @@ const emit = defineEmits<{
 
 // 是否语音输入
 const isVoice = ref(false);
+/** 是否处于手动停止状态，用于防止在停止后依然接收到服务器后续信息 */
+const isStoped = ref(false)
 
 const inputValue = ref('')
 
@@ -47,6 +49,7 @@ const recordDomRef = ref<HTMLElement>()
 
 const { isCancel, isRecording, isRouse, isAIMessageEnd, initRecord, resetRecord } = useRecord(recordDomRef, {
     onStart() {
+        isStoped.value = false
         startRecord()
     },
     onReset() {
@@ -106,6 +109,8 @@ function handleSend(text?: string) {
     }
 
     if (inputValue.value && isAIMessageEnd.value) {
+        isStoped.value = false
+
         sockets.send({
             data: inputValue.value
         })
@@ -159,6 +164,7 @@ function handleStartWU() {
                 return
             }
 
+            isStoped.value = false
             isVoice.value = true
             isRecording.value = true;
             isRouse.value = true;
@@ -207,11 +213,17 @@ function handleStop() {
     recogHandle && recogHandle.stopRecognizer();
 }
 /** 手动停止 AI 正在进行的流程 */
-function handleStopAI() {
-    sockets.send({
-        data: WB_Enum.PAUSE_RESPONSE
-    })
-    handleMessage({ data: WB_Enum.AI_END })
+function handleStopAI(notSend = false) {
+    console.log('手动停止 ai');
+    if (!notSend) {
+        sockets.send({
+            data: WB_Enum.PAUSE_RESPONSE
+        })
+        handleMessage({ data: WB_Enum.AI_END })
+        isStoped.value = true
+    } else {
+        currentMessageType.value = MessageTypeEnum.User
+    }
 }
 
 const sockets = uni.connectSocket({
@@ -225,7 +237,7 @@ const sockets = uni.connectSocket({
 });
 
 sockets.onOpen = function (event) {
-    if(props.testId) {
+    if (props.testId) {
         sockets.send({
             data: `DIALOGUE_TEST:${props.testId}`
         })
@@ -235,7 +247,9 @@ sockets.onOpen = function (event) {
 
 /** 处理接收到的服务器数据，可能也包含小部分自定义数据 */
 function handleMessage(event: { data: any }) {
-    console.log('收到服务器内容：' + event.data);
+    
+    console.log(`收到服务器内容：` + event.data);
+    if(isStoped.value) return
     emit('sendMessage', {
         type: currentMessageType.value,
         content: event.data,
@@ -295,8 +309,8 @@ defineExpose({
             <view class="flex-1 w-0 p-1px rounded-20px overflow-hidden h-38px"
                 style="background: linear-gradient(126.88deg, #009AFF 0%, #EB5CFF 34.73%, #00FFE3 68.48%, #1100FF 100%);">
                 <view class="bg-white w-full h-full rounded-20px">
-                    <input v-model="inputValue" class="w-full h-full px-12px outline-none text-14px" type="text" confirm-type="search" @keydown.enter="handleSend()"
-                        placeholder="请输入执行指令" v-if="!isVoice" />
+                    <input v-model="inputValue" class="w-full h-full px-12px outline-none text-14px" type="text"
+                        confirm-type="search" @keydown.enter="handleSend()" placeholder="请输入执行指令" v-if="!isVoice" />
                     <view class="f-c-c h-full text-14px font-500">按住 说话</view>
                 </view>
             </view>
