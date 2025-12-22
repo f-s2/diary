@@ -17,7 +17,7 @@ import { UvTabsDefaultConfig } from './config/theme';
 
 // #ifdef H5
 import eruda from 'eruda'
-eruda.init()
+import.meta.env.VITE_APP_DEVTOOLS === 'true' && eruda.init()
 // #endif
 
 export function createApp() {

@@ -51,6 +51,7 @@ function handleJump(id: string) {
             </view>
         </template>
         <view>
+            <uv-empty v-if="!list.length && !loading"></uv-empty>
             <view class="px-16px space-y-12px">
                 <view class="px-12px py-10px bg-white rounded-8px" v-for="item in list">
                     <view class="flex items-center text-16px font-500" @click="item.showList = !item.showList">{{

@@ -62,9 +62,8 @@ let timer = null
 
 function scrollToBottom() {
     console.log('触发滚动');
-    if(timer) return
    
-    timer = setTimeout(() => {
+    setTimeout(() => {
          uni.createSelectorQuery()
         .select('#list-content')
         .boundingClientRect(data => {
@@ -80,7 +79,7 @@ function scrollToBottom() {
             }
         })
         .exec();
-    }, 16);
+    }, 100);
 }
 
 onMounted(() => {
