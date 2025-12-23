@@ -4,7 +4,7 @@
 import { FySpeechRecog, FyPermission } from '@/uni_modules/fy-speech-recog';
 // #endif
 
-import { getCurrentInstance, onMounted, ref, watch } from 'vue';
+import { getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue';
 import VoicePng from '@/static/images/voice.png';
 import KeyboardPng from '@/static/images/keyboard.png';
 import VoicingGif from '@/static/images/voicing.gif';
@@ -229,12 +229,16 @@ function handleStopAI(notSend = false) {
 const sockets = uni.connectSocket({
     url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message`,
     success() {
-        console.log('WebSocket连接成功');
+        console.log('WebSocket成功执行');
     },
     fail(err) {
         console.log('WebSocket连接失败:', err);
     }
 });
+
+onUnmounted(() => {
+    uni.closeSocket()
+})
 
 sockets.onOpen = function (event) {
     if (props.testId) {
