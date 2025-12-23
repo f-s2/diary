@@ -103,10 +103,7 @@ export default function useMessage(_options: {
   });
 
   const playNext = async () => {
-    console.log(
-      "play next",
-      lastAIMessage.value[currentIndex.value] 
-    );
+    console.log("play next", lastAIMessage.value[currentIndex.value]);
 
     if (
       isPlaying.value ||
@@ -119,7 +116,7 @@ export default function useMessage(_options: {
     const target = lastAIMessage.value[currentIndex.value];
 
     if (typeof target === "string") {
-    //   console.log("当前文本是", target);
+      //   console.log("当前文本是", target);
       lastShowAIMessage.value.push(target);
       _options?.pushAfter();
       if (
@@ -156,7 +153,6 @@ export default function useMessage(_options: {
     if (isStoped.value) return;
 
     // console.log('push data', options);
-    
 
     if (
       options.type === MessageTypeEnum.AI &&
@@ -165,6 +161,12 @@ export default function useMessage(_options: {
       isMessageEnd.value = true;
       return;
     }
+
+    // #ifdef H5
+    if (typeof options.content !== "string") {
+      return;
+    }
+    // #endif
 
     if (!lastData || lastData.type !== options.type) {
       const target = {
