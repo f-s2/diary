@@ -105,12 +105,7 @@ export default function useMessage(_options: {
   const playNext = async () => {
     console.log("play next", lastAIMessage.value[currentIndex.value]);
 
-    if (
-      isPlaying.value ||
-      !lastAIMessage.value[currentIndex.value] ||
-      isStoped.value
-    )
-      return;
+    if (isPlaying.value || !lastAIMessage.value[currentIndex.value]) return;
 
     isPlaying.value = true;
     const target = lastAIMessage.value[currentIndex.value];
@@ -134,11 +129,14 @@ export default function useMessage(_options: {
 
     // console.log("当前播放的是", target);
 
+    // #ifdef APP
+
+    if(isAudioEnd.value) return
+
     const current = target as ArrayBuffer;
     isAudioEnd.value = false;
-
-    // #ifdef APP
     isPlaying.value = true;
+
     const path = await writeMp3(current);
     currentAudio.src = path;
     currentAudio.play();
@@ -149,8 +147,6 @@ export default function useMessage(_options: {
     const lastData = list.value[list.value.length - 1];
 
     if (lastData?.type !== options.type) isStoped.value = false;
-
-    if (isStoped.value) return;
 
     // console.log('push data', options);
 

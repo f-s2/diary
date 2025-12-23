@@ -52,6 +52,11 @@ export default defineConfig(async ({ mode }) => {
           ws: false,
           changeOrigin: true,
         },
+        [env.VITE_APP_PREFIX]: {
+          target: env.VITE_APP_BASE_URL,
+          changeOrigin: true,
+          ws: true,
+        }
       },
     },
   });

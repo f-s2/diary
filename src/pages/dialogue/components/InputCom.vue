@@ -219,8 +219,6 @@ function handleStopAI(notSend = false) {
         sockets.send({
             data: WB_Enum.PAUSE_RESPONSE
         })
-        handleMessage({ data: WB_Enum.AI_END })
-        isStoped.value = true
     } else {
         currentMessageType.value = MessageTypeEnum.User
     }
@@ -253,7 +251,6 @@ sockets.onOpen = function (event) {
 function handleMessage(event: { data: any }) {
     
     console.log(`收到服务器内容：` + event.data);
-    if(isStoped.value) return
     emit('sendMessage', {
         type: currentMessageType.value,
         content: event.data,
