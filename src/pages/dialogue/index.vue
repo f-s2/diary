@@ -45,48 +45,28 @@ function handleSend(options: { type: MessageTypeEnum; content: any }) {
 
 const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum.User)?.data?.[0])
 
-const scrollHeight = ref(0)
-
-function initScrollHeight() {
-    uni.createSelectorQuery()
-        .select('#scroll-view')
-        .boundingClientRect(data => {
-            if (data) {
-                scrollHeight.value = (<any>data)?.height
-            }
-        })
-        .exec();
-}
-
 let timer = null
 
-function scrollToBottom() {
-    console.log('触发滚动');
-   
-    setTimeout(() => {
-         uni.createSelectorQuery()
-        .select('#list-content')
-        .boundingClientRect(data => {
-            if (data) {
-                let top = (<any>data)?.height - scrollHeight.value;
+const scrollIntoView = ref('')
 
-                console.log(top, scrollHeight.value);
-                    
-                if (top > 0) {
-                    scrollTop.value = top;
-                }
-                timer = null
-            }
+function scrollToBottom() {
+   console.log('触发滚动');
+
+   if(timer) return
+
+   scrollIntoView.value = ''
+
+   timer = setTimeout(() => {
+        scrollIntoView.value = 'chat-bottom-2'
+        nextTick(() => {
+            timer = null
         })
-        .exec();
-    }, 100);
+    }, 300);
 }
 
 onMounted(() => {
-    initScrollHeight()
-})
 
-const scrollTop = ref<number>()
+})
 
 
 const startY = ref(0)
@@ -145,9 +125,12 @@ function jumpPage(path: string) {
 function handleAdd() {
     InputComRef.value?.iniStatus()
     list.value = []
-    uni.redirectTo({
-        url: '/pages/dialogue/index'
-    })
+
+    if (historyId.value) {
+        uni.redirectTo({
+            url: '/pages/dialogue/index'
+        })
+    }
 }
 
 function handleStopAI() {
@@ -211,14 +194,14 @@ function getMessage(item: typeof list.value[0], index: number): string[] {
             <view class="f-c-b gap-12px px-14px">
                 <view class="text-22px font-700">AI助手</view>
                 <view class="flex-1 w-0 text-center line-clamp-1 px-20px">{{ titleText }}</view>
-                <view class="f-c-c gap-16px" :class="{ 'invisible': testId }">
-                    <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd" />
+                <view class="f-c-c gap-16px h-20px" :class="{ 'invisible': testId }">
+                    <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd" v-if="list.length" />
                     <image class="w-20px" src="@/static/images/more.png" mode="widthFix"
                         @click="jumpPage('/pages/history/index')" />
                 </view>
             </view>
         </template>
-        <scroll-view class="h-full" id="scroll-view" scroll-y :scroll-top="scrollTop" scroll-with-animation>
+        <scroll-view class="h-full" id="scroll-view" scroll-y :scroll-into-view="scrollIntoView" :scroll-with-animation="true">
             <view id="list-content" class="pb-12px" @touchstart="onTouchStart" @touchmove="onTouchMove">
                 <view class="px-16px" v-if="!historyId">
                     <TopTip class="mt-24px"></TopTip>
@@ -226,7 +209,7 @@ function getMessage(item: typeof list.value[0], index: number): string[] {
                 </view>
                 <view class="p-16px space-y-16px">
                     <view class="w-full flex gap-10px" v-for="item, index in list">
-                        <view class="flex-shrink-0" :class="{ 'invisible': item.type === MessageTypeEnum.User }">
+                        <view class="flex-shrink-0 h-40px" :class="{ 'invisible': item.type === MessageTypeEnum.User }">
                             <image class=" w-40px h-40px" src="@/static/images/top-tip-icon.png" mode="widthFix" />
                         </view>
                         <view class="p-16px text-14px rounded-b-10px min-w-50px"
