@@ -119,7 +119,7 @@ export function isNumber(val) {
 
  */
 export function isString(val) {
-  return is(val, 'String')
+  return typeof val === 'string'
 }
 
 /**

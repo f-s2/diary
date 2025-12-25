@@ -20,5 +20,12 @@ export class HistoryApi {
             }
         });
     }
+    static reaction(data) {
+        return request({
+            url: prefix + "/conversation/message-like-status-update",
+            method: "post",
+            data
+        });
+    }
 
 }

@@ -13,7 +13,8 @@ import SharePng from '@/static/images/control/share.png'
 import TreadPng from '@/static/images/control/tread.png'
 import useAudioList from './useAudio';
 import { HistoryApi } from '@/api/history';
-import useMessage, { type ConfirmNode } from './useMessage';
+import useMessage, { UserReactionEnum, type ConfirmNode, type ItemType } from './useMessage';
+import { isString } from '@/components/da-tree/utils';
 
 const InputComRef = ref<InstanceType<typeof InputCom>>()
 
@@ -84,31 +85,49 @@ function onTouchMove(e: TouchEvent) {
     }
 }
 
-const controlList = ref<{
+const controlList = computed<{
     icon: string
+    inactiveClass?: string
+    isInactive?: (item: ItemType) => boolean
     onClick?: (data: typeof list.value[0]) => void
-}[]>([
+}[]>(() => [
     {
         icon: CopyPng,
         onClick(data) {
-            const text = data.data.filter(v => ![WB_Enum.AI_END, WB_Enum.AI_START].includes(v as any)).join(' ')
+            const text = data.data.filter(v => isString(v) && ![WB_Enum.AI_END, WB_Enum.AI_START].some(_ => v.startsWith(_))).join(' ')
             uni.setClipboardData({
                 data: text
             })
         },
     },
     {
-        icon: PraisePng
+        icon: PraisePng,
+        isInactive(item) {
+            return item.userReaction === UserReactionEnum.Dislike
+        },
+        inactiveClass: 'opacity-60',
+        onClick(data) {
+            if(historyId.value) return
+            handleReaction(data, UserReactionEnum.Like)
+        },
     },
     {
-        icon: TreadPng
+        icon: TreadPng,
+        isInactive(item) {
+            return item.userReaction === UserReactionEnum.Like
+        },
+        inactiveClass: 'opacity-60',
+        onClick(data) {
+            if(historyId.value) return
+            handleReaction(data, UserReactionEnum.Dislike)
+        },
     },
     // {
     //     icon: PhonicsPng
     // },
-    {
-        icon: SharePng
-    },
+    // {
+    //     icon: SharePng
+    // },
 ])
 
 function jumpPage(path: string) {
@@ -160,7 +179,8 @@ async function getData() {
         list.value = _data.map(v => ({
             type: v.role as any,
             data: [v.content],
-            voice: []
+            id: v.id,
+            userReaction: v.likeStatus
         }))
 
     } catch (error) {
@@ -169,10 +189,6 @@ async function getData() {
     } finally {
         loading.value = false
     }
-}
-
-function isString(text?: any) {
-    return typeof text === 'string'
 }
 
 function handleConfirm(item: ConfirmNode, data: 0 | 1) {
@@ -184,6 +200,24 @@ function handleConfirm(item: ConfirmNode, data: 0 | 1) {
     }
     InputComRef.value?.sendData(JSON.stringify(target))
     playNext(true)
+}
+function handleReaction(item: ItemType, reaction: ItemType['userReaction']) {
+    try {
+        if (item.userReaction === reaction) {
+            item.userReaction = UserReactionEnum.None
+        } else if (item.userReaction === UserReactionEnum.None || !item.userReaction) {
+            item.userReaction = reaction
+        }
+
+        HistoryApi.reaction({
+            id: item.id,
+            likeStatus: item.userReaction
+        })
+    } catch (error) {
+        console.log(error);
+
+    }
+
 }
 
 
@@ -235,7 +269,8 @@ function handleConfirm(item: ConfirmNode, data: 0 | 1) {
                                     <view>是否确认执行？</view>
                                     <view class="f-c-c gap-24px my-8px">
                                         <uv-button size="mini" @click="handleConfirm(text, 0)">取消</uv-button>
-                                        <uv-button color="var(--primary-color)" size="mini" @click="handleConfirm(text, 1)">确认</uv-button>
+                                        <uv-button color="var(--primary-color)" size="mini"
+                                            @click="handleConfirm(text, 1)">确认</uv-button>
                                     </view>
                                 </view>
 
@@ -243,8 +278,13 @@ function handleConfirm(item: ConfirmNode, data: 0 | 1) {
 
                             <view class="flex gap-10px mt-20px"
                                 v-if="(isMessageEnd || index < list.length - 1 || historyId) && item.type === MessageTypeEnum.AI">
-                                <image v-for="control in controlList" class=" w-22px cursor-pointer" :src="control.icon"
-                                    mode="widthFix" @click="() => control?.onClick(item)"></image>
+                                <view v-for="control in controlList">
+                                    <image class=" w-22px cursor-pointer"
+                                        :class="{ [control.inactiveClass]: control.isInactive?.(item) }"
+                                        :src="control.icon" mode="widthFix" @click="() => control?.onClick(item)"
+                                        >
+                                    </image>
+                                </view>
                             </view>
                         </view>
                     </view>

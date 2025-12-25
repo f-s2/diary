@@ -260,7 +260,7 @@ function handleMessage(event: { data: any }) {
         timestamp: Date.now()
     })
 
-    if (currentMessageType.value === MessageTypeEnum.AI && event.data === WB_Enum.AI_END) {
+    if (currentMessageType.value === MessageTypeEnum.AI && isString(event.data) && event.data.startsWith(WB_Enum.AI_END)) {
         currentMessageType.value = MessageTypeEnum.User
         return
     }

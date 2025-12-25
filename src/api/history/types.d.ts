@@ -7,6 +7,7 @@ declare namespace History {
     role: number;
     content: string;
     messageTime: string;
+    likeStatus: any
   }
 
   interface ItemType {

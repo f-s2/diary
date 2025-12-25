@@ -1,5 +1,6 @@
 import { computed, ref, watch } from "vue";
 import { MessageTypeEnum, WB_Enum } from "./config";
+import { isString } from "@/components/da-tree/utils";
 
 // #ifdef APP
 function writeMp3(buffer: ArrayBuffer): Promise<string> {
@@ -36,9 +37,17 @@ function writeMp3(buffer: ArrayBuffer): Promise<string> {
 }
 // #endif
 
-interface ItemType {
+export enum UserReactionEnum {
+  None,
+  Like,
+  Dislike
+}
+
+export interface ItemType {
   type: MessageTypeEnum;
   data: (string | ConfirmNode)[];
+  userReaction?: UserReactionEnum,
+  id?: string
 }
 
 export interface ConfirmNode {
@@ -144,8 +153,9 @@ export default function useMessage(_options: {
 
     if (
       options.type === MessageTypeEnum.AI &&
-      options.content === WB_Enum.AI_END
+      isString(options.content) && options.content.startsWith(WB_Enum.AI_END)
     ) {
+      lastData.id = options.content.split(':')[1]
       isMessageEnd.value = true;
       return;
     }
