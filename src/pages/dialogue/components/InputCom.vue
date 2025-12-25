@@ -135,6 +135,16 @@ function handleSend(text?: string) {
     }
 }
 
+/**
+ * 仅发送数据，不做其它任何处理
+ * @param data 
+ */
+function sendData(data: string) {
+    sockets.send({
+        data
+    })
+}
+
 let recogHandle = null;
 
 onMounted(() => {
@@ -199,9 +209,9 @@ function handleStart() {
             console.log('收到音频数据，长度:', length);
             // console.log(audioData);
 
-            sockets.send({
-                data: audioData
-            })
+            // sockets.send({
+            //     data: audioData
+            // })
 
             // 处理音频数据，audioData是PCM格式，16bits 16000采样率
             // 可以保存到文件或进行其他处理
@@ -224,8 +234,10 @@ function handleStopAI(notSend = false) {
     }
 }
 
+const { deviceId } = uni.getSystemInfoSync()
+
 const sockets = uni.connectSocket({
-    url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message`,
+    url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
     success() {
         console.log('WebSocket成功执行');
     },
@@ -238,19 +250,10 @@ onUnmounted(() => {
     uni.closeSocket()
 })
 
-sockets.onOpen = function (event) {
-    if (props.testId) {
-        sockets.send({
-            data: `DIALOGUE_TEST:${props.testId}`
-        })
-    }
-    console.log('WebSocket已连接');
-};
-
 /** 处理接收到的服务器数据，可能也包含小部分自定义数据 */
 function handleMessage(event: { data: any }) {
-    
-    console.log(`收到服务器内容：` + event.data);
+
+    // console.log(`收到服务器内容：` + event.data);
     emit('sendMessage', {
         type: currentMessageType.value,
         content: event.data,
@@ -297,6 +300,7 @@ defineExpose({
     handleStopAI,
     handleSend,
     iniStatus,
+    sendData,
     setAIStatus
 })
 </script>

@@ -12,15 +12,14 @@ import PraisePng from '@/static/images/control/praise.png'
 import SharePng from '@/static/images/control/share.png'
 import TreadPng from '@/static/images/control/tread.png'
 import useAudioList from './useAudio';
-import { isString } from '@/components/da-tree/utils';
 import { HistoryApi } from '@/api/history';
-import useMessage from './useMessage';
+import useMessage, { type ConfirmNode } from './useMessage';
 
 const InputComRef = ref<InstanceType<typeof InputCom>>()
 
 const needAutoScroll = ref(true)
 
-const { isAIEnd, initStatus, pushData, isMessageEnd, lastShowAIMessage, stopAI, list } = useMessage({
+const { initStatus, pushData, isMessageEnd, stopAI, list, playNext } = useMessage({
     pushAfter() {
         needAutoScroll.value && scrollToBottom()
     },
@@ -37,10 +36,6 @@ const { isAIEnd, initStatus, pushData, isMessageEnd, lastShowAIMessage, stopAI, 
 
 function handleSend(options: { type: MessageTypeEnum; content: any }) {
     pushData(options)
-
-    // setTimeout(() => {
-    //     needAutoScroll.value && scrollToBottom()
-    // }, 500);
 }
 
 const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum.User)?.data?.[0])
@@ -50,13 +45,13 @@ let timer = null
 const scrollIntoView = ref('')
 
 function scrollToBottom() {
-   console.log('触发滚动');
+    // console.log('触发滚动');
 
-   if(timer) return
+    if (timer) return
 
-   scrollIntoView.value = ''
+    scrollIntoView.value = ''
 
-   timer = setTimeout(() => {
+    timer = setTimeout(() => {
         scrollIntoView.value = 'chat-bottom-2'
         nextTick(() => {
             timer = null
@@ -176,15 +171,21 @@ async function getData() {
     }
 }
 
-function getMessage(item: typeof list.value[0], index: number): string[] {
-    const target = item.data.filter(v => typeof v === 'string')
-
-    if (item.type === MessageTypeEnum.AI && !isAIEnd.value && (index === list.value.length - 1)) {
-        return lastShowAIMessage.value
-    }
-
-    return target
+function isString(text?: any) {
+    return typeof text === 'string'
 }
+
+function handleConfirm(item: ConfirmNode, data: 0 | 1) {
+    item.isEnd = true
+    const target: ConfirmNode = {
+        msgType: 'CONFIRM_REPLY',
+        commandId: item.commandId,
+        replyContent: data
+    }
+    InputComRef.value?.sendData(JSON.stringify(target))
+    playNext(true)
+}
+
 
 </script>
 
@@ -195,13 +196,15 @@ function getMessage(item: typeof list.value[0], index: number): string[] {
                 <view class="text-22px font-700">AI助手</view>
                 <view class="flex-1 w-0 text-center line-clamp-1 px-20px">{{ titleText }}</view>
                 <view class="f-c-c gap-16px h-20px" :class="{ 'invisible': testId }">
-                    <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd" v-if="list.length" />
+                    <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd"
+                        v-if="list.length" />
                     <image class="w-20px" src="@/static/images/more.png" mode="widthFix"
                         @click="jumpPage('/pages/history/index')" />
                 </view>
             </view>
         </template>
-        <scroll-view class="h-full" id="scroll-view" scroll-y :scroll-into-view="scrollIntoView" :scroll-with-animation="true">
+        <scroll-view class="h-full" id="scroll-view" scroll-y :scroll-into-view="scrollIntoView"
+            :scroll-with-animation="true">
             <view id="list-content" class="pb-12px" @touchstart="onTouchStart" @touchmove="onTouchMove">
                 <view class="px-16px" v-if="!historyId">
                     <TopTip class="mt-24px"></TopTip>
@@ -215,7 +218,7 @@ function getMessage(item: typeof list.value[0], index: number): string[] {
                         <view class="p-16px text-14px rounded-b-10px min-w-50px"
                             :class="item.type === MessageTypeEnum.AI ? ' rounded-tr-10px bg-white flex-1' : 'rounded-tl-10px bg-#4F87FE color-white ml-auto'">
                             <view class="flex items-center gap-6px mb-8px"
-                                v-if="index === list.length - 1 && !isAIEnd && item.type === MessageTypeEnum.AI && !historyId">
+                                v-if="index === list.length - 1 && !isMessageEnd && item.type === MessageTypeEnum.AI && !historyId">
                                 <view class="h-15px">
                                     <image class=" w-14px" src="@/static/images/ai-loading.png" mode="widthFix" />
                                 </view>
@@ -225,11 +228,21 @@ function getMessage(item: typeof list.value[0], index: number): string[] {
                                         mode="widthFix" @click="handleStopAI" />
                                 </view>
                             </view>
-                            <view class=" whitespace-pre-wrap" v-for="text in getMessage(item, index)">{{ text ===
-                                WB_Enum.AI_START ? '' : text }}</view>
+                            <view class=" whitespace-pre-wrap" v-for="text in item.data">
+                                <text v-if="isString(text)">{{ text ===
+                                    WB_Enum.AI_START ? '' : text }}</text>
+                                <view v-if="!isString(text) && !text.isEnd">
+                                    <view>是否确认执行？</view>
+                                    <view class="f-c-c gap-24px my-8px">
+                                        <uv-button size="mini" @click="handleConfirm(text, 0)">取消</uv-button>
+                                        <uv-button color="var(--primary-color)" size="mini" @click="handleConfirm(text, 1)">确认</uv-button>
+                                    </view>
+                                </view>
+
+                            </view>
 
                             <view class="flex gap-10px mt-20px"
-                                v-if="(isAIEnd || index < list.length - 1 || historyId) && item.type === MessageTypeEnum.AI">
+                                v-if="(isMessageEnd || index < list.length - 1 || historyId) && item.type === MessageTypeEnum.AI">
                                 <image v-for="control in controlList" class=" w-22px cursor-pointer" :src="control.icon"
                                     mode="widthFix" @click="() => control?.onClick(item)"></image>
                             </view>

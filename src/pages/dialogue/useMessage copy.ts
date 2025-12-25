@@ -38,27 +38,13 @@ function writeMp3(buffer: ArrayBuffer): Promise<string> {
 
 interface ItemType {
   type: MessageTypeEnum;
-  data: (string | ConfirmNode)[];
+  data: (string | ArrayBuffer)[];
 }
 
-export interface ConfirmNode {
-  msgType: "CONFIRM_REPLY" | "CONFIRM_TIMEOUT" | "CONFIRM";
+interface ConfirmNode {
+  msgType: "CONFIRM_REPLY";
   commandId: string;
   replyContent: 0 | 1;
-  isEnd?: boolean;
-}
-
-export function transformerData(data: string): string | ConfirmNode {
-  try {
-    const target = JSON.parse(data);
-    if (typeof target !== "number") {
-      return target;
-    } else {
-      return data;
-    }
-  } catch (error) {
-    return data;
-  }
 }
 
 export default function useMessage(_options: {
@@ -68,16 +54,32 @@ export default function useMessage(_options: {
 }) {
   const isMessageEnd = ref(false);
   const isAudioEnd = ref(true);
-
+  const isConfirmEnd = ref(true);
   const list = ref<ItemType[]>([]);
+  const isAIEnd = computed(() => isMessageEnd.value && isAudioEnd.value && isConfirmEnd.value);
 
-  const audioList = ref<ArrayBuffer[]>([]);
-
-  watch(isMessageEnd, (nv) => {
+  watch(isAIEnd, (nv) => {
     if (nv) {
+      console.error(
+        "AI已经全部完成",
+        currentIndex.value,
+        lastAIMessage.value.length
+      );
+
       _options?.AIEnd();
     }
   });
+
+  const lastAIMessage = computed(() => {
+    const target = list.value.slice(-1)?.[0];
+    if (target?.type === MessageTypeEnum.AI) {
+      return target.data;
+    } else {
+      return [];
+    }
+  });
+
+  const lastShowAIMessage = ref<string[]>([]);
 
   const currentIndex = ref(0);
 
@@ -92,9 +94,14 @@ export default function useMessage(_options: {
     console.log("播放完毕 audio");
 
     if (
-      currentIndex.value >= audioList.value.length - 1 &&
+      currentIndex.value >= lastAIMessage.value.length - 1 &&
       isMessageEnd.value
     ) {
+      console.error(
+        "audio AI已经全部完成",
+        currentIndex.value,
+        lastAIMessage.value.length
+      );
       isAudioEnd.value = true;
     } else {
       currentIndex.value++;
@@ -102,30 +109,36 @@ export default function useMessage(_options: {
     }
   });
 
-  const playNext = async (sync = false) => {
+  const playNext = async () => {
+    console.log("play next", lastAIMessage.value[currentIndex.value]);
 
-    if (sync) {
-      currentAudio.stop();
-      isPlaying.value = false
-      if(audioList.value[currentIndex.value]) {
-        currentIndex.value ++
+    if (isPlaying.value || !lastAIMessage.value[currentIndex.value]) return;
+
+    isPlaying.value = true;
+    const target = lastAIMessage.value[currentIndex.value];
+
+    if (typeof target === "string") {
+      //   console.log("当前文本是", target);
+      lastShowAIMessage.value.push(target);
+      _options?.pushAfter();
+      if (
+        !isMessageEnd.value ||
+        currentIndex.value < lastAIMessage.value.length - 1
+      ) {
+        currentIndex.value++;
+        isPlaying.value = false;
+        playNext();
+      } else {
+        isAudioEnd.value = true;
       }
-      playNext();
       return;
     }
 
-    if (
-      isPlaying.value ||
-      !audioList.value[currentIndex.value] ||
-      isAudioEnd.value
-    )
-      return;
+    // console.log("当前播放的是", target);
 
     // #ifdef APP
 
-    const target = audioList.value[currentIndex.value];
-
-    // console.log("当前播放的是", target);
+    if (isAudioEnd.value) return;
 
     const current = target as ArrayBuffer;
     isAudioEnd.value = false;
@@ -142,6 +155,8 @@ export default function useMessage(_options: {
 
     if (lastData?.type !== options.type) isStoped.value = false;
 
+    // console.log('push data', options);
+
     if (
       options.type === MessageTypeEnum.AI &&
       options.content === WB_Enum.AI_END
@@ -150,46 +165,34 @@ export default function useMessage(_options: {
       return;
     }
 
+    // #ifdef H5
     if (typeof options.content !== "string") {
-      audioList.value.push(options.content);
-      isAudioEnd.value = false
-    } else {
-      const tagrgetContent = transformerData(options.content);
+      return;
+    }
+    // #endif
 
-      if (typeof tagrgetContent === "string" || ['CONFIRM'].includes(tagrgetContent.msgType)) {
-        if (!lastData || lastData.type !== options.type) {
-          const target = {
-            type: options.type,
-            data: [tagrgetContent],
-          };
-          list.value.push(target);
-        } else {
-          lastData.data.push(tagrgetContent);
-        }
-        _options.pushAfter()
-      } else {
-        if(tagrgetContent.msgType === 'CONFIRM_TIMEOUT') {
-          lastData.data.forEach((v:any) => {
-            if(v?.commandId === tagrgetContent.commandId) {
-              v.isEnd = true
-            }
-          })
-          playNext()
-        }
-      }
+    if (!lastData || lastData.type !== options.type) {
+      const target = {
+        type: options.type,
+        data: [],
+      };
+
+      target.data.push(options.content);
+
+      list.value.push(target);
+      // needAutoScroll.value = true
+    } else {
+      lastData.data.push(options.content);
     }
 
-    // 新消息开始时，需要手动停止且清空未播放完毕的音频
     if (
       options.type === MessageTypeEnum.AI &&
       options.content === WB_Enum.AI_START
     ) {
       currentIndex.value = 0;
+      lastShowAIMessage.value = [];
       isPlaying.value = false;
       isStoped.value = false;
-
-      currentAudio.stop();
-      audioList.value = [];
       _options.AIStart();
     }
 
@@ -197,43 +200,31 @@ export default function useMessage(_options: {
       isMessageEnd.value = false;
     }
 
-    // 需要等到状态都设置完成后，再开始播放
     playNext();
-
   };
 
   const stopAI = () => {
     isStoped.value = true;
     isAudioEnd.value = true;
     currentAudio.stop();
-    audioList.value = [];
-
-    const lastData = list.value[list.value.length - 1];
-    // 手动停止 AI 之后需要手动结束所有确认节点
-    if(lastData.type === MessageTypeEnum.AI) {
-      lastData.data.forEach((v:any) => {
-        if(v?.commandId) {
-          v.isEnd = true
-        }
-      })
-    }
-    
   };
 
   const initStatus = () => {
     isMessageEnd.value = false;
     isAudioEnd.value = true;
+    isConfirmEnd.value = true
     list.value = [];
     currentIndex.value = 0;
-    audioList.value = [];
+    lastShowAIMessage.value = [];
   };
 
   return {
+    isAIEnd,
     isMessageEnd,
     pushData,
     list,
+    lastShowAIMessage,
     initStatus,
     stopAI,
-    playNext
   };
 }
