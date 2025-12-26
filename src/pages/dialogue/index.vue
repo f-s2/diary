@@ -102,8 +102,8 @@ const controlList = computed<{
     },
     {
         icon: PraisePng,
-        isInactive(item) {
-            return item.userReaction === UserReactionEnum.Dislike
+        isInactive(item) {            
+            return item.userReaction !== UserReactionEnum.Like
         },
         inactiveClass: 'opacity-60',
         onClick(data) {
@@ -114,7 +114,7 @@ const controlList = computed<{
     {
         icon: TreadPng,
         isInactive(item) {
-            return item.userReaction === UserReactionEnum.Like
+            return item.userReaction !== UserReactionEnum.Dislike
         },
         inactiveClass: 'opacity-60',
         onClick(data) {
