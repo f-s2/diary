@@ -15,6 +15,7 @@ import { onShow } from '@dcloudio/uni-app';
 
 import { netConfig } from '@/config/net.config';
 import { isString } from '@/components/da-tree/utils';
+import { useUniWebSocket } from './useSocket';
 
 // #ifdef H5
 const FySpeechRecog = null;
@@ -91,14 +92,10 @@ function stopRecord() {
     }
     if (!isCancel.value) {
         console.log('发送语音');
-        sockets.send({
-            data: WB_Enum.AUDIO_END,
-        })
+        sockets.send(WB_Enum.AUDIO_END)
         currentMessageType.value = MessageTypeEnum.User
     } else {
-        sockets.send({
-            data: WB_Enum.AUDIO_CANCEL,
-        })
+        sockets.send(WB_Enum.AUDIO_CANCEL)
     }
 }
 
@@ -111,9 +108,7 @@ function handleSend(text?: string) {
     if (inputValue.value && isAIMessageEnd.value) {
         isStoped.value = false
 
-        sockets.send({
-            data: inputValue.value
-        })
+        sockets.send(inputValue.value)
 
         emit('sendMessage', {
             type: MessageTypeEnum.User,
@@ -140,9 +135,7 @@ function handleSend(text?: string) {
  * @param data 
  */
 function sendData(data: string) {
-    sockets.send({
-        data
-    })
+    sockets.send(data)
 }
 
 let recogHandle = null;
@@ -209,9 +202,7 @@ function handleStart() {
             console.log('收到音频数据，长度:', length);
             // console.log(audioData);
 
-            // sockets.send({
-            //     data: audioData
-            // })
+            sockets.send(audioData)
 
             // 处理音频数据，audioData是PCM格式，16bits 16000采样率
             // 可以保存到文件或进行其他处理
@@ -226,9 +217,7 @@ function handleStop() {
 function handleStopAI(notSend = false) {
     console.log('手动停止 ai');
     if (!notSend) {
-        sockets.send({
-            data: WB_Enum.PAUSE_RESPONSE
-        })
+        sockets.send(WB_Enum.PAUSE_RESPONSE)
     } else {
         currentMessageType.value = MessageTypeEnum.User
     }
@@ -236,22 +225,34 @@ function handleStopAI(notSend = false) {
 
 const { deviceId } = uni.getSystemInfoSync()
 
-const sockets = uni.connectSocket({
-    url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
-    success() {
-        console.log('WebSocket成功执行');
-    },
-    fail(err) {
-        console.log('WebSocket连接失败:', err);
+const sockets = useUniWebSocket(`${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
+    {
+        handleMessage: handleMessage
     }
-});
+)
 
-onUnmounted(() => {
-    uni.closeSocket()
+onShow(() => {
+    sockets.connect()
 })
 
+// const sockets = uni.connectSocket({
+//     url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
+//     success() {
+//         console.log('WebSocket成功执行');
+//     },
+//     fail(err) {
+//         console.log('WebSocket连接失败:', err);
+//     }
+// });
+
+// onUnmounted(() => {
+//     uni.closeSocket()
+// })
+
 /** 处理接收到的服务器数据，可能也包含小部分自定义数据 */
-function handleMessage(event: { data: any }) {
+function handleMessage(data: any) {
+
+    const event = { data }
 
     // console.log(`收到服务器内容：` + event.data);
     emit('sendMessage', {
@@ -281,8 +282,6 @@ function setAIStatus(isEnd: boolean) {
     isAIMessageEnd.value = isEnd
 }
 
-uni.onSocketMessage(handleMessage);
-
 /** 初始化所有状态，用户点击新增对话时调用 */
 function iniStatus() {
     isVoice.value = false
@@ -290,10 +289,12 @@ function iniStatus() {
     isRouse.value = false;
     inputValue.value = ''
 
-    sockets.send({
-        data: WB_Enum.NEW_CONVERSATION
-    })
+    sockets.send(WB_Enum.NEW_CONVERSATION)
 }
+
+onUnmounted(() => {
+    sockets.close()
+})
 
 
 defineExpose({
