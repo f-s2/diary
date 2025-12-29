@@ -19,7 +19,7 @@ set "BUILD_DIR=dist"
 set "OUTPUT_ZIP=dist.zip"
 set "REMOTE_HOST=root@47.98.201.147"
 set "SSH_KEY_PATH=C:\keys\deploy.pem"
-set "REMOTE_PATH=/app/cmms-mobile"
+set "REMOTE_PATH=/app/vcs-mobile"
 set "SEVEN_ZIP=C:\Program Files\7-Zip\7z.exe"
 
 :: ========== 清理旧文件 ==========

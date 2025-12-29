@@ -16,7 +16,7 @@ variables:
 
   # ------ 应用相关 -------
   #在k8s当中使用的服务名，不能使用下划线（_），且必须小写
-  SERVICE_NAME: 'kycmms-mobile'
+  SERVICE_NAME: 'vcs-mobile'
   # 程序运行的端口
   PORT: '80'
   # 对外访问用的端口
