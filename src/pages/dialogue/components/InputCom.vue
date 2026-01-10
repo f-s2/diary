@@ -16,6 +16,8 @@ import { onShow } from '@dcloudio/uni-app';
 import { netConfig } from '@/config/net.config';
 import { isString } from '@/components/da-tree/utils';
 import { useUniWebSocket } from './useSocket';
+import { storeToRefs } from 'pinia';
+import { useGlobalStore } from '@/store/global';
 
 // #ifdef H5
 const FySpeechRecog = null;
@@ -225,7 +227,10 @@ function handleStopAI(notSend = false) {
 
 const { deviceId } = uni.getSystemInfoSync()
 
-const sockets = useUniWebSocket(`${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
+const {commonSetting} = storeToRefs(useGlobalStore())
+
+
+const sockets = useUniWebSocket(`${commonSetting.value.baseUrl}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
     {
         handleMessage: handleMessage
     }

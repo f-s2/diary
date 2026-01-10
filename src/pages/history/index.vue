@@ -31,10 +31,6 @@ onShow(() => {
     getData()
 })
 
-function handleBack() {
-    uni.navigateBack()
-}
-
 function handleJump(id: string) {
     uni.navigateTo({
         url: `/pages/dialogue/index?id=${id}`,
@@ -42,14 +38,7 @@ function handleJump(id: string) {
 }
 </script>
 <template>
-    <page-container :loading="loading">
-        <template #header>
-            <view class="relative bg-white h-60px f-c-c">
-                <image class="absolute left-0 top-0 bottom-0 my-auto w-44px"
-                    src="@/static/images/history/arrow-left.png" mode="widthFix" @click="handleBack" />
-                <text class=" text-center text-20px font-500">历史记录</text>
-            </view>
-        </template>
+    <page-container :loading="loading" title="历史记录">
         <view>
             <uv-empty v-if="!list.length && !loading"></uv-empty>
             <view class="px-16px space-y-12px">
@@ -70,7 +59,7 @@ function handleJump(id: string) {
                                     {{ dayjs(content.initiationTime).format('MM月DD日 HH:mm') }}
                                 </view>
                             </view>
-                            <image class="w-23px" src="@/static/images/history/arrow-right.png" mode="widthFix" />
+                            <image class="w-23px h-23px" src="@/static/images/history/arrow-right.png" mode="widthFix" />
                         </view>
                     </view>
                 </view>

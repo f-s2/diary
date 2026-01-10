@@ -1,17 +1,16 @@
 import { netConfig } from '@/config/net.config';
 import axios from 'axios';
 import mpAdapter from "axios-miniprogram-adapter";
+import { storeToRefs } from 'pinia';
+import { useGlobalStore } from '@/store/global';
 axios.defaults.adapter = mpAdapter;
 const { baseName, contentType, requestTimeout, successCode, invalidCode } = netConfig;
 
 const NotCheckLoginPages = ['pages_work/report-repair/index', 'pages_work/report-repair/handle', 'pages_work/report-repair/done', 'pages_work/report-repair/device', 'pages_work/report-repair/history']
 
-const {VITE_APP_BASE_URL} = import.meta.env
-
 let BaseUrl = ''
 
 // #ifdef APP
-BaseUrl = VITE_APP_BASE_URL + baseName
 // #endif
 
 // #ifdef H5
@@ -99,5 +98,10 @@ instance.interceptors.response.use(
     }
 );
 
-export default instance;
+export const resetAxiosBaseUrl = (baseUrl) => {
+    // #ifdef APP
+        instance.defaults.baseURL = baseUrl + baseName
+    // #endif
+}
 
+export default instance;

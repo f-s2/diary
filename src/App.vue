@@ -1,13 +1,17 @@
 <script setup>
 import { onLaunch, onError, onShow } from '@dcloudio/uni-app'
+import { useGlobalStore } from './store/global';
 
 function initOptions() {
 
 
 }
 
+
 onLaunch(() => {
   try {
+    const {initSetting} = useGlobalStore()
+    initSetting()
     // 挂载APP启动日志提交
     uni.$dev.logReport("appOnLaunch>" + JSON.stringify(ctx));
   } catch (error) { }

@@ -15,8 +15,10 @@ import useAudioList from './useAudio';
 import { HistoryApi } from '@/api/history';
 import useMessage, { UserReactionEnum, type ConfirmNode, type ItemType } from './useMessage';
 import { isString } from '@/components/da-tree/utils';
+import NavDrawer from '@/components/NavDrawer.vue';
 
 const InputComRef = ref<InstanceType<typeof InputCom>>()
+const NavDrawerRef = ref<InstanceType<typeof NavDrawer>>()
 
 const needAutoScroll = ref(true)
 
@@ -224,7 +226,7 @@ function handleReaction(item: ItemType, reaction: ItemType['userReaction']) {
 </script>
 
 <template>
-    <PageContainer :loading="loading">
+    <PageContainer :loading="loading" header-color="transparent">
         <template #header>
             <view class="f-c-b gap-12px px-14px">
                 <view class="text-22px font-700">AI助手</view>
@@ -233,7 +235,7 @@ function handleReaction(item: ItemType, reaction: ItemType['userReaction']) {
                     <image class="w-18px" src="@/static/images/add.png" mode="widthFix" @click="handleAdd"
                         v-if="list.length" />
                     <image class="w-20px" src="@/static/images/more.png" mode="widthFix"
-                        @click="jumpPage('/pages/history/index')" />
+                        @click="NavDrawerRef?.open()" />
                 </view>
             </view>
         </template>
@@ -297,5 +299,6 @@ function handleReaction(item: ItemType, reaction: ItemType['userReaction']) {
         <template #footer>
             <InputCom ref="InputComRef" :test-id="testId" @send-message="handleSend" v-if="!historyId"></InputCom>
         </template>
+        <NavDrawer ref="NavDrawerRef"></NavDrawer>
     </PageContainer>
 </template>
