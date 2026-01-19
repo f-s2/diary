@@ -15,6 +15,8 @@ onLaunch(() => {
 
     window?.addEventListener('message', e => {
       if(e.data.type === 'URL_INFO') {
+        console.log('origin:', e.origin);
+        
           setSetting({baseUrl: e.origin})
       }
       
@@ -44,16 +46,7 @@ onError((err) => {
 page,
 uni-page-wrapper {
   color: #333;
-  background-image: linear-gradient(
-    177deg,
-    rgba(154, 218, 255, 0.5) 0px,
-    rgba(236, 255, 249, 0.5) 138px,
-    rgba(240, 248, 255, 0.5) 250px,
-    rgba(241, 249, 255, 0.5) 300px,
-    rgba(234, 244, 254, 0.5) 332px,
-    #F1F9FF 400px,
-    #F1F9FF 100%
-  );
+  background-image: linear-gradient(145.46deg, rgba(222, 235, 255, 1) 0%, rgba(214, 240, 255, 1) 24.81%, rgba(227, 229, 255, 1) 53.08%, rgba(243, 248, 255, 1) 74.09%, rgba(233, 254, 255, 1) 100%);
 }
 
 .z-paging-content {
