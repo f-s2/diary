@@ -10,8 +10,15 @@ function initOptions() {
 
 onLaunch(() => {
   try {
-    const {initSetting} = useGlobalStore()
+    const {initSetting, setSetting} = useGlobalStore()
     initSetting()
+
+    window?.addEventListener('message', e => {
+      if(e.data.type === 'URL_INFO') {
+          setSetting({baseUrl: e.origin})
+      }
+      
+    })
     // 挂载APP启动日志提交
     uni.$dev.logReport("appOnLaunch>" + JSON.stringify(ctx));
   } catch (error) { }
