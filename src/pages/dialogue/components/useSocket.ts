@@ -60,7 +60,7 @@ export function useUniWebSocket(url: string, options:{
   }
 
   const connect = () => {
-    console.log('is connect');
+    // console.log('is connect:', url);
     
     if (status.value === 'connecting' || status.value === 'connected') return
 
@@ -75,7 +75,7 @@ export function useUniWebSocket(url: string, options:{
     socketTask.value.onMessage((res) => {
       const data = res.data
 
-      console.log(data);
+      // console.log(data);
       
 
       if (data === HeartMessageEnum.Pong) {
@@ -87,6 +87,7 @@ export function useUniWebSocket(url: string, options:{
         status.value = 'connected'
         return
       }
+        console.log(data);
 
       // 业务消息在这里处理
       options.handleMessage(data)

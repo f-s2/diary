@@ -1,4 +1,4 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import { MessageTypeEnum, WB_Enum } from "./config";
 import { isString } from "@/components/da-tree/utils";
 
@@ -75,10 +75,12 @@ export default function useMessage(_options: {
   AIStart?: () => void;
   AIEnd?: () => void;
 }) {
-  const isMessageEnd = ref(false);
+  const isMessageEnd = ref(true);
   const isAudioEnd = ref(true);
 
   const list = ref<ItemType[]>([]);
+
+  const currentAIMessage = computed(() => (list.value[list.value.length - 1]?.type === MessageTypeEnum.AI && !isMessageEnd.value)? list.value[list.value.length - 1] : undefined);
 
   const audioList = ref<ArrayBuffer[]>([]);
 
@@ -147,7 +149,7 @@ export default function useMessage(_options: {
   };
 
   const pushData = (options: { type: MessageTypeEnum; content: any }) => {
-    const lastData = list.value[list.value.length - 1];
+    const lastData = list.value[list.value.length - 1];    
 
     if (lastData?.type !== options.type) isStoped.value = false;
 
@@ -231,7 +233,7 @@ export default function useMessage(_options: {
   };
 
   const initStatus = () => {
-    isMessageEnd.value = false;
+    isMessageEnd.value = true;
     isAudioEnd.value = true;
     list.value = [];
     currentIndex.value = 0;
@@ -240,6 +242,8 @@ export default function useMessage(_options: {
 
   return {
     isMessageEnd,
+    isAudioEnd,
+    currentAIMessage,
     pushData,
     list,
     initStatus,

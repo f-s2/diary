@@ -1,353 +1,387 @@
 <script setup lang="ts">
-// #ifdef APP
-// @ts-ignore
-import { FySpeechRecog, FyPermission } from '@/uni_modules/fy-speech-recog';
-// #endif
+import { computed, getCurrentInstance, onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
+import VoicePng from "@/static/images/voice.png";
+import KeyboardPng from "@/static/images/keyboard.png";
+import VoicingGif from "@/static/images/voicing.gif";
+import dayjs, { Dayjs } from "dayjs";
+import { MessageTypeEnum, SpeechRecogConfig, WB_Enum } from "../config";
+import useRecord from "./useRecord";
+import { onShow } from "@dcloudio/uni-app";
 
-import { getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue';
-import VoicePng from '@/static/images/voice.png';
-import KeyboardPng from '@/static/images/keyboard.png';
-import VoicingGif from '@/static/images/voicing.gif';
-import dayjs, { Dayjs } from 'dayjs';
-import { MessageTypeEnum, SpeechRecogConfig, WB_Enum } from '../config';
-import useRecord from './useRecord';
-import { onShow } from '@dcloudio/uni-app';
-
-import { netConfig } from '@/config/net.config';
-import { isString } from '@/components/da-tree/utils';
-import { useUniWebSocket } from './useSocket';
-import { storeToRefs } from 'pinia';
-import { useGlobalStore } from '@/store/global';
-
-// #ifdef H5
-const FySpeechRecog = null;
-const FyPermission = null;
-// #endif
-
+import { netConfig } from "@/config/net.config";
+import { isString } from "@/components/da-tree/utils";
+import { useUniWebSocket } from "./useSocket";
+import { storeToRefs } from "pinia";
+import { useGlobalStore } from "@/store/global";
+import IconWrapper from "./IconWrapper.vue";
+import VoiceIcon from '@/static/images/dialogue/voice-icon.png'
+import StopIcon from '@/static/images/dialogue/stop-icon.png'
+import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
+import useBaiduVoice from "./useBaiduVoice";
 
 const props = defineProps<{
-    testId?: string
-}>()
+    testId?: string;
+    isRecordMode?: boolean
+    recording?: boolean
+}>();
 
 const emit = defineEmits<{
-    sendMessage: [{ type: MessageTypeEnum; content: any, timestamp: number }]
-}>()
+    sendMessage: [{ type: MessageTypeEnum; content: any; timestamp: number }];
+    stopAi: []
+    'update:recording': [boolean]
+    resetVoice: []
+}>();
 
 // 是否语音输入
 const isVoice = ref(false);
 /** 是否处于手动停止状态，用于防止在停止后依然接收到服务器后续信息 */
-const isStoped = ref(false)
+const isStoped = ref(false);
 
-const inputValue = ref('')
+const inputValue = ref("");
 
-const currentMessageType = ref<MessageTypeEnum>(MessageTypeEnum.User)
+const currentMessageType = ref<MessageTypeEnum>(MessageTypeEnum.User);
 
-const startVoiceTime = ref<Dayjs>()
+const isRecording = ref(false);
+const isAIMessageEnd = ref(true);
 
-const voiceTimeText = ref('00:00')
-let voiceInterval: any | null = null;
-
-
-const recordDomRef = ref<HTMLElement>()
-
-const { isCancel, isRecording, isRouse, isAIMessageEnd, initRecord, resetRecord } = useRecord(recordDomRef, {
-    onStart() {
-        isStoped.value = false
-        startRecord()
-    },
-    onReset() {
-        stopRecord()
-    },
+watchEffect(() => {
+    emit('update:recording', isRecording.value)
 })
 
 /** 修改当前输入模式 语音/键盘 */
 function changeVoice() {
-
     isVoice.value = !isVoice.value;
-    if (isVoice.value) {
-        initRecord()
-    }
 }
 
 /** 开始录音的入口，用于处理部分数据初始化操作 */
 function startRecord() {
-    handleStart()
-    startVoiceTime.value = dayjs();
-    voiceTimeText.value = '00:00';
-    voiceInterval = setInterval(() => {
-        if (startVoiceTime.value) {
-            const diff = dayjs().diff(startVoiceTime.value, 'second');
-            const minutes = Math.floor(diff / 60).toString().padStart(2, '0');
-            const seconds = (diff % 60).toString().padStart(2, '0');
-            voiceTimeText.value = `${minutes}:${seconds}`;
-        }
-    }, 1000);
+    if (isRecording.value || !isAIMessageEnd.value) return;
+
+    isVoice.value = true
+    isStoped.value = false;
+    isRecording.value = true;
+    inputValue.value = ''
+    handleStart();
 }
 
 /** 结束录音的入口 */
 function stopRecord() {
-    isRouse.value = false;
-    handleStop()
-    if (voiceInterval) {
-        clearInterval(voiceInterval);
-        voiceInterval = null;
-    }
-    if (!isCancel.value) {
-        console.log('发送语音');
-        sockets.send(WB_Enum.AUDIO_END)
-        currentMessageType.value = MessageTypeEnum.User
-    } else {
-        sockets.send(WB_Enum.AUDIO_CANCEL)
-    }
+    // isRouse.value = false;
+    // isRecording.value = false;
+
+    if (isShowTextMode.value) return
+
+    handleStop();
+    // if (!isCancel.value) {
+    console.log("发送语音");
+    sockets.send(WB_Enum.AUDIO_END);
+    currentMessageType.value = MessageTypeEnum.User;
+    // } else {
+    //     sockets.send(WB_Enum.AUDIO_CANCEL)
+    // }
 }
 
 /** 发送文本数据 */
 function handleSend(text?: string) {
+    if (isRecording.value) return;
+
+    if(inputValue.value === '未能识别到有效语音内容' ) {
+        inputValue.value = ''
+        return
+    }
+
     if (text) {
-        inputValue.value = text
+        inputValue.value = text;
     }
 
     if (inputValue.value && isAIMessageEnd.value) {
-        isStoped.value = false
+        isStoped.value = false;
 
-        sockets.send(inputValue.value)
+        sockets.send(inputValue.value);
 
-        emit('sendMessage', {
+        emit("sendMessage", {
             type: MessageTypeEnum.User,
             content: inputValue.value,
-            timestamp: Date.now()
-        })
+            timestamp: Date.now(),
+        });
 
-        inputValue.value = ''
+        inputValue.value = "";
 
-        currentMessageType.value = MessageTypeEnum.AI
-        isAIMessageEnd.value = false
+        currentMessageType.value = MessageTypeEnum.AI;
+        isAIMessageEnd.value = false;
 
         // 目的是为了解决后端响应时间过长，导致前端无法展示 ai 对话框的问题
-        emit('sendMessage', {
+        emit("sendMessage", {
             type: MessageTypeEnum.AI,
             content: WB_Enum.AI_START,
-            timestamp: Date.now() + 1
-        })
+            timestamp: Date.now() + 1,
+        });
     }
 }
 
 /**
  * 仅发送数据，不做其它任何处理
- * @param data 
+ * @param data
  */
 function sendData(data: string) {
-    sockets.send(data)
+    sockets.send(data);
 }
 
-let recogHandle = null;
+const { initBaiduVoice, handleStart, handleStartWU, handleStop, handleStopWU } = useBaiduVoice({
+    sendData: (data) => sockets.send(data),
+    startWU() {
+        if (!isAIMessageEnd.value || isRecording.value) {
+            return;
+        }
+
+        isStoped.value = false;
+        isVoice.value = true;
+        startRecord();
+    },
+    voiceOver() {
+        stopRecord();
+    }
+})
+
 
 onMounted(() => {
-
     // #ifdef APP
-    const permis = new FyPermission();
-    permis.requestPermission({
-        success: function () {
-            recogHandle = new FySpeechRecog(SpeechRecogConfig);
-            console.log('成功注册');
-
-            handleStartWU()
-        }
-    })
+        initBaiduVoice()
     // #endif
-})
+});
 
-
-// 开始唤醒功能
-function handleStartWU() {
-    recogHandle && recogHandle.startWakeUp({
-        WP_WORDS_FILE: plus.io.convertLocalFileSystemURL("/static/WakeUp.bin")
-    }, {
-        success: function (res) {
-            console.log('开始唤醒');
-            if (!isAIMessageEnd.value) {
-                return
-            }
-
-            isStoped.value = false
-            isVoice.value = true
-            isRecording.value = true;
-            isRouse.value = true;
-            startRecord()
-        }
-    });
-}
-// 停止语音唤醒
-function handleStopWU() {
-    recogHandle && recogHandle.stopWakeUp();
-}
-
-// 开启语音识别功能
-function handleStart() {
-    recogHandle && recogHandle.startRecognizer({ AUDIO_MILLS: 0, ACCEPT_AUDIO_DATA: true, VAD_ENDPOINT_TIMEOUT: 1000, DECODER: 2 }, {
-        listener: function (res) {
-            try {
-                const recogRes = JSON.parse(res);
-                console.log(recogRes);
-                if (recogRes.resultWold && [6, 11061, 7].includes(recogRes.status)) { // 临时识别、最终识别、长语音识别
-                    console.log(recogRes.resultWold);
-                }
-
-                if (recogRes.status === 2) {
-                    resetRecord()
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        },
-        audioCallback: (audioData, offset, length) => {
-            console.log('收到音频数据，长度:', length);
-            // console.log(audioData);
-
-            sockets.send(audioData)
-
-            // 处理音频数据，audioData是PCM格式，16bits 16000采样率
-            // 可以保存到文件或进行其他处理
-        }
-    })
-}
-/** 停止语音识别功能 */
-function handleStop() {
-    recogHandle && recogHandle.stopRecognizer();
-}
 /** 手动停止 AI 正在进行的流程 */
 function handleStopAI(notSend = false) {
-    console.log('手动停止 ai');
+    console.log("手动停止 ai");
     if (!notSend) {
-        sockets.send(WB_Enum.PAUSE_RESPONSE)
+        sockets.send(WB_Enum.PAUSE_RESPONSE);
     } else {
-        currentMessageType.value = MessageTypeEnum.User
+        currentMessageType.value = MessageTypeEnum.User;
     }
 }
 
-const { deviceId } = uni.getSystemInfoSync()
+const { deviceId } = uni.getSystemInfoSync();
 
-const {commonSetting} = storeToRefs(useGlobalStore())
+const { commonSetting } = storeToRefs(useGlobalStore());
 
-
-const sockets = useUniWebSocket(`${commonSetting.value.baseUrl}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
+const sockets = useUniWebSocket(
+    `${commonSetting.value.baseUrl}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ""}`,
     {
-        handleMessage: handleMessage
-    }
-)
+        handleMessage: handleMessage,
+    },
+);
 
 onShow(() => {
-    sockets.connect()
+    sockets.connect();
+});
+
+const showCountdown = ref(false);
+
+const CountdownTime = 10;
+
+const CountdownDuration = ref(CountdownTime);
+
+let timer: any = null;
+const lastAIEndInfo = ref()
+
+let timer2: any = null;
+
+const isShowConfirm = ref(false)
+
+watch(showCountdown, (newVal) => {
+    if (newVal) {
+        CountdownDuration.value = CountdownTime;
+        timer2 = setInterval(() => {
+            CountdownDuration.value -= 1;
+            if (CountdownDuration.value <= 0) {
+                clearInterval(timer2)
+            }
+        }, 1000);
+    } else {
+        clearInterval(timer2)
+    }
 })
 
-// const sockets = uni.connectSocket({
-//     url: `${import.meta.env.VITE_APP_BASE_URL}${import.meta.env.VITE_APP_PREFIX}/ws/message?initiator=${deviceId}&testDialogueId=${props?.testId ?? ''}`,
-//     success() {
-//         console.log('WebSocket成功执行');
-//     },
-//     fail(err) {
-//         console.log('WebSocket连接失败:', err);
-//     }
-// });
+onUnmounted(() => {
+    clearInterval(timer2)
+})
 
-// onUnmounted(() => {
-//     uni.closeSocket()
-// })
+
+function handleAIEnd() {
+    clearTimeout(timer)
+    emit("sendMessage", lastAIEndInfo.value);
+    currentMessageType.value = MessageTypeEnum.User;
+    showCountdown.value = false
+    lastAIEndInfo.value = undefined
+    isShowConfirm.value = false
+    emit('resetVoice')
+}
+
+/** 是否正在展示语音转换后的文本 */
+const isShowTextMode = computed(() => isRecording.value && !!inputValue.value)
 
 /** 处理接收到的服务器数据，可能也包含小部分自定义数据 */
 function handleMessage(data: any) {
-
-    const event = { data }
+    const event = { data };
 
     // console.log(`收到服务器内容：` + event.data);
-    emit('sendMessage', {
-        type: currentMessageType.value,
-        content: event.data,
-        timestamp: Date.now()
-    })
 
-    if (currentMessageType.value === MessageTypeEnum.AI && isString(event.data) && event.data.startsWith(WB_Enum.AI_END)) {
-        currentMessageType.value = MessageTypeEnum.User
-        return
-    }
+    // console.log(currentMessageType.value, event.data);
 
     // 当前为 user ，说明是语音转文字的响应
     if (currentMessageType.value === MessageTypeEnum.User) {
-        currentMessageType.value = MessageTypeEnum.AI
-        // 目的是为了解决后端响应时间过长，导致前端无法展示 ai 对话框的问题
-        emit('sendMessage', {
-            type: MessageTypeEnum.AI,
-            content: WB_Enum.AI_START,
-            timestamp: Date.now() + 1
-        })
+
+        inputValue.value = event.data;
+        setTimeout(() => {
+            isRecording.value = false
+            handleSend()
+        }, 2000);
+    } else {
+
+        if (
+            currentMessageType.value === MessageTypeEnum.AI &&
+            isString(event.data) &&
+            event.data.startsWith(WB_Enum.AI_END)
+        ) {
+            lastAIEndInfo.value = {
+                type: currentMessageType.value,
+                content: event.data,
+                timestamp: Date.now(),
+            }
+
+            if (props.isRecordMode) {
+                isShowConfirm.value = true
+                timer = setTimeout(() => {
+                    handleAIEnd()
+                }, CountdownTime * 1000)
+                showCountdown.value = true
+            } else {
+                handleAIEnd()
+            }
+        } else {
+            emit("sendMessage", {
+                type: currentMessageType.value,
+                content: event.data,
+                timestamp: Date.now(),
+            });
+        }
     }
 }
 
 function setAIStatus(isEnd: boolean) {
-    isAIMessageEnd.value = isEnd
+    isAIMessageEnd.value = isEnd;
 }
 
 /** 初始化所有状态，用户点击新增对话时调用 */
 function iniStatus() {
-    isVoice.value = false
+    isVoice.value = false;
     isRecording.value = false;
-    isRouse.value = false;
-    inputValue.value = ''
+    // isRouse.value = false;
+    inputValue.value = "";
 
-    sockets.send(WB_Enum.NEW_CONVERSATION)
+    sockets.send(WB_Enum.NEW_CONVERSATION);
 }
 
 onUnmounted(() => {
-    sockets.close()
-})
-
+    sockets.close();
+});
 
 defineExpose({
     handleStopAI,
     handleSend,
     iniStatus,
     sendData,
-    setAIStatus
-})
+    setAIStatus,
+});
 </script>
 
 <template>
     <view>
-        <view class="p-16px bg-white bg-opacity-80 f-c-c gap-10px">
-            <!-- #ifdef APP -->
-            <image class="w-36px" :src="!isVoice ? VoicePng : KeyboardPng" mode="widthFix" @click="changeVoice" />
-            <!-- #endif -->
-            <view class="flex-1 w-0 p-1px rounded-20px overflow-hidden h-38px"
-                style="background: linear-gradient(126.88deg, #009AFF 0%, #EB5CFF 34.73%, #00FFE3 68.48%, #1100FF 100%);">
-                <view class="bg-white w-full h-full rounded-20px">
-                    <input v-model="inputValue" class="w-full h-full px-12px outline-none text-14px" type="text"
-                        confirm-type="search" @keydown.enter="handleSend()" placeholder="请输入执行指令" v-if="!isVoice" />
-                    <view class="f-c-c h-full text-14px font-500">按住 说话</view>
+        <view v-if="!isRecordMode">
+            <view class="p-16px bg-white bg-opacity-80 f-c-c gap-10px">
+                <!-- #ifdef APP -->
+                <image class="w-36px" :src="!isVoice ? VoicePng : KeyboardPng" mode="widthFix" @click="changeVoice" />
+                <!-- #endif -->
+                <view class="flex-1 w-0 p-1px rounded-20px overflow-hidden h-38px" style="
+          background: linear-gradient(
+            126.88deg,
+            #009aff 0%,
+            #eb5cff 34.73%,
+            #00ffe3 68.48%,
+            #1100ff 100%
+          );
+        ">
+                    <view class="w-full h-full rounded-20px" :class="isRecording ? 'gradient-bg' : 'bg-white'">
+                        <input v-model="inputValue" class="w-full h-full px-12px outline-none text-14px" type="text"
+                            confirm-type="search" @keydown.enter="handleSend()" placeholder="请输入执行指令" v-if="!isVoice" />
+                        <view class="f-c-c h-full text-14px font-500" @click="startRecord">点击 说话</view>
+                    </view>
                 </view>
+                <image class="w-36px cursor-pointer" src="@/static/images/send.png" mode="widthFix"
+                    @click="handleSend()" />
             </view>
-            <image class="w-36px cursor-pointer" src="@/static/images/send.png" mode="widthFix" @click="handleSend()" />
+            <view class="fixed left-0 right-0 bottom-54px" v-if="isRecording">
+                <view v-if="inputValue"
+                    class="w-90% rounded-24px text-16px font-500 color-white text-center p-12px mx-auto gradient-bg-2">
+                    {{ inputValue
+                    }}</view>
+                <image class="w-120px h-120px mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
+                    mode="widthFix" />
+            </view>
         </view>
-        <view class="fixed z-20 top-0 left-0 w-full h-full bg-#000000 bg-opacity-45"
-            :class="{ 'opacity-0 pointer-events-none': !isRecording }" v-if="isVoice">
-            <view class=" absolute left-0 right-0 bottom-120px">
-                <view class="relative mb-10px px-16px py-10px bg-#4F87FE rounded-12px mx-auto w-240px min-h-94px f-c-c">
-                    <!-- <view class="text-16px font-600 color-white">{{  }}</view> -->
-                    <image class="w-90px" :src="VoicingGif" mode="widthFix" />
-                    <view class=" absolute left-1/2 translate-x--1/2 -bottom-8px w-20px h-20px bg-#4F87FE"
-                        style="clip-path: polygon(50% 100%, 0 50%, 100% 50%);"></view>
+        <view class=" f-c-c pb-20px" v-else>
+            <template v-if="currentMessageType === MessageTypeEnum.AI">
+                <view>
+                    <view class=" color-primary text-center mb-18px" v-if="showCountdown">{{ CountdownDuration }}s后返回
+                    </view>
+                    <icon-wrapper :url="ConfirmIcon" v-if="isShowConfirm" @click="handleAIEnd"></icon-wrapper>
+                    <icon-wrapper :url="StopIcon" v-else @click="$emit('stopAi')"></icon-wrapper>
                 </view>
-                <view class="text-center mt-7px mb-20px color-white">{{ voiceTimeText }}</view>
-                <view class="text-center color-white mb-12px" v-show="!isRouse">{{ isCancel ? '松开取消发送' : '上滑取消发送' }}
+            </template>
+            <template v-else>
+                <icon-wrapper :url="VoiceIcon" v-if="!isRecording" @click="startRecord"></icon-wrapper>
+                <view class=" relative w-full" v-else>
+                    <image class=" absolute w-full left-0 top-1/2 -translate-y-1/2"
+                        src="@/static/images/dialogue/user-speek.gif" mode="widthFix" />
+                    <icon-wrapper class="mx-auto" :url="StopIcon" @click="stopRecord"></icon-wrapper>
                 </view>
-            </view>
-            <view class="absolute left-0 right-0 bottom-0 w-full select-none"
-                :class="{ '!w-68vw h-30px bottom-30px mx-auto pointer-events-auto': !isRecording }" ref="recordDomRef">
-                <image class="w-full" src="@/static/images/microphone-bg.png" mode="widthFix" />
-                <view class=" absolute left-1/2 top-24px -translate-x-1/2 z-10 f-c-c flex-col">
-                    <image class="w-20px" src="@/static/images/microphone.png" mode="widthFix" />
-                    <text class="mt-6px text-14px color-#4F87FE" v-show="!isRouse">松开发送</text>
-                </view>
+            </template>
+            <view class="fixed left-0 right-0 bottom-140px" v-if="isShowTextMode">
+                <view
+                    class="w-90% rounded-24px text-16px font-500 color-white text-center p-12px mx-auto gradient-bg-2">
+                    {{
+                        inputValue
+                    }}</view>
             </view>
         </view>
     </view>
 </template>
+
+<style scoped>
+.gradient-bg {
+    background: linear-gradient(226.92deg,
+            #deebff 0%,
+            #d6f0ff 23.41%,
+            #e3e5ff 55.25%,
+            #f3f8ff 75.21%,
+            #e9feff 100%);
+    animation: gradientMove 6s linear infinite;
+}
+
+.gradient-bg-2 {
+    background: linear-gradient(238.38deg,
+            rgba(152, 170, 252, 1) 0%,
+            rgba(108, 181, 255, 1) 46.69%,
+            rgba(60, 125, 254, 1) 100%);
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+</style>

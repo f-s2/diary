@@ -48,7 +48,7 @@
 
 </script>
 <template>
-    <view class="p-14px rounded-14px border-(1px solid #fff)"
+    <view class="p-14px pb-0px rounded-14px border-(1px solid #fff)"
         style="background: linear-gradient(180deg, #DEEBFF 0%, #E2F5FF 5.12%, #FFFFFF 15.79%, #FFFFFF 100%);">
         <view class="flex items-center">
             <image class="w-38px" src="@/static/images/quick-icon.png" mode="widthFix" />
