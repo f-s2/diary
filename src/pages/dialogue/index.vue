@@ -303,7 +303,7 @@ function resetVoice() {
                                 </view>
                                 <view class="px-16px py-12px text-14px min-w-50px overflow-hidden" :class="item.type === MessageTypeEnum.AI ?
                                     ' gradient-border flex-1' :
-                                    'rounded-l-100px rounded-tr-0px rounded-br-20px message-user color-white ml-auto'">
+                                    'rounded-l-15px rounded-tr-0px rounded-br-20px message-user color-white ml-auto'">
                                     <view class="flex items-center gap-6px mb-8px"
                                         v-if="index === list.length - 1 && !isMessageEnd && item.type === MessageTypeEnum.AI && !historyId">
                                         <LoadingIcon :url="LoadingPng"></LoadingIcon>
