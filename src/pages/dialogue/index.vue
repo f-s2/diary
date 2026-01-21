@@ -345,7 +345,6 @@ function resetVoice() {
                     <view id="chat-bottom-1" style="height:1px;"></view>
                     <view id="chat-bottom-2" style="height:1px;"></view>
                 </scroll-view>
-                <NavDrawer ref="NavDrawerRef"></NavDrawer>
             </swiper-item>
             <swiper-item>
                 <image class="w-280px h-280px mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
@@ -380,6 +379,7 @@ function resetVoice() {
                 :test-id="testId" @stop-ai="handleStopAI" @send-message="handleSend" @reset-voice="resetVoice" v-if="!historyId">
             </InputCom>
         </template>
+        <NavDrawer ref="NavDrawerRef"></NavDrawer>
     </PageContainer>
 </template>
 
