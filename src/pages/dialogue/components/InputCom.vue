@@ -18,6 +18,7 @@ import VoiceIcon from '@/static/images/dialogue/voice-icon.png'
 import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import useBaiduVoice from "./useBaiduVoice";
+import AiIcon from './AiIcon.vue';
 
 const props = defineProps<{
     testId?: string;
@@ -183,6 +184,7 @@ const sockets = useUniWebSocket(
 );
 
 onShow(() => {    
+        console.log(1432432123);
     sockets.connect();
 });
 
@@ -294,13 +296,13 @@ function iniStatus() {
     sockets.send(WB_Enum.NEW_CONVERSATION);
 }
  
-onHide(() => {
+onHide(() => {    
     sockets.close();
 })
 
-onUnmounted(() => {
-    sockets.close();
-});
+// onUnmounted(() => {
+//     sockets.close();
+// });
 
 defineExpose({
     handleStopAI,
@@ -341,8 +343,9 @@ defineExpose({
                     class="w-90% rounded-24px text-16px font-500 color-white text-center p-12px mx-auto gradient-bg-2">
                     {{ inputValue
                     }}</view>
-                <image class="w-120px h-120px mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
-                    mode="widthFix" />
+                <!-- <image class=" mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
+                    mode="widthFix" /> -->
+                <AiIcon class="w-120px h-120px"></AiIcon>
             </view>
         </view>
         <view class=" f-c-c pb-20px" v-else>

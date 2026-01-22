@@ -21,6 +21,7 @@ import LoadingPng from '@/static/images/dialogue/loading-icon.png'
 import LoadingPng2 from '@/static/images/dialogue/loading-icon2.webp'
 import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
+import AiIcon from './components/AiIcon.vue';
 
 let disableTouch = true
 
@@ -31,6 +32,7 @@ disableTouch = false
 
 const InputComRef = ref()
 const NavDrawerRef = ref<InstanceType<typeof NavDrawer>>()
+const AiIconRef = ref<InstanceType<typeof AiIcon>>()
 
 const inputRefs = []
 
@@ -259,6 +261,9 @@ const current = ref(0)
 
 function changeCurrent(index: number) {
     current.value = index
+    if(index === 1) {
+        AiIconRef.value?.showAnime()
+    }
 }
 
 function resetVoice() {
@@ -347,8 +352,9 @@ function resetVoice() {
                 </scroll-view>
             </swiper-item>
             <swiper-item>
-                <image class="w-280px h-280px mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
-                    mode="widthFix" />
+                <!-- <image class="w-280px h-280px mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
+                    mode="widthFix" /> -->
+                <AiIcon ref="AiIconRef" class="w-280px h-280px mx-auto block"></AiIcon>
                 <image v-if="!isAudioEnd" class="w-136px h-136px -mb-50px -mt-70px mx-auto block"
                     src="@/static/images/dialogue/ai-speek.gif" mode="widthFix" />
                 <view class="gradient-text text-center" v-if="!currentAIMessage">请用“晓言、晓言”唤醒我</view>
