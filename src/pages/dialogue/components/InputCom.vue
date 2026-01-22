@@ -95,7 +95,8 @@ function stopRecord() {
 function handleSend(text?: string) {
     if (isRecording.value) return;
 
-    if(inputValue.value === '未能识别到有效语音内容' ) {
+    const allowList = ['未能识别到有效语音内容', '语音识别异常']
+    if(allowList.includes(inputValue.value)) {
         inputValue.value = ''
         return
     }
