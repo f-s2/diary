@@ -54,6 +54,18 @@ export default function useBaiduVoice(options: {
     recogHandle.value?.stopWakeUp();
   }
 
+
+let timer:any = null
+
+function checkRecording() {
+  timer && clearTimeout(timer);
+
+  timer = setTimeout(() => {
+    handleStop()
+    options.voiceOver();
+  }, 5000);
+}
+
   // 开启语音识别功能
 function handleStart() {
         recogHandle.value?.startRecognizer(
@@ -77,6 +89,7 @@ function handleStart() {
                         }
 
                         if (recogRes.status === 2) {
+                            clearTimeout(timer)                            
                             options.voiceOver();
                         }
                     } catch (err) {
@@ -87,8 +100,8 @@ function handleStart() {
                     console.log("收到音频数据，长度:", length);
                     // console.log(audioData);
 
-                    
                     options.sendData(audioData);
+                    checkRecording()
                     // 处理音频数据，audioData是PCM格式，16bits 16000采样率
                     // 可以保存到文件或进行其他处理
                 },

@@ -6,7 +6,7 @@ import VoicingGif from "@/static/images/voicing.gif";
 import dayjs, { Dayjs } from "dayjs";
 import { MessageTypeEnum, SpeechRecogConfig, WB_Enum } from "../config";
 import useRecord from "./useRecord";
-import { onShow } from "@dcloudio/uni-app";
+import { onHide, onShow } from "@dcloudio/uni-app";
 
 import { netConfig } from "@/config/net.config";
 import { isString } from "@/components/da-tree/utils";
@@ -63,6 +63,8 @@ function startRecord() {
     inputValue.value = ''
     handleStart();
 }
+/** 语音转换超时的定时器 */
+let transformVoiceTimer: any = null;
 
 /** 结束录音的入口 */
 function stopRecord() {
@@ -76,6 +78,14 @@ function stopRecord() {
     console.log("发送语音");
     sockets.send(WB_Enum.AUDIO_END);
     currentMessageType.value = MessageTypeEnum.User;
+    console.log('切换状态');
+    transformVoiceTimer = setTimeout(() => {
+        isRecording.value = false
+        uni.showToast({
+            title: '语音识别超时',
+            icon: 'error'
+        })
+    }, 10000);
     // } else {
     //     sockets.send(WB_Enum.AUDIO_CANCEL)
     // }
@@ -171,7 +181,7 @@ const sockets = useUniWebSocket(
     },
 );
 
-onShow(() => {
+onShow(() => {    
     sockets.connect();
 });
 
@@ -233,6 +243,7 @@ function handleMessage(data: any) {
 
         inputValue.value = event.data;
         setTimeout(() => {
+            clearTimeout(transformVoiceTimer)
             isRecording.value = false
             handleSend()
         }, 2000);
@@ -281,6 +292,10 @@ function iniStatus() {
 
     sockets.send(WB_Enum.NEW_CONVERSATION);
 }
+ 
+onHide(() => {
+    sockets.close();
+})
 
 onUnmounted(() => {
     sockets.close();

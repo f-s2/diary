@@ -5,7 +5,7 @@ import { cloneFnJSON } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
-const {setSetting} = useGlobalStore()
+const { setSetting } = useGlobalStore()
 
 const {commonSetting} = storeToRefs(useGlobalStore())
 
