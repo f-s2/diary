@@ -184,7 +184,6 @@ const sockets = useUniWebSocket(
 );
 
 onShow(() => {    
-        console.log(1432432123);
     sockets.connect();
 });
 

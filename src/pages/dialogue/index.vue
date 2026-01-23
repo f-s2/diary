@@ -368,10 +368,10 @@ function resetVoice() {
                             WB_Enum.AI_START ? '' : text }}</text>
                         <view v-if="!isString(text) && !text.isEnd">
                             <view>是否确认执行？</view>
-                            <view class="f-c-c gap-24px my-8px">
-                                <image class="w-24px h-24px" :src="StopIcon" mode="widthFix"
+                            <view class="f-c-c gap-40px my-8px">
+                                <image class="w-40px h-40px" :src="StopIcon" mode="widthFix"
                                     @click="handleConfirm(text, 0)" />
-                                <image class="w-24px h-24px" :src="ConfirmIcon" mode="widthFix"
+                                <image class="w-40px h-40px" :src="ConfirmIcon" mode="widthFix"
                                     @click="handleConfirm(text, 1)" />
                             </view>
                         </view>
