@@ -1,8 +1,8 @@
 import { computed, ref, type Ref } from "vue";
 
-// #ifdef APP
-function writeMp3(buffer: ArrayBuffer): Promise<string> {
+export function writeMp3(buffer: ArrayBuffer): Promise<string> {
   return new Promise((resolve, reject) => {
+    // #ifdef APP
     plus.io.requestFileSystem(plus.io.PRIVATE_DOC, (fs) => {
       fs.root.getFile(
         `audio_${Date.now()}.mp3`,
@@ -31,9 +31,9 @@ function writeMp3(buffer: ArrayBuffer): Promise<string> {
         (err) => reject(err)
       );
     });
+    // #endif
   });
 }
-// #endif
 
 export default function useAudioList(
   isMessageEnd: Ref<boolean>,
@@ -63,7 +63,7 @@ export default function useAudioList(
   const pushAudio = (data) => {
     isAudioEnd.value = false;
 
-    audioList.value.push(data);
+    audioList.value.push(data);    
     playNext();
   };
 

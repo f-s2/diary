@@ -22,6 +22,7 @@ import LoadingPng2 from '@/static/images/dialogue/loading-icon2.webp'
 import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import AiIcon from './components/AiIcon.vue';
+import useBaiduVoice from './components/useBaiduVoice';
 
 let disableTouch = true
 
@@ -272,6 +273,9 @@ function resetVoice() {
     }
 }
 
+onShow(() => {
+    useBaiduVoice().initHello()
+})
 </script>
 
 <template>

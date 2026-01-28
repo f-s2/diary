@@ -50,10 +50,10 @@ instance.interceptors.response.use(
                 
         // 请求出错处理
         // -1 超时、token过期或者没有获得授权
-        if (successCode.includes(res.code)) {
+        if (successCode.includes(res.code) || Object.values(response.headers).some(v => v.startsWith('audio/'))) {
             return res
         } 
-        
+
         if (invalidCode.includes(res.code)) {
             if(NotCheckLoginPages.includes(pageRoute)) {
                 return Promise.reject(res)
@@ -99,9 +99,7 @@ instance.interceptors.response.use(
 );
 
 export const resetAxiosBaseUrl = (baseUrl) => {
-    // #ifdef APP
-        instance.defaults.baseURL = baseUrl + baseName
-    // #endif
+    instance.defaults.baseURL = baseUrl + baseName
 }
 
 export default instance;

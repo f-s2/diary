@@ -5,6 +5,8 @@ import { FySpeechRecog, FyPermission } from "@/uni_modules/fy-speech-recog";
 
 import { SpeechRecogConfig } from "../config";
 import { ref } from "vue";
+import { DialogueApi } from "@/api/dialogue";
+import { writeMp3 } from "../useAudio";
 
 // #ifdef H5
 const FySpeechRecog = null;
@@ -13,12 +15,35 @@ const FyPermission = null;
 
 let recogHandle = ref();
 
-export default function useBaiduVoice(options: {
+const hellowAudio = ref()
+
+export default function useBaiduVoice(options?: {
     startWU: () => void
     sendData: (data:any) => void
     voiceOver: () => void
+    helloEnd: () => void
 }) {
-  function init() {
+
+  const currentAudio = uni.createInnerAudioContext();
+
+  currentAudio.onEnded(() => {
+    options.helloEnd()
+  })
+
+  function initHello() {
+     DialogueApi.synthesisAudio('你好, 我在').then(async (res) => {
+      hellowAudio.value = res
+    })
+  }
+
+  async function playHello() {    
+     const path = await writeMp3(hellowAudio.value);
+     currentAudio.src = path;
+     currentAudio.play();
+  }
+
+  function init() {    
+    // initAudio()
     const permis = new FyPermission();
     permis.requestPermission({
       success: function () {
@@ -38,10 +63,11 @@ export default function useBaiduVoice(options: {
             plus.io.convertLocalFileSystemURL("/static/WakeUp.bin"),
         },
         {
-          success: function (res) {
+          success: async function (res) {
             console.log("开始唤醒");
-
-           options.startWU()
+            
+            options.startWU()
+            playHello()
           },
           fail(err) {
             console.log("唤醒失败", err);
@@ -118,6 +144,7 @@ function handleStop() {
     handleStartWU,
     handleStopWU,
     handleStart,
-    handleStop
+    handleStop,
+    initHello
   }
 }

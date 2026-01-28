@@ -54,9 +54,10 @@ function changeVoice() {
     isVoice.value = !isVoice.value;
 }
 
+//jumpCheck 主要是为了兼容 hello 语音与之前的 icon 展示逻辑
 /** 开始录音的入口，用于处理部分数据初始化操作 */
-function startRecord() {
-    if (isRecording.value || !isAIMessageEnd.value) return;
+function startRecord(jumpCheck=false) {
+    if ((isRecording.value && !jumpCheck) || !isAIMessageEnd.value) return;
 
     isVoice.value = true
     isStoped.value = false;
@@ -148,11 +149,14 @@ const { initBaiduVoice, handleStart, handleStartWU, handleStop, handleStopWU } =
 
         isStoped.value = false;
         isVoice.value = true;
-        startRecord();
+        isRecording.value = true
     },
     voiceOver() {
         stopRecord();
-    }
+    },
+    helloEnd() {
+        startRecord(true);
+    },
 })
 
 
