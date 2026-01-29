@@ -19,6 +19,7 @@ import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import useBaiduVoice from "./useBaiduVoice";
 import AiIcon from './AiIcon.vue';
+import type { ResponseData } from "../useMessage";
 
 const props = defineProps<{
     testId?: string;
@@ -27,7 +28,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    sendMessage: [{ type: MessageTypeEnum; content: any; timestamp: number }];
+    sendMessage: [{ type: MessageTypeEnum; content: ResponseData; timestamp: number }];
     stopAi: []
     'update:recording': [boolean]
     resetVoice: []
@@ -114,7 +115,9 @@ function handleSend(text?: string) {
 
         emit("sendMessage", {
             type: MessageTypeEnum.User,
-            content: inputValue.value,
+            content: {
+                content: inputValue.value
+            },
             timestamp: Date.now(),
         });
 
@@ -126,7 +129,9 @@ function handleSend(text?: string) {
         // 目的是为了解决后端响应时间过长，导致前端无法展示 ai 对话框的问题
         emit("sendMessage", {
             type: MessageTypeEnum.AI,
-            content: WB_Enum.AI_START,
+            content: {
+                msgType: WB_Enum.AI_START
+            },
             timestamp: Date.now() + 1,
         });
     }
@@ -174,6 +179,9 @@ function handleStopAI(notSend = false) {
     } else {
         currentMessageType.value = MessageTypeEnum.User;
     }
+
+    console.log('is record', isRecording.value, currentMessageType.value);
+    
 }
 
 const { deviceId } = uni.getSystemInfoSync();
@@ -233,6 +241,16 @@ function handleAIEnd() {
     emit('resetVoice')
 }
 
+const isAiEnd = (data: any) => {
+    if(data instanceof ArrayBuffer) {
+        return false
+    }
+
+    const target = JSON.parse(data) as ResponseData
+
+    return target?.msgType === WB_Enum.AI_END
+}
+
 /** 是否正在展示语音转换后的文本 */
 const isShowTextMode = computed(() => isRecording.value && !!inputValue.value)
 
@@ -241,8 +259,6 @@ function handleMessage(data: any) {
     const event = { data };
 
     // console.log(`收到服务器内容：` + event.data);
-
-    // console.log(currentMessageType.value, event.data);
 
     // 当前为 user ，说明是语音转文字的响应
     if (currentMessageType.value === MessageTypeEnum.User) {
@@ -256,9 +272,7 @@ function handleMessage(data: any) {
     } else {
 
         if (
-            currentMessageType.value === MessageTypeEnum.AI &&
-            isString(event.data) &&
-            event.data.startsWith(WB_Enum.AI_END)
+            currentMessageType.value === MessageTypeEnum.AI && isAiEnd(event.data)
         ) {
             lastAIEndInfo.value = {
                 type: currentMessageType.value,

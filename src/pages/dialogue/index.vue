@@ -13,7 +13,7 @@ import SharePng from '@/static/images/control/share.png'
 import TreadPng from '@/static/images/control/tread.png'
 import useAudioList from './useAudio';
 import { HistoryApi } from '@/api/history';
-import useMessage, { UserReactionEnum, type ConfirmNode, type ItemType } from './useMessage';
+import useMessage, { UserReactionEnum, type ConfirmNode, type ItemType, type ResponseData } from './useMessage';
 import { isString } from '@/components/da-tree/utils';
 import NavDrawer from '@/components/NavDrawer.vue';
 import LoadingIcon from '@/components/LoadingIcon.vue';
@@ -23,6 +23,7 @@ import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import AiIcon from './components/AiIcon.vue';
 import useBaiduVoice from './components/useBaiduVoice';
+import { cloneFnJSON } from '@vueuse/core';
 
 let disableTouch = true
 
@@ -30,6 +31,9 @@ let disableTouch = true
 disableTouch = false
 // #endif
 
+
+const MessageClass = ['color-#666666 text-12px font-500', 'color-#333 text-12px font-500', 'color-#222222 text-14px font-500 mt-6px']
+const MessageClass2 = ['color-#666666 text-14px font-500', 'color-#333 text-14px font-500', 'color-#222222 text-16px font-500 mt-14px']
 
 const InputComRef = ref()
 const NavDrawerRef = ref<InstanceType<typeof NavDrawer>>()
@@ -70,12 +74,11 @@ const { initStatus, pushData, currentAIMessage, isMessageEnd, isAudioEnd, stopAI
     },
 
 })
-
 function handleSend(options: { type: MessageTypeEnum; content: any }) {
     pushData(options)
 }
 
-const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum.User)?.data?.[0])
+const titleText = computed(() => list.value.find(v => v.type === MessageTypeEnum.User)?.data?.[0]?.content)
 
 let timer = null
 
@@ -96,10 +99,30 @@ function scrollToBottom() {
     }, 300);
 }
 
-onMounted(() => {
+let timer2 = null
 
+const scrollIntoView2 = ref('')
+
+function scrollToBottom2() {
+    console.log('触发滚动');
+
+    if (timer2) return
+
+    scrollIntoView2.value = ''
+
+    timer2 = setTimeout(() => {
+        scrollIntoView2.value = 'chat-bottom-3'
+        nextTick(() => {
+            timer2 = null
+        })
+    }, 300);
+}
+
+watch(currentAIMessage, () => {
+    scrollToBottom2()
+}, {
+    deep: true
 })
-
 
 const startY = ref(0)
 const CANCEL_DISTANCE = 100; // 上滑取消的距离阈值
@@ -214,7 +237,7 @@ async function getData() {
 
         list.value = _data.map(v => ({
             type: v.role as any,
-            data: [v.content],
+            data: v.content?.split('\\n').map(v => ({ content: v })),
             id: v.id,
             userReaction: v.likeStatus
         }))
@@ -229,9 +252,9 @@ async function getData() {
 
 function handleConfirm(item: ConfirmNode, data: 0 | 1) {
     item.isEnd = true
-    const target: ConfirmNode = {
+    const target = {
         msgType: 'CONFIRM_REPLY',
-        commandId: item.commandId,
+        commandId: item.content,
         replyContent: data
     }
     InputComRef.value?.sendData(JSON.stringify(target))
@@ -262,15 +285,49 @@ const current = ref(0)
 
 function changeCurrent(index: number) {
     current.value = index
-    if(index === 1) {
+    if (index === 1) {
         AiIconRef.value?.showAnime()
     }
 }
 
 function resetVoice() {
-    if(current.value === 1) {
+    if (current.value === 1) {
         isAudioEnd.value = true
     }
+}
+
+function transformerMessage(_data: ConfirmNode[]) {
+    const messageList: (ConfirmNode & { nodeList?: { text: string, isNode: boolean }[] })[] = []
+
+    _data.forEach(v => {
+        if (!v.commandName) {
+            messageList.push(v)
+        } else {
+            const targetItem = messageList.find(_ => _.commandName === v.commandName)
+
+            const targetNode = {
+                text: v.content,
+                isNode: v.msgType === 'NODE'
+            }
+
+            if (targetItem) {
+                targetItem.nodeList.push(targetNode)
+            } else {
+                messageList.push({
+                    ...v,
+                    nodeList: [targetNode]
+                })
+            }
+        }
+    })
+
+    return messageList
+}
+
+const isNodeLast = (index: number, arr: { isNode: boolean }[]) => {
+    const textIndex = arr.findIndex(v => !v.isNode)
+
+    return ~textIndex ? index === textIndex - 1 : index === arr.length - 1
 }
 
 onShow(() => {
@@ -323,11 +380,45 @@ onShow(() => {
                                                 mode="widthFix" @click="handleStopAI" />
                                         </view>
                                     </view>
-                                    <view class=" whitespace-pre-wrap" v-for="text in item.data">
-                                        <text v-if="isString(text)">{{ text ===
-                                            WB_Enum.AI_START ? '' : text }}</text>
-                                        <view v-if="!isString(text) && !text.isEnd">
-                                            <view>是否确认执行？</view>
+                                    <view class=" whitespace-pre-wrap" :class="MessageClass[text.styleType]"
+                                        v-for="text in transformerMessage(item.data)">
+                                        <text v-if="!text.msgType && !text.commandName">{{ text.msgType ===
+                                            WB_Enum.AI_START ? '' : text.content }}</text>
+                                        <view v-if="text.commandName">
+                                            <view class="text-12px font-500 text-#333 mb-3px">{{ text.commandName }}
+                                            </view>
+                                            <view v-for="node, nodeIndex in text.nodeList" class="flex pl-2px">
+                                                <view class="mr-8px w-2px h-auto relative bg-#318DFF" :class="{
+                                                    'rounded-t-2px': nodeIndex === 0,
+                                                    'rounded-b-2px': isNodeLast(nodeIndex, text.nodeList),
+                                                }" v-if="node.isNode">
+                                                    <!-- #ifdef APP -->
+                                                    <view
+                                                        class=" absolute h-full left-1/2 top-0px pt-5px translate-x--1/2">
+                                                        <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                            v-if="nodeIndex === text.nodeList.length - 1"></LoadingIcon>
+                                                        <image class="w-6px h-6px" v-else
+                                                            src="@/static/images/dialogue/success.png"
+                                                            mode="widthFix" />
+                                                    </view>
+                                                    <!-- #endif -->
+                                                    <!-- #ifdef H5 -->
+                                                    <view class=" absolute h-full left-1/2 top--3px translate-x--1/2">
+                                                        <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                            v-if="nodeIndex === text.nodeList.length - 1"></LoadingIcon>
+                                                        <image class="w-6px h-6px" v-else
+                                                            src="@/static/images/dialogue/success.png"
+                                                            mode="widthFix" />
+                                                    </view>
+                                                    <!-- #endif -->
+                                                </view>
+                                                <view class="pb-4px"
+                                                    :class="node.isNode ? ' text-12px font-500 color-#333' : 'text-14px font-500 color-#222 ml--3px'">
+                                                    {{ node.text }}</view>
+                                            </view>
+                                        </view>
+                                        <view v-if="!text.isEnd && text.msgType === 'CONFIRM'">
+                                            <view class="color-#222 mt-6px">是否确认执行？</view>
                                             <view class="f-c-c gap-24px my-8px">
                                                 <uv-button size="mini" @click="handleConfirm(text, 0)">取消</uv-button>
                                                 <uv-button color="var(--primary-color)" size="mini"
@@ -356,37 +447,73 @@ onShow(() => {
                 </scroll-view>
             </swiper-item>
             <swiper-item>
-                <!-- <image class="w-280px h-280px mx-auto block" src="@/static/images/dialogue/loading-ai.gif"
-                    mode="widthFix" /> -->
-                <AiIcon ref="AiIconRef" class="w-280px h-280px mx-auto block"></AiIcon>
-                <image v-if="!isAudioEnd" class="w-136px h-136px -mb-50px -mt-70px mx-auto block"
-                    src="@/static/images/dialogue/ai-speek.gif" mode="widthFix" />
-                <view class="gradient-text text-center" v-if="!currentAIMessage">请用“晓言、晓言”唤醒我</view>
-                <view class="px-40px py-12px text-14px min-w-50px overflow-hidden" v-if="currentAIMessage">
-                    <view class="flex items-center gap-6px mb-8px">
-                        <LoadingIcon :url="LoadingPng2"></LoadingIcon>
-                        <text class="text-14px font-500 color-#005CC2 flex-1 gradient-text">分析中...</text>
-                    </view>
-                    <view class=" whitespace-pre-wrap" v-for="text in currentAIMessage.data">
-                        <text v-if="isString(text)">{{ text ===
-                            WB_Enum.AI_START ? '' : text }}</text>
-                        <view v-if="!isString(text) && !text.isEnd">
-                            <view>是否确认执行？</view>
-                            <view class="f-c-c gap-40px my-8px">
-                                <image class="w-40px h-40px" :src="StopIcon" mode="widthFix"
-                                    @click="handleConfirm(text, 0)" />
-                                <image class="w-40px h-40px" :src="ConfirmIcon" mode="widthFix"
-                                    @click="handleConfirm(text, 1)" />
+                <view class="h-full flex flex-col">
+                    <AiIcon ref="AiIconRef" class="flex-shrink-0 w-280px h-280px mx-auto block"></AiIcon>
+                    <image v-if="!isAudioEnd" class="w-136px h-136px flex-shrink-0 -mb-50px -mt-70px mx-auto block"
+                        src="@/static/images/dialogue/ai-speek.gif" mode="widthFix" />
+                    <view class="gradient-text flex-shrink-0 text-center" v-if="!currentAIMessage">请用“晓言、晓言”唤醒我</view>
+                    <scroll-view class="h-25vh" id="scroll-view2" scroll-y :scroll-into-view="scrollIntoView2"
+                        :scroll-with-animation="true">
+                        <!-- <view v-for="i in 1000">{{i}}</view> -->
+                        <view class="px-40px py-12px text-14px min-w-50px overflow-auto" v-if="currentAIMessage">
+                            <view class="flex items-center gap-6px mb-8px">
+                                <LoadingIcon :url="LoadingPng2"></LoadingIcon>
+                                <text class="text-14px font-500 color-#005CC2 flex-1 gradient-text">分析中...</text>
+                            </view>
+                            <view class=" whitespace-pre-wrap" :class="MessageClass2[text.styleType]"
+                                v-for="text in transformerMessage(currentAIMessage.data)">
+                                <text v-if="!text.msgType && !text.commandName">{{ text.msgType ===
+                                    WB_Enum.AI_START ? '' : text.content }}</text>
+                                <view v-if="text.commandName">
+                                    <view class="text-12px font-500 text-#333 mb-3px">{{ text.commandName }}</view>
+                                    <view v-for="node, nodeIndex in text.nodeList" class="flex pl-2px">
+                                        <view class="mr-8px w-2px h-auto relative bg-#318DFF" :class="{
+                                            'rounded-t-2px': nodeIndex === 0,
+                                            'rounded-b-2px': isNodeLast(nodeIndex, text.nodeList),
+                                        }" v-if="node.isNode">
+                                            <!-- #ifdef APP -->
+                                            <view class=" absolute h-full left-1/2 top-0px pt-5px translate-x--1/2">
+                                                <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                    v-if="nodeIndex === text.nodeList.length - 1"></LoadingIcon>
+                                                <image class="w-6px h-6px" v-else
+                                                    src="@/static/images/dialogue/success.png" mode="widthFix" />
+                                            </view>
+                                            <!-- #endif -->
+                                            <!-- #ifdef H5 -->
+                                            <view class=" absolute h-full left-1/2 top--3px translate-x--1/2">
+                                                <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                    v-if="nodeIndex === text.nodeList.length - 1"></LoadingIcon>
+                                                <image class="w-6px h-6px" v-else
+                                                    src="@/static/images/dialogue/success.png" mode="widthFix" />
+                                            </view>
+                                            <!-- #endif -->
+                                        </view>
+                                        <view class="pb-4px"
+                                            :class="node.isNode ? ' text-12px font-500 color-#333' : 'text-14px font-500 color-#222 ml--3px'">
+                                            {{ node.text }}</view>
+                                    </view>
+                                </view>
+                                <view v-if="!text.isEnd && text.msgType === 'CONFIRM'">
+                                    <view class="color-#222 mt-6px">是否确认执行？</view>
+                                    <view class="f-c-c gap-40px my-8px">
+                                        <image class="w-40px h-40px" :src="StopIcon" mode="widthFix"
+                                            @click="handleConfirm(text, 0)" />
+                                        <image class="w-40px h-40px" :src="ConfirmIcon" mode="widthFix"
+                                            @click="handleConfirm(text, 1)" />
+                                    </view>
+                                </view>
+
                             </view>
                         </view>
-
-                    </view>
+                        <view id="chat-bottom-3" style="height:1px;"></view>
+                    </scroll-view>
                 </view>
             </swiper-item>
         </swiper>
         <template #footer>
             <InputCom :ref="registerInput" v-model:recording="isRecording" :is-record-mode="current === 1"
-                :test-id="testId" @stop-ai="handleStopAI" @send-message="handleSend" @reset-voice="resetVoice" v-if="!historyId">
+                :test-id="testId" @stop-ai="handleStopAI" @send-message="handleSend" @reset-voice="resetVoice"
+                v-if="!historyId">
             </InputCom>
         </template>
         <NavDrawer ref="NavDrawerRef"></NavDrawer>

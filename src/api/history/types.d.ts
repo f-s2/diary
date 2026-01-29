@@ -5,7 +5,7 @@ declare namespace History {
     // conversationSubject: 0;
     user: string;
     role: number;
-    content: string;
+    content: any;
     messageTime: string;
     likeStatus: any
   }

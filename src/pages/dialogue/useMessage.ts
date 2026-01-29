@@ -13,7 +13,7 @@ function writeMp3(buffer: ArrayBuffer): Promise<string> {
           var fullPath = entry.fullPath;
           const Base64 = plus.android.importClass("android.util.Base64") as any;
           const FileOutputStream = plus.android.importClass(
-            "java.io.FileOutputStream"
+            "java.io.FileOutputStream",
           ) as any;
           try {
             const _base64Str = uni.arrayBufferToBase64(buffer);
@@ -30,7 +30,7 @@ function writeMp3(buffer: ArrayBuffer): Promise<string> {
             console.log(e.message);
           }
         },
-        (err) => reject(err)
+        (err) => reject(err),
       );
     });
   });
@@ -40,33 +40,47 @@ function writeMp3(buffer: ArrayBuffer): Promise<string> {
 export enum UserReactionEnum {
   None,
   Like,
-  Dislike
+  Dislike,
 }
 
 export interface ItemType {
   type: MessageTypeEnum;
-  data: (string | ConfirmNode)[];
-  userReaction?: UserReactionEnum,
-  id?: string
+  data: ConfirmNode[];
+  userReaction?: UserReactionEnum;
+  id?: string;
 }
 
-export interface ConfirmNode {
-  msgType: "CONFIRM_REPLY" | "CONFIRM_TIMEOUT" | "CONFIRM";
-  commandId: string;
-  replyContent: 0 | 1;
+export interface ConfirmNode extends ResponseData {
+  replyContent?: 0 | 1;
   isEnd?: boolean;
 }
 
-export function transformerData(data: string): string | ConfirmNode {
+export interface ResponseData {
+  msgType?:
+    | "CONFIRM_REPLY"
+    | "CONFIRM_TIMEOUT"
+    | "CONFIRM"
+    | WB_Enum.AI_END
+    | WB_Enum.AI_START | "NODE";
+  content?: string;
+  styleType?: number;
+  commandName?: string
+}
+
+export function transformerData(data: string | ArrayBuffer | object): undefined | ConfirmNode {
   try {
-    const target = JSON.parse(data);
-    if (typeof target !== "number") {
-      return target;
-    } else {
-      return data;
+    if(data instanceof ArrayBuffer) {
+      return undefined
     }
+
+    if(typeof data === 'object') {
+      return data as ConfirmNode
+    }
+
+    const target = JSON.parse(data);
+    return target;
   } catch (error) {
-    return data;
+    return undefined;
   }
 }
 
@@ -80,7 +94,12 @@ export default function useMessage(_options: {
 
   const list = ref<ItemType[]>([]);
 
-  const currentAIMessage = computed(() => (list.value[list.value.length - 1]?.type === MessageTypeEnum.AI && !isMessageEnd.value)? list.value[list.value.length - 1] : undefined);
+  const currentAIMessage = computed(() =>
+    list.value[list.value.length - 1]?.type === MessageTypeEnum.AI &&
+    !isMessageEnd.value
+      ? list.value[list.value.length - 1]
+      : undefined,
+  );
 
   const audioList = ref<ArrayBuffer[]>([]);
 
@@ -114,12 +133,11 @@ export default function useMessage(_options: {
   });
 
   const playNext = async (sync = false) => {
-
     if (sync) {
       currentAudio.stop();
-      isPlaying.value = false
-      if(audioList.value[currentIndex.value]) {
-        currentIndex.value ++
+      isPlaying.value = false;
+      if (audioList.value[currentIndex.value]) {
+        currentIndex.value++;
       }
       playNext();
       return;
@@ -149,52 +167,51 @@ export default function useMessage(_options: {
   };
 
   const pushData = (options: { type: MessageTypeEnum; content: any }) => {
-    const lastData = list.value[list.value.length - 1];    
-
+    const lastData = list.value[list.value.length - 1];
+    
+    
+    const targetContent = transformerData(options.content);    
+    
     if (lastData?.type !== options.type) isStoped.value = false;
 
     if (
       options.type === MessageTypeEnum.AI &&
-      isString(options.content) && options.content.startsWith(WB_Enum.AI_END)
+      targetContent?.msgType === WB_Enum.AI_END
     ) {
-      lastData.id = options.content.split(':')[1]
+      lastData.id = targetContent?.content;
       isMessageEnd.value = true;
       return;
     }
 
-    if (typeof options.content !== "string") {
+    if (!targetContent) {
       audioList.value.push(options.content);
-      isAudioEnd.value = false
+      isAudioEnd.value = false;
     } else {
-      const tagrgetContent = transformerData(options.content);
-
-      if (typeof tagrgetContent === "string" || ['CONFIRM'].includes(tagrgetContent.msgType)) {
+      if (targetContent.msgType === "CONFIRM_TIMEOUT") {
+        lastData.data.forEach((v: any) => {
+          if (v?.content === targetContent.content) {
+            v.isEnd = true;
+          }
+        });
+        playNext();
+      } else {
         if (!lastData || lastData.type !== options.type) {
           const target = {
             type: options.type,
-            data: [tagrgetContent],
+            data: [targetContent],
           };
           list.value.push(target);
         } else {
-          lastData.data.push(tagrgetContent);
+          lastData.data.push(targetContent);
         }
-        _options.pushAfter()
-      } else {
-        if(tagrgetContent.msgType === 'CONFIRM_TIMEOUT') {
-          lastData.data.forEach((v:any) => {
-            if(v?.commandId === tagrgetContent.commandId) {
-              v.isEnd = true
-            }
-          })
-          playNext()
-        }
+        _options.pushAfter();
       }
     }
 
     // 新消息开始时，需要手动停止且清空未播放完毕的音频
     if (
       options.type === MessageTypeEnum.AI &&
-      options.content === WB_Enum.AI_START
+      targetContent?.msgType === WB_Enum.AI_START
     ) {
       currentIndex.value = 0;
       isPlaying.value = false;
@@ -211,7 +228,6 @@ export default function useMessage(_options: {
 
     // 需要等到状态都设置完成后，再开始播放
     playNext();
-
   };
 
   const stopAI = () => {
@@ -222,14 +238,13 @@ export default function useMessage(_options: {
 
     const lastData = list.value[list.value.length - 1];
     // 手动停止 AI 之后需要手动结束所有确认节点
-    if(lastData.type === MessageTypeEnum.AI) {
-      lastData.data.forEach((v:any) => {
-        if(v?.commandId) {
-          v.isEnd = true
+    if (lastData.type === MessageTypeEnum.AI) {
+      lastData.data.forEach((v: any) => {
+        if (v?.commandId) {
+          v.isEnd = true;
         }
-      })
+      });
     }
-    
   };
 
   const initStatus = () => {
@@ -238,6 +253,39 @@ export default function useMessage(_options: {
     list.value = [];
     currentIndex.value = 0;
     audioList.value = [];
+
+//     list.value = [
+//     {
+//         type: MessageTypeEnum.AI,
+//         data: [
+//             {
+//                 msgType: 'NODE',
+//                 commandName: '测试指令1',
+//                 content: '节点开始'
+//             },
+//             {
+//                 msgType: 'NODE',
+//                 commandName: '测试指令1',
+//                 content: '节点开始'
+//             },
+//             {
+//                 msgType: 'NODE',
+//                 commandName: '测试指令2',
+//                 content: '节点开始2'
+//             },
+//             {
+//                 msgType: 'NODE',
+//                 commandName: '测试指令1',
+//                 content: '节点开始3'
+//             },
+//             {
+//                 commandName: '测试指令1',
+//                 content: '节点结束'
+//             },
+//         ]
+//     }
+// ]
+
   };
 
   return {
@@ -248,6 +296,6 @@ export default function useMessage(_options: {
     list,
     initStatus,
     stopAI,
-    playNext
+    playNext,
   };
 }
