@@ -32,13 +32,12 @@ export default function useBaiduVoice(options?: {
 
   function initHello() {
      DialogueApi.synthesisAudio('你好, 我在').then(async (res) => {
-      hellowAudio.value = res
+      hellowAudio.value = await writeMp3(res as any);
     })
   }
 
   async function playHello() {    
-     const path = await writeMp3(hellowAudio.value);
-     currentAudio.src = path;
+     currentAudio.src = hellowAudio.value;
      currentAudio.play();
   }
 

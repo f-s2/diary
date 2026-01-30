@@ -153,7 +153,7 @@ const controlList = computed<{
     {
         icon: CopyPng,
         onClick(data) {
-            const text = data.data.filter(v => isString(v) && ![WB_Enum.AI_END, WB_Enum.AI_START].some(_ => v.startsWith(_))).join(' ')
+            const text = data.data.filter(v => ![WB_Enum.AI_END, WB_Enum.AI_START].some(_ => v.msgType === _)).map(v => v.content).join(' ')
             uni.setClipboardData({
                 data: text
             })
