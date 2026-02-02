@@ -48,6 +48,8 @@ export interface ItemType {
   data: ConfirmNode[];
   userReaction?: UserReactionEnum;
   id?: string;
+  // 后端是否已经发送 end 结束符
+  isAiEnd?: boolean
 }
 
 export interface ConfirmNode extends ResponseData {
@@ -180,6 +182,7 @@ export default function useMessage(_options: {
     ) {
       lastData.id = targetContent?.content;
       isMessageEnd.value = true;
+      lastData.isAiEnd = true
       return;
     }
 
@@ -239,8 +242,8 @@ export default function useMessage(_options: {
     const lastData = list.value[list.value.length - 1];
     // 手动停止 AI 之后需要手动结束所有确认节点
     if (lastData.type === MessageTypeEnum.AI) {
-      lastData.data.forEach((v: any) => {
-        if (v?.commandId) {
+      lastData.data.forEach((v) => {
+        if (v?.msgType === 'CONFIRM') {
           v.isEnd = true;
         }
       });
