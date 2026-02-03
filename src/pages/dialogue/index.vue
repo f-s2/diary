@@ -74,6 +74,16 @@ const { initStatus, pushData, currentAIMessage, isMessageEnd, isAudioEnd, stopAI
     },
 
 })
+
+const processTip = computed(() => {
+    const lastData = list.value[list.value.length - 1]
+    if(lastData.type === MessageTypeEnum.User) return
+
+    if(lastData.data.some(v => v.isEnd)) return '已完成'
+    else if(lastData.data.some(v => v.msgType === 'NODE')) return '执行中...'
+    else return '分析中...'
+})
+
 function handleSend(options: { type: MessageTypeEnum; content: any }) {
     pushData(options)
 }
@@ -374,7 +384,7 @@ onShow(() => {
                                         v-if="index === list.length - 1 && !isMessageEnd && item.type === MessageTypeEnum.AI && !historyId">
                                         <LoadingIcon :url="LoadingPng"></LoadingIcon>
                                         <text
-                                            class="text-14px font-500 color-#005CC2 flex-1 gradient-text">分析中...</text>
+                                            class="text-14px font-500 color-#005CC2 flex-1 gradient-text">{{ processTip }}</text>
                                         <view class="h-16px">
                                             <image class=" w-16px cursor-pointer" src="@/static/images/stop-ai.png"
                                                 mode="widthFix" @click="handleStopAI" />
@@ -395,18 +405,18 @@ onShow(() => {
                                                     <!-- #ifdef APP -->
                                                     <view
                                                         class=" absolute h-full left-1/2 top-0px pt-5px translate-x--1/2">
-                                                        <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                        <LoadingIcon class="w-8px h-8px" :url="LoadingPng"
                                                             v-if="nodeIndex === text.nodeList.length - 1 && !item.isAiEnd"></LoadingIcon>
-                                                        <image class="w-6px h-6px" v-else
+                                                        <image class="w-8px h-8px" v-else
                                                             src="@/static/images/dialogue/success.png"
                                                             mode="widthFix" />
                                                     </view>
                                                     <!-- #endif -->
                                                     <!-- #ifdef H5 -->
-                                                    <view class=" absolute h-full left-1/2 top--3px translate-x--1/2">
-                                                        <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                    <view class=" absolute h-full left-1/2 top-0px translate-x--1/2">
+                                                        <LoadingIcon class="w-8px h-8px" :url="LoadingPng"
                                                             v-if="nodeIndex === text.nodeList.length - 1 && !item.isAiEnd"></LoadingIcon>
-                                                        <image class="w-6px h-6px" v-else
+                                                        <image class="w-8px h-8px" v-else
                                                             src="@/static/images/dialogue/success.png"
                                                             mode="widthFix" />
                                                     </view>
@@ -458,7 +468,7 @@ onShow(() => {
                         <view class="px-40px py-12px text-14px min-w-50px overflow-auto" v-if="currentAIMessage">
                             <view class="flex items-center gap-6px mb-8px">
                                 <LoadingIcon :url="LoadingPng2"></LoadingIcon>
-                                <text class="text-14px font-500 color-#005CC2 flex-1 gradient-text">分析中...</text>
+                                <text class="text-14px font-500 color-#005CC2 flex-1 gradient-text">{{ processTip }}</text>
                             </view>
                             <view class=" whitespace-pre-wrap" :class="MessageClass2[text.styleType]"
                                 v-for="text in transformerMessage(currentAIMessage.data)">
@@ -471,22 +481,12 @@ onShow(() => {
                                             'rounded-t-2px': nodeIndex === 0,
                                             'rounded-b-2px': isNodeLast(nodeIndex, text.nodeList),
                                         }" v-if="node.isNode">
-                                            <!-- #ifdef APP -->
                                             <view class=" absolute h-full left-1/2 top-0px pt-5px translate-x--1/2">
-                                                <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
+                                                <LoadingIcon class="w-8px h-8px" :url="LoadingPng"
                                                     v-if="nodeIndex === text.nodeList.length - 1 && !currentAIMessage.isAiEnd"></LoadingIcon>
-                                                <image class="w-6px h-6px" v-else
+                                                <image class="w-8px h-8px" v-else
                                                     src="@/static/images/dialogue/success.png" mode="widthFix" />
                                             </view>
-                                            <!-- #endif -->
-                                            <!-- #ifdef H5 -->
-                                            <view class=" absolute h-full left-1/2 top--3px translate-x--1/2">
-                                                <LoadingIcon class="w-6px h-6px" :url="LoadingPng"
-                                                    v-if="nodeIndex === text.nodeList.length - 1 && !currentAIMessage.isAiEnd"></LoadingIcon>
-                                                <image class="w-6px h-6px" v-else
-                                                    src="@/static/images/dialogue/success.png" mode="widthFix" />
-                                            </view>
-                                            <!-- #endif -->
                                         </view>
                                         <view class="pb-4px"
                                             :class="node.isNode ? ' text-12px font-500 color-#333' : 'text-14px font-500 color-#222 ml--3px'">
@@ -495,7 +495,7 @@ onShow(() => {
                                 </view>
                                 <view v-if="!text.isEnd && text.msgType === 'CONFIRM' && !currentAIMessage.isAiEnd">
                                     <view class="color-#222 mt-6px">是否确认执行？</view>
-                                    <view class="f-c-c gap-40px my-8px">
+                                    <view class="flex items-center justify-end gap-40px my-8px">
                                         <image class="w-40px h-40px" :src="StopIcon" mode="widthFix"
                                             @click="handleConfirm(text, 0)" />
                                         <image class="w-40px h-40px" :src="ConfirmIcon" mode="widthFix"

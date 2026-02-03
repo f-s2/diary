@@ -4,6 +4,9 @@ import { useGlobalStore } from './store/global';
 
 function initOptions() {
 
+  // #ifdef APP
+    plus.device.setWakelock(true); 
+  // #endif
 
 }
 
