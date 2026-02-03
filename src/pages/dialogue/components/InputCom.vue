@@ -241,7 +241,7 @@ function handleAIEnd() {
     emit('resetVoice')
 }
 
-const isAiEnd = (data: any) => {
+const isNodeEnd = (data: any) => {
     if(data instanceof ArrayBuffer) {
         return false
     }
@@ -272,7 +272,7 @@ function handleMessage(data: any) {
     } else {
 
         if (
-            currentMessageType.value === MessageTypeEnum.AI && isAiEnd(event.data)
+            currentMessageType.value === MessageTypeEnum.AI && isNodeEnd(event.data)
         ) {
             lastAIEndInfo.value = {
                 type: currentMessageType.value,

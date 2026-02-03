@@ -48,8 +48,8 @@ export interface ItemType {
   data: ConfirmNode[];
   userReaction?: UserReactionEnum;
   id?: string;
-  // 后端是否已经发送 end 结束符
-  isAiEnd?: boolean
+  /** 用于判断节点状态是否结束 */
+  isNodeEnd?: boolean
 }
 
 export interface ConfirmNode extends ResponseData {
@@ -182,7 +182,7 @@ export default function useMessage(_options: {
     ) {
       lastData.id = targetContent?.content;
       isMessageEnd.value = true;
-      lastData.isAiEnd = true
+      lastData.isNodeEnd = true
       return;
     }
 
@@ -247,6 +247,8 @@ export default function useMessage(_options: {
           v.isEnd = true;
         }
       });
+
+      lastData.isNodeEnd = true
     }
   };
 

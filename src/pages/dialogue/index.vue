@@ -406,7 +406,7 @@ onShow(() => {
                                                     <view
                                                         class=" absolute h-full left-1/2 top-0px pt-5px translate-x--1/2">
                                                         <LoadingIcon class="w-8px h-8px" :url="LoadingPng"
-                                                            v-if="nodeIndex === text.nodeList.length - 1 && !item.isAiEnd"></LoadingIcon>
+                                                            v-if="nodeIndex === text.nodeList.length - 1 && !item.isNodeEnd"></LoadingIcon>
                                                         <image class="w-8px h-8px" v-else
                                                             src="@/static/images/dialogue/success.png"
                                                             mode="widthFix" />
@@ -415,7 +415,7 @@ onShow(() => {
                                                     <!-- #ifdef H5 -->
                                                     <view class=" absolute h-full left-1/2 top-0px translate-x--1/2">
                                                         <LoadingIcon class="w-8px h-8px" :url="LoadingPng"
-                                                            v-if="nodeIndex === text.nodeList.length - 1 && !item.isAiEnd"></LoadingIcon>
+                                                            v-if="nodeIndex === text.nodeList.length - 1 && !item.isNodeEnd"></LoadingIcon>
                                                         <image class="w-8px h-8px" v-else
                                                             src="@/static/images/dialogue/success.png"
                                                             mode="widthFix" />
@@ -427,7 +427,7 @@ onShow(() => {
                                                     {{ node.text }}</view>
                                             </view>
                                         </view>
-                                        <view v-if="!text.isEnd && text.msgType === 'CONFIRM' && !item.isAiEnd">
+                                        <view v-if="!text.isEnd && text.msgType === 'CONFIRM' && !item.isNodeEnd">
                                             <view class="color-#222 mt-6px">是否确认执行？</view>
                                             <view class="f-c-c gap-24px my-8px">
                                                 <uv-button size="mini" @click="handleConfirm(text, 0)">取消</uv-button>
@@ -483,7 +483,7 @@ onShow(() => {
                                         }" v-if="node.isNode">
                                             <view class=" absolute h-full left-1/2 top-0px pt-5px translate-x--1/2">
                                                 <LoadingIcon class="w-8px h-8px" :url="LoadingPng"
-                                                    v-if="nodeIndex === text.nodeList.length - 1 && !currentAIMessage.isAiEnd"></LoadingIcon>
+                                                    v-if="nodeIndex === text.nodeList.length - 1 && !currentAIMessage.isNodeEnd"></LoadingIcon>
                                                 <image class="w-8px h-8px" v-else
                                                     src="@/static/images/dialogue/success.png" mode="widthFix" />
                                             </view>
@@ -493,7 +493,7 @@ onShow(() => {
                                             {{ node.text }}</view>
                                     </view>
                                 </view>
-                                <view v-if="!text.isEnd && text.msgType === 'CONFIRM' && !currentAIMessage.isAiEnd">
+                                <view v-if="!text.isEnd && text.msgType === 'CONFIRM' && !currentAIMessage.isNodeEnd">
                                     <view class="color-#222 mt-6px">是否确认执行？</view>
                                     <view class="flex items-center justify-end gap-40px my-8px">
                                         <image class="w-40px h-40px" :src="StopIcon" mode="widthFix"
