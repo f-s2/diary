@@ -144,7 +144,7 @@ export default function useMessage(_options: {
       playNext();
       return;
     }
-
+    
     if (
       isPlaying.value ||
       !audioList.value[currentIndex.value] ||
@@ -155,8 +155,6 @@ export default function useMessage(_options: {
     // #ifdef APP
 
     const target = audioList.value[currentIndex.value];
-
-    // console.log("当前播放的是", target);
 
     const current = target as ArrayBuffer;
     isAudioEnd.value = false;
@@ -173,10 +171,9 @@ export default function useMessage(_options: {
     
     const targetContent = transformerData(options.content);
     // 主要用于处理 10s 延时相关显示逻辑
-    if(targetContent.msgType === 'NODE_END') {
+    if(targetContent?.msgType === 'NODE_END') {
       return lastData.isNodeEnd = true
     }
-
     
     if (lastData?.type !== options.type) isStoped.value = false;
 
@@ -189,7 +186,7 @@ export default function useMessage(_options: {
       lastData.isNodeEnd = true
       return;
     }
-
+  
     if (!targetContent) {
       audioList.value.push(options.content);
       isAudioEnd.value = false;

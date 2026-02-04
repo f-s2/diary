@@ -458,7 +458,7 @@ onShow(() => {
             </swiper-item>
             <swiper-item>
                 <view class="h-full flex flex-col">
-                    <view class="transition-all" :class="currentAIMessage ? 'translate-y-0%' : 'translate-y-26%'">
+                    <view class="transition-all" :class="currentAIMessage ? 'translate-y-0%' : 'translate-y-16vh'">
                         <AiIcon ref="AiIconRef" class="flex-shrink-0 w-280px h-280px mx-auto block transition-transform" 
                         :class="currentAIMessage ? 'scale-100' : 'scale-120'"></AiIcon>
                         <image v-if="!isAudioEnd" class="w-67px h-67px flex-shrink-0 -mb-10px -mt-40px mx-auto block"
