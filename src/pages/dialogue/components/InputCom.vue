@@ -15,6 +15,7 @@ import { storeToRefs } from "pinia";
 import { useGlobalStore } from "@/store/global";
 import IconWrapper from "./IconWrapper.vue";
 import VoiceIcon from '@/static/images/dialogue/voice-icon.png'
+import VoiceActive from '@/static/images/dialogue/voice-active.png'
 import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import useBaiduVoice from "./useBaiduVoice";
@@ -241,7 +242,7 @@ function handleAIEnd() {
     emit('resetVoice')
 }
 
-const isNodeEnd = (data: any) => {
+const isAiEnd = (data: any) => {
     if(data instanceof ArrayBuffer) {
         return false
     }
@@ -272,7 +273,7 @@ function handleMessage(data: any) {
     } else {
 
         if (
-            currentMessageType.value === MessageTypeEnum.AI && isNodeEnd(event.data)
+            currentMessageType.value === MessageTypeEnum.AI && isAiEnd(event.data)
         ) {
             lastAIEndInfo.value = {
                 type: currentMessageType.value,
@@ -282,6 +283,13 @@ function handleMessage(data: any) {
 
             if (props.isRecordMode) {
                 isShowConfirm.value = true
+                emit('sendMessage', {
+                    type: MessageTypeEnum.AI,
+                    content: {
+                        msgType: 'NODE_END'
+                    },
+                    timestamp: Date.now(),
+                })
                 timer = setTimeout(() => {
                     handleAIEnd()
                 }, CountdownTime * 1000)
@@ -376,10 +384,12 @@ defineExpose({
             </template>
             <template v-else>
                 <icon-wrapper :url="VoiceIcon" v-if="!isRecording" @click="startRecord"></icon-wrapper>
-                <view class=" relative w-full" v-else>
-                    <image class=" absolute w-full left-0 top-1/2 -translate-y-1/2"
+                <view class=" relative w-full f-c-c" v-else>
+                    <image class="w-94px"
                         src="@/static/images/dialogue/user-speek.gif" mode="widthFix" />
-                    <icon-wrapper class="mx-auto" :url="StopIcon" @click="stopRecord"></icon-wrapper>
+                    <icon-wrapper class="" :url="VoiceActive" @click="stopRecord"></icon-wrapper>
+                    <image class="w-94px rotate-180"
+                        src="@/static/images/dialogue/user-speek.gif" mode="widthFix" />
                 </view>
             </template>
             <view class="fixed left-0 right-0 bottom-140px" v-if="isShowTextMode">

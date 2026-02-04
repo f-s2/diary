@@ -79,7 +79,7 @@ const processTip = computed(() => {
     const lastData = list.value[list.value.length - 1]
     if(lastData.type === MessageTypeEnum.User) return
 
-    if(lastData.data.some(v => v.isEnd)) return '已完成'
+    if(lastData.isNodeEnd) return '已完成'
     else if(lastData.data.some(v => v.msgType === 'NODE')) return '执行中...'
     else return '分析中...'
 })
@@ -458,18 +458,21 @@ onShow(() => {
             </swiper-item>
             <swiper-item>
                 <view class="h-full flex flex-col">
-                    <AiIcon ref="AiIconRef" class="flex-shrink-0 w-280px h-280px mx-auto block"></AiIcon>
-                    <image v-if="!isAudioEnd" class="w-136px h-136px flex-shrink-0 -mb-50px -mt-70px mx-auto block"
-                        src="@/static/images/dialogue/ai-speek.gif" mode="widthFix" />
-                    <view class="gradient-text flex-shrink-0 text-center" v-if="!currentAIMessage">请用“晓言、晓言”唤醒我</view>
-                    <scroll-view class="h-25vh" id="scroll-view2" scroll-y :scroll-into-view="scrollIntoView2"
+                    <view class="transition-all" :class="currentAIMessage ? 'translate-y-0%' : 'translate-y-26%'">
+                        <AiIcon ref="AiIconRef" class="flex-shrink-0 w-280px h-280px mx-auto block transition-transform" 
+                        :class="currentAIMessage ? 'scale-100' : 'scale-120'"></AiIcon>
+                        <image v-if="!isAudioEnd" class="w-67px h-67px flex-shrink-0 -mb-10px -mt-40px mx-auto block"
+                            src="@/static/images/dialogue/ai-speek.gif" mode="widthFix" />
+                        <view class="gradient-text flex-shrink-0 text-center" v-if="!currentAIMessage">请用“晓言、晓言”唤醒我</view>
+                    </view>
+                    <view class="flex items-center gap-6px mb-8px pl-40px" v-if="currentAIMessage">
+                        <LoadingIcon :url="LoadingPng2" :not-spin="currentAIMessage.isNodeEnd"></LoadingIcon>
+                        <text class="text-14px font-500 color-#005CC2 flex-1 gradient-text">{{ processTip }}</text>
+                    </view>
+                    <scroll-view class="h-25.5vh" id="scroll-view2" scroll-y :scroll-into-view="scrollIntoView2"
                         :scroll-with-animation="true">
                         <!-- <view v-for="i in 1000">{{i}}</view> -->
-                        <view class="px-40px py-12px text-14px min-w-50px overflow-auto" v-if="currentAIMessage">
-                            <view class="flex items-center gap-6px mb-8px">
-                                <LoadingIcon :url="LoadingPng2"></LoadingIcon>
-                                <text class="text-14px font-500 color-#005CC2 flex-1 gradient-text">{{ processTip }}</text>
-                            </view>
+                        <view class="px-40px pb-20px text-14px min-w-50px overflow-auto" v-if="currentAIMessage">
                             <view class=" whitespace-pre-wrap" :class="MessageClass2[text.styleType]"
                                 v-for="text in transformerMessage(currentAIMessage.data)">
                                 <text v-if="!text.msgType && !text.commandName">{{ text.msgType ===

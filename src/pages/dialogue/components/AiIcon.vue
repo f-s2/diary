@@ -21,7 +21,7 @@ defineExpose({
 
 <template>
     <view class=" relative mx-auto admission-ani" :key="comKey">
-        <image class="absolute-center w-180% h-140%" src="@/static/images/dialogue/ai-bg.gif" mode="widthFix" @load="handleImageLoaded" />
+        <image class="absolute-center w-180% h-140% opacity-60" src="@/static/images/dialogue/ai-bg.gif" mode="widthFix" @load="handleImageLoaded" />
         <view class="absolute-center w-40% -ml-3%">
             <image src="@/static/images/dialogue/ai-avatar.png" mode="widthFix" @load="handleImageLoaded" />
             <view class=" absolute left-22% bottom-39% bg-#19EAFF wink-ani w-10% h-7% rounded-6px" v-show="loadedCount>=2"></view>

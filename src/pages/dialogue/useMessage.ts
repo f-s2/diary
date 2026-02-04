@@ -63,7 +63,7 @@ export interface ResponseData {
     | "CONFIRM_TIMEOUT"
     | "CONFIRM"
     | WB_Enum.AI_END
-    | WB_Enum.AI_START | "NODE";
+    | WB_Enum.AI_START | "NODE" | "NODE_END";
   content?: string;
   styleType?: number;
   commandName?: string
@@ -171,8 +171,12 @@ export default function useMessage(_options: {
   const pushData = (options: { type: MessageTypeEnum; content: any }) => {
     const lastData = list.value[list.value.length - 1];
     
-    
-    const targetContent = transformerData(options.content);    
+    const targetContent = transformerData(options.content);
+    // 主要用于处理 10s 延时相关显示逻辑
+    if(targetContent.msgType === 'NODE_END') {
+      return lastData.isNodeEnd = true
+    }
+
     
     if (lastData?.type !== options.type) isStoped.value = false;
 
@@ -277,6 +281,24 @@ export default function useMessage(_options: {
 //                 msgType: 'NODE',
 //                 commandName: '测试指令2',
 //                 content: '节点开始2'
+//             },
+//             {
+//                 msgType: 'NODE',
+//                 commandName: '测试指令1',
+//                 content: '节点开始3'
+//             },
+//             {
+//                 commandName: '测试指令1',
+//                 content: '节点结束'
+//             },
+//             {
+//                 msgType: 'NODE',
+//                 commandName: '测试指令1',
+//                 content: '节点开始3'
+//             },
+//             {
+//                 commandName: '测试指令1',
+//                 content: '节点结束'
 //             },
 //             {
 //                 msgType: 'NODE',

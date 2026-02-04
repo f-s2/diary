@@ -1,12 +1,14 @@
 <script setup lang="ts">
     defineProps<{
         url: string
+        notSpin?: boolean
     }>()
 </script>
 
 <template>
     <image
-        class="w-22px h-22px rotate"
+        class="w-22px h-22px"
+        :class="{'rotate': !notSpin}"
         :src="url"
         mode="widthFix"
     />
