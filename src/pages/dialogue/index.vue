@@ -23,7 +23,6 @@ import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import AiIcon from './components/AiIcon.vue';
 import useBaiduVoice from './components/useBaiduVoice';
-import { cloneFnJSON, useDebounceFn } from '@vueuse/core';
 
 let disableTouch = true
 
@@ -60,7 +59,7 @@ const registerInput = (ins) => {
 
 const needAutoScroll = ref(true)
 
-const { initStatus, pushData, currentAIMessage, isMessageEnd, isAudioEnd, stopAI, list, playNext } = useMessage({
+const { initStatus, pushData, currentAIMessage, isMessageEnd, isAudioEnd, stopAI, list, playNext, isStoped } = useMessage({
     pushAfter() {
         needAutoScroll.value && scrollToBottom()
     },
@@ -215,8 +214,6 @@ function handleAdd() {
         })
     }
 }
-
-const debounceStopAi = useDebounceFn(handleStopAI, 500)
 
 function handleStopAI() {
     InputComRef.value?.handleStopAI(isMessageEnd.value)
@@ -387,9 +384,9 @@ onShow(() => {
                                         <LoadingIcon :url="LoadingPng"></LoadingIcon>
                                         <text
                                             class="text-14px font-500 color-#005CC2 flex-1 gradient-text">{{ processTip }}</text>
-                                        <view class="h-16px">
+                                        <view class="h-16px" v-if="!isStoped">
                                             <image class=" w-16px cursor-pointer" src="@/static/images/stop-ai.png"
-                                                mode="widthFix" @click="debounceStopAi" />
+                                                mode="widthFix" @click="handleStopAI" />
                                         </view>
                                     </view>
                                     <view class=" whitespace-pre-wrap" :class="MessageClass[text.styleType]"
@@ -517,7 +514,7 @@ onShow(() => {
         </swiper>
         <template #footer>
             <InputCom :ref="registerInput" v-model:recording="isRecording" :is-record-mode="current === 1"
-                :test-id="testId" @stop-ai="debounceStopAi" @send-message="handleSend" @reset-voice="resetVoice"
+                :test-id="testId" @stop-ai="handleStopAI" @send-message="handleSend" @reset-voice="resetVoice"
                 v-if="!historyId">
             </InputCom>
         </template>

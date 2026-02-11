@@ -318,6 +318,7 @@ export default function useMessage(_options: {
     currentAIMessage,
     pushData,
     list,
+    isStoped,
     initStatus,
     stopAI,
     playNext,
