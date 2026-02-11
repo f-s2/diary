@@ -517,7 +517,7 @@ onShow(() => {
         </swiper>
         <template #footer>
             <InputCom :ref="registerInput" v-model:recording="isRecording" :is-record-mode="current === 1"
-                :test-id="testId" @stop-ai="handleStopAI" @send-message="handleSend" @reset-voice="resetVoice"
+                :test-id="testId" @stop-ai="debounceStopAi" @send-message="handleSend" @reset-voice="resetVoice"
                 v-if="!historyId">
             </InputCom>
         </template>
