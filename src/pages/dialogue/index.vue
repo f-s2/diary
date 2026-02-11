@@ -23,7 +23,7 @@ import StopIcon from '@/static/images/dialogue/stop-icon.png'
 import ConfirmIcon from '@/static/images/dialogue/confirm-icon.png'
 import AiIcon from './components/AiIcon.vue';
 import useBaiduVoice from './components/useBaiduVoice';
-import { cloneFnJSON } from '@vueuse/core';
+import { cloneFnJSON, useDebounceFn } from '@vueuse/core';
 
 let disableTouch = true
 
@@ -216,6 +216,8 @@ function handleAdd() {
     }
 }
 
+const debounceStopAi = useDebounceFn(handleStopAI, 500)
+
 function handleStopAI() {
     InputComRef.value?.handleStopAI(isMessageEnd.value)
     stopAI()
@@ -387,7 +389,7 @@ onShow(() => {
                                             class="text-14px font-500 color-#005CC2 flex-1 gradient-text">{{ processTip }}</text>
                                         <view class="h-16px">
                                             <image class=" w-16px cursor-pointer" src="@/static/images/stop-ai.png"
-                                                mode="widthFix" @click="handleStopAI" />
+                                                mode="widthFix" @click="debounceStopAi" />
                                         </view>
                                     </view>
                                     <view class=" whitespace-pre-wrap" :class="MessageClass[text.styleType]"
