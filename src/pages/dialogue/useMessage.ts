@@ -192,8 +192,8 @@ export default function useMessage(_options: {
       isAudioEnd.value = false;
     } else {
       if (targetContent.msgType === "CONFIRM_TIMEOUT") {
-        lastData.data.forEach((v: any) => {
-          if (v?.content === targetContent.content) {
+        lastData.data.forEach((v) => {
+          if (v?.commandName === targetContent?.commandName) {
             v.isEnd = true;
           }
         });

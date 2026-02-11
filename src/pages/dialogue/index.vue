@@ -309,7 +309,7 @@ function transformerMessage(_data: ConfirmNode[]) {
     const messageList: (ConfirmNode & { nodeList?: { text: string, isNode: boolean }[] })[] = []
 
     _data.forEach(v => {
-        if (!v.commandName) {
+        if (!v.commandName || v.msgType === 'CONFIRM') {
             messageList.push(v)
         } else {
             const targetItem = messageList.find(_ => _.commandName === v.commandName)
@@ -394,7 +394,7 @@ onShow(() => {
                                         <text v-if="!text.msgType && !text.commandName">{{ text.msgType ===
                                             WB_Enum.AI_START ? '' : text.content }}</text>
                                         <view v-if="text.commandName">
-                                            <view class="text-12px font-500 text-#333 mb-3px">{{ text.commandName }}
+                                            <view class="text-12px font-500 text-#333 mb-3px" v-if="text.msgType !== 'CONFIRM'">{{ text.commandName }}
                                             </view>
                                             <view v-for="node, nodeIndex in text.nodeList" class="flex pl-2px">
                                                 <view class="mr-8px w-2px h-auto relative bg-#318DFF" :class="{
@@ -477,7 +477,7 @@ onShow(() => {
                                 <text v-if="!text.msgType && !text.commandName">{{ text.msgType ===
                                     WB_Enum.AI_START ? '' : text.content }}</text>
                                 <view v-if="text.commandName">
-                                    <view class="text-12px font-500 text-#333 mb-3px">{{ text.commandName }}</view>
+                                    <view class="text-12px font-500 text-#333 mb-3px" v-if="text.msgType !== 'CONFIRM'">{{ text.commandName }}</view>
                                     <view v-for="node, nodeIndex in text.nodeList" class="flex pl-2px">
                                         <view class="mr-8px w-2px h-auto relative bg-#318DFF" :class="{
                                             'rounded-t-2px': nodeIndex === 0,
