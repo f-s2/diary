@@ -1,6 +1,5 @@
-<script setup>
+<script lang="ts" setup>
 import { onLaunch, onError, onShow } from '@dcloudio/uni-app'
-import { useGlobalStore } from './store/global';
 
 function initOptions() {
 
@@ -13,17 +12,6 @@ function initOptions() {
 
 onLaunch(() => {
   try {
-    const {initSetting, setSetting} = useGlobalStore()
-    initSetting()
-
-    window?.addEventListener('message', e => {
-      if(e.data.type === 'URL_INFO') {
-        console.log('origin:', e.origin);
-        
-          setSetting({baseUrl: e.origin})
-      }
-      
-    })
     // 挂载APP启动日志提交
     uni.$dev.logReport("appOnLaunch>" + JSON.stringify(ctx));
   } catch (error) { }
